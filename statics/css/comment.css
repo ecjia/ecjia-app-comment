@@ -1,0 +1,86 @@
+.ms-container {
+	width: 300px;
+}
+
+.ms-container .select_user li.selected {
+	background-color: #48A6D2 !important;
+	color: #fff;
+}
+.ms-container .select_goods li.selected {
+	background-color: #48A6D2 !important;
+	color: #fff;
+}
+
+.tips {
+	padding-left: 10px;
+	color: #999;
+}
+
+.ms-elem-selectable {
+	padding-left: 5px;
+	border-bottom: 1px solid #f2f2f2;
+}
+
+.kong {
+	border-bottom: none;
+	color: #AAA;
+	font-size: 12px;
+	line-height: 16px;
+	padding: 4px 10px 3px;
+}
+
+.new_userinfo_wrap {
+	display: none
+}
+
+.vcard ul {
+    list-style: none;
+	margin: 10px 0 0 0;
+    overflow: hidden;
+}
+
+.vcard ul li {
+    padding: 8px 0px 8px 0;
+    border-bottom: 1px dashed #dcdcdc;
+	overflow: visible;
+}
+
+.vcard .v-heading {
+	padding-left: 10px;
+}
+
+.vcard ul li:last-child {
+	margin-bottom:10px;
+}
+
+ul, ol {
+    padding: 0;
+    margin: 0 0 10px 25px;
+}
+
+.cat_list label{
+	float: left;
+	padding-left: 5px;
+	width: 120px;
+	overflow: hidden;
+	text-overflow:ellipsis; 
+	white-space:nowrap; 
+	overflow:hidden;
+}
+
+.chzn-container .chzn-results { 
+	max-height:155px;
+	overflow-y:auto;
+}
+.tab_merchants {
+	float: right;
+    width: 78%;
+	overflow:visible;
+}
+
+.tab_merchants_nav {
+	width: 19%;
+	margin-right:0px;
+}
+
+
