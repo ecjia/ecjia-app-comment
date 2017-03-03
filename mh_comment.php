@@ -53,8 +53,6 @@ class mh_comment extends ecjia_merchant {
 	public function __construct() {
 		parent::__construct();
 		
-		RC_Loader::load_app_func('global');
-		assign_adminlog_content();
 		
 		RC_Script::enqueue_script('jquery-form');
 		RC_Script::enqueue_script('smoke');
