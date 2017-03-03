@@ -1,205 +1,151 @@
 <?php
+//
+//    ______         ______           __         __         ______
+//   /\  ___\       /\  ___\         /\_\       /\_\       /\  __ \
+//   \/\  __\       \/\ \____        \/\_\      \/\_\      \/\ \_\ \
+//    \/\_____\      \/\_____\     /\_\/\_\      \/\_\      \/\_\ \_\
+//     \/_____/       \/_____/     \/__\/_/       \/_/       \/_/ /_/
+//
+//   上海商创网络科技有限公司
+//
+//  ---------------------------------------------------------------------------------
+//
+//   一、协议的许可和权利
+//
+//    1. 您可以在完全遵守本协议的基础上，将本软件应用于商业用途；
+//    2. 您可以在协议规定的约束和限制范围内修改本产品源代码或界面风格以适应您的要求；
+//    3. 您拥有使用本产品中的全部内容资料、商品信息及其他信息的所有权，并独立承担与其内容相关的
+//       法律义务；
+//    4. 获得商业授权之后，您可以将本软件应用于商业用途，自授权时刻起，在技术支持期限内拥有通过
+//       指定的方式获得指定范围内的技术支持服务；
+//
+//   二、协议的约束和限制
+//
+//    1. 未获商业授权之前，禁止将本软件用于商业用途（包括但不限于企业法人经营的产品、经营性产品
+//       以及以盈利为目的或实现盈利产品）；
+//    2. 未获商业授权之前，禁止在本产品的整体或在任何部分基础上发展任何派生版本、修改版本或第三
+//       方版本用于重新开发；
+//    3. 如果您未能遵守本协议的条款，您的授权将被终止，所被许可的权利将被收回并承担相应法律责任；
+//
+//   三、有限担保和免责声明
+//
+//    1. 本软件及所附带的文件是作为不提供任何明确的或隐含的赔偿或担保的形式提供的；
+//    2. 用户出于自愿而使用本软件，您必须了解使用本软件的风险，在尚未获得商业授权之前，我们不承
+//       诺提供任何形式的技术支持、使用担保，也不承担任何因使用本软件而产生问题的相关责任；
+//    3. 上海商创网络科技有限公司不对使用本产品构建的商城中的内容信息承担责任，但在不侵犯用户隐
+//       私信息的前提下，保留以任何方式获取用户信息及商品信息的权利；
+//
+//   有关本产品最终用户授权协议、商业授权与技术服务的详细内容，均由上海商创网络科技有限公司独家
+//   提供。上海商创网络科技有限公司拥有在不事先通知的情况下，修改授权协议的权力，修改后的协议对
+//   改变之日起的新授权用户生效。电子文本形式的授权协议如同双方书面签署的协议一样，具有完全的和
+//   等同的法律效力。您一旦开始修改、安装或使用本产品，即被视为完全理解并接受本协议的各项条款，
+//   在享有上述条款授予的权力的同时，受到相关的约束和限制。协议许可范围以外的行为，将直接违反本
+//   授权协议并构成侵权，我们有权随时终止授权，责令停止损害，并保留追究相关责任的权力。
+//
+//  ---------------------------------------------------------------------------------
+//
 defined('IN_ECJIA') or exit('No permission resources.');
+
 /**
- * 某商品的所有评论
+ * 发表评价
  * @author royalwang
  *
  */
-class create_module extends api_front implements api_interface
-{
-    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request)
-    {	
-		$this->authSession();
-		if ($_SESSION['user_id'] <= 0) {
-			return new ecjia_error(100,'Invalid session');
-		}
-		$email			= $_SESSION['email'];
-		$id				= $this->requestData('object_id');
-		$user_name		= $this->requestData('user_name');
-		$user_name		= empty($user_name) ? $_SESSION['user_name'] : $user_name;
-		$comment_type	= $this->requestData('object_type', 'goods');
-		$type			= $comment_type == 'goods' ? 0 : 1;
-		$order_id		= $this->requestData('order_id');
-		$content		= $this->requestData('content');
-		$rank			= $this->requestData('rank', 5);
-		
-		$result = true;
-		if (!isset($id)) {
-			$result = new ecjia_error('invalid_comments', __('无效的评论内容！'));
-		} 
-		
-		if (empty($email)) {
-			$code = '';
-			$charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-			$charset_len = strlen($charset) - 1;
-			for ($i = 0; $i < 6; $i++) {
-				$code .= $charset[rand(1, $charset_len)];
-			}
-			$email = $code.'@'.$_SESSION['user_id'].'.com';
+class create_module extends api_front implements api_interface {
+    public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
+    	
+		$user_id = $_SESSION['user_id'];
+		if ($user_id < 1) {
+			return new ecjia_error(100, 'Invalid session');
 		}
 		
+		$rec_id		= _POST('rec_id');
+		$content	= _POST('content');
+		$comment_rank	= _POST('comment_rank');
+		$comment_image	= _POST('comment_image');
+		$is_anonymous	= _POST('is_anonymous', 0);
 		
-		/* 没有验证码时，用时间来限制机器人发帖或恶意发评论 */
-		if (!isset($_SESSION['send_time'])) {
-			$_SESSION['send_time'] = 0;
+		if (empty($rec_id)) {
+			return new ecjia_error('invalid_parameter', '参数错误！');
 		}
-
-		$cur_time = RC_Time::gmtime();
-		// 小于30秒禁止发评论
-		if (($cur_time - $_SESSION['send_time']) < 30 && isset($_SESSION['send_time']))  {
-			$result = new ecjia_error('cmt_spam_warning', __('您至少在30秒后才可以继续发表评论！'));
-		} else {
-// 			$factor = intval(ecjia::config('comment_factor'));
-			$factor = 4;
-			if ($type == 0 && $factor > 0) {
-				/* 只有商品才检查评论条件 */
-				switch ($factor) {
-					case COMMENT_LOGIN :
-						if ($_SESSION['user_id'] == 0) {
-							$result = new ecjia_error('comment_login', __('只有注册会员才能发表评论，请您登录后再发表评论！'));
-						}
-						break;
-					case COMMENT_CUSTOM :
-						if ($_SESSION['user_id'] > 0) {
-							$db = RC_Loader::load_app_model('order_info_model', 'orders');
-							$where = array(
-								'user_id' => $_SESSION['user_id'],
-								"(order_status ='".OS_CONFIRMED."' OR order_status = '".OS_SPLITED."')",
-								"(pay_status ='".PS_PAYED."' OR pay_status ='".PS_PAYING."')",
-								"(shipping_status ='".SS_SHIPPED."' OR shipping_status = '".SS_RECEIVED."')"
-							);
-							$tmp = $db->where($where)->get_field('order_id');
-							if (empty($tmp)) {
-								$result = new ecjia_error('comment_custom', __('评论失败。只有在本店购买过商品的注册会员才能发表评论。'));
-							}
-						} else {
-							$result = new ecjia_error('comment_custom', __('评论失败。只有在本店购买过商品的注册会员才能发表评论。'));
-						}
-						break;
-
-					case COMMENT_BOUGHT :
-						if ($_SESSION['user_id'] > 0) {
-							$db = RC_Loader::load_app_model('order_order_infogoods_viewmodel', 'orders');
-							$where = array(
-								'oi.user_id' => $_SESSION['user_id'],
-								'og.goods_id' => $id,
-								"(oi.order_status = '".OS_CONFIRMED."' OR oi.order_status = '".OS_SPLITED."')",
-								"(oi.pay_status = '".PS_PAYED."' OR oi.pay_status = '".PS_PAYING."')",
-								"(oi.shipping_status = '".SS_SHIPPED."' OR oi.shipping_status ='".SS_RECEIVED."')"
-							);
-							$tmp = $db->where($where)->get_field('order_id');
-							if (empty($tmp)) {
-								$result = new ecjia_error('comment_brought', __('评论失败。只有购买过此商品的注册用户才能评论该商品。'));
-							}
-						} else {
-							$result = new ecjia_error('comment_brought', __('评论失败。只有购买过此商品的注册用户才能评论该商品。'));
-						}
-						break;
-					case 4:
-						if ($_SESSION['user_id'] > 0) {
-							//判断是否已评论
-							$dbview = RC_Loader::load_app_model('order_goods_comment_viewmodel', 'orders');
-							$dbview->view = array(
-								'term_relationship' => array(
-									'type' 		=> Component_Model_View::TYPE_LEFT_JOIN,
-									'alias' 	=> 'tr',
-									'on'		=> 'tr.object_id = og.rec_id and object_type = "ecjia.comment"'
-								),
-							);
-							$res = $dbview->where(array('og.order_id' => $order_id, 'og.goods_id' => $id))->find();
-							
-							if (!empty($res['relation_id'])) {
-								$result = new ecjia_error('comment_already', __('您已评论过该商品！'));
-							}
-							if (empty($res)) {
-								$result = new ecjia_error('comment_not_brought', __('您还没有购买过此商品！'));
-							}
-						} else {
-							$result = new ecjia_error('comment_brought', __('评论失败。只有购买过此商品的注册用户才能评论该商品。'));
-						}
-						break;
+		
+		$order_db = RC_Model::model('orders/order_order_infogoods_viewmodel');
+		$order_db->view = array(
+				'order_goods' => array(
+						'type'	=> Component_Model_View::TYPE_LEFT_JOIN,
+						'alias'	=> 'og',
+						'on'	=> 'oi.order_id = og.order_id'
+				),
+		);
+		$order_info = $order_db->where(array('oi.user_id' => $_SESSION['user_id'], 'og.rec_id' => $rec_id))->find();
+	
+		if (empty($order_info)) {
+			return new ecjia_error('order_error', '订单信息不存在！');
+		}
+		
+		$comment_info = RC_Model::model('comment/comment_model')->where(array('rec_id' => $rec_id, 'user_id' => $_SESSION['user_id'], 'comment_type' => 0))->find();
+		if (empty($comment_info) && empty($content) && empty($comment_rank)) {
+			return new ecjia_error('invalid_parameter', '参数错误！');
+		}
+		
+		if (empty($comment_info)) {
+			/* 评论是否需要审核 */
+			$status = 1 - ecjia::config('comment_check');
+			$goods_id = RC_Model::model('orders/order_goods_model')->where(array('rec_id' => $rec_id))->get_field('goods_id');
+			
+			$user_name = $_SESSION['user_name'];
+			if ($is_anonymous) {
+				$len = mb_strlen($user_name);
+				if ($len > 2) {
+					$user_name = mb_substr($user_name, 0, 1) . '***' . mb_substr($user_name, $len-1, $len);
+				} else  {
+					$user_name = mb_substr($user_name, 0, 1) . '*';
 				}
 			}
 			
-			/* 无错误就保存留言 */
-			if (is_ecjia_error($result)) {
-				return $result;
-			} else {
-				
-				$comment_info = array(
-					'email'		=> $email,
-					'user_name' => $user_name,
-					'type'		=> $type,
-					'id'		=> $id,
-					'content'	=> $content,
-					'rank'		=> $rank
-				);
-				$comment_id = add_comment($comment_info);
-				
-				$db_term_relation = RC_Loader::load_model('term_relationship_model');
-				$term_relation = array(
-					'object_type'	=> 'ecjia.comment',
-					'object_group'	=> 'comment',
-					'object_id'		=> $res['rec_id'],
-					'item_key1'		=> 'goods_id',
-					'item_value1'	=> $id,
-					'item_key2'		=> 'comment_id',
-					'item_value2'	=> $comment_id
-				);
-				$db_term_relation->insert($term_relation);
-				$message = '';
-				$comment_award = 0;
-				if (ecjia::config('comment_award_open')) {
-					$comment_award_rules = ecjia::config('comment_award_rules');
-					$comment_award_rules = unserialize($comment_award_rules);
-					$comment_award = isset($comment_award_rules[$_SESSION['user_rank']]) ? $comment_award_rules[$_SESSION['user_rank']] : ecjia::config('comment_award');
-					
-					RC_Api::api('user', 'account_change_log', array('user_id' => $_SESSION['user_id'], 'pay_points' => $comment_award, 'change_desc' => '评论送积分'));
-					$message = '评论成功！并获得'.$comment_award.ecjia::config('integral_name').'！';
-				}
-
-				return array('data' => array('comment_award' => $comment_award, 'label_comment_award' => $message, 'label_award' => ecjia::config('integral_name')));
-
-			}
+			$data = array(
+					'comment_type'	=> 0,
+					'id_value'		=> $goods_id,
+					'user_name'		=> $user_name,
+					'content'		=> $content,
+					'comment_rank'	=> $comment_rank,
+					'add_time'		=> RC_Time::gmtime(),
+					'ip_address'	=> RC_Ip::client_ip(),
+					'status'		=> $status,
+					'parent_id'		=> 0,
+					'user_id'		=> $_SESSION['user_id'],
+					'rec_id'		=> $rec_id,
+			);
+			$comment_id = RC_Model::model('comment/comment_model')->insert($data);
+		} else {
+			$comment_id = $comment_info['comment_id'];
 		}
+		
+// 		$comment_img = RC_Model::model('comment/comment_img_model')->find(array('comment_id' => $comment_id));
+// 		if (empty($comment_img) && !empty($_FILES)) {
+// 			$save_path = 'data/cmt_img/'.RC_Time::local_date('Ym');
+// 			$upload = RC_Upload::uploader('image', array('save_path' => $save_path, 'auto_sub_dirs' => true));
+	
+// 			$image_info	= $upload->batch_upload($_FILES);
+// 			foreach ($image_info as $key => $val) {
+// 				if (!empty($val)) {
+// 					$image_url	= $upload->get_position($image_info[$key]);
+// 					RC_Model::model('comment/comment_img_model')->insert(array(
+// 						'user_id'		=> $_SESSION['user_id'],
+// 						'goods_id'		=> $order_info['goods_id'],
+// 						'comment_id'	=> $comment_id,
+// 						'comment_img'	=> $image_url,
+// 						'img_thumb'		=> $image_url,
+// 					));
+// 				}
+// 			}
+// 		}
+		return array();
+		
 	}
 }
 
-/**
- * 添加评论内容
- *
- * @access  public
- * @param   object  $cmt
- * @return  void
- */
-function add_comment($comment_info) {
-	/* 评论是否需要审核 */
-	$status = 1 - ecjia::config('comment_check');
 
-	$user_id = empty($_SESSION['user_id']) ? 0 : $_SESSION['user_id'];
-	$email = $comment_info['email'];
-	$user_name = $comment_info['user_name'];
-	$email = htmlspecialchars($email);
-// 	$user_name = htmlspecialchars($user_name);
-	
-	/* 保存评论内容 */
-	$db = RC_Loader::load_app_model('comment_model', 'comment');
-	$data = array(
-		'comment_type' => $comment_info['type'],
-		'id_value' => $comment_info['id'],
-		'email' => $email,
-		'user_name' => $user_name,
-		'content' => $comment_info['content'],
-		'comment_rank' => $comment_info['rank'],
-		'add_time' => RC_Time::gmtime(),
-		'ip_address' => RC_Ip::client_ip(),
-		'status' => $status,
-		'parent_id' => 0,
-		'user_id' => $user_id
-	);
-	$result = $db->insert($data);
 
-	return $result;
-}
 
 // end
