@@ -63,7 +63,7 @@ class mh_comment extends ecjia_merchant {
 		
 		RC_Script::enqueue_script('mh_comment', RC_App::apps_url('statics/js/mh_comment.js', __FILE__));
 		
-		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('评论管理', RC_Uri::url('staff/merchant/init')));
+		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('评论管理', RC_Uri::url('comment/mh_comment/init')));
 		ecjia_merchant_screen::get_current_screen()->set_parentage('comment', 'comment/mh_comment.php');
 	}
 
