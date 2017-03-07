@@ -3,7 +3,7 @@
 
 <!-- {block name="footer"} -->
 <script type="text/javascript">
-ecjia.merchant.merchant_comment.editlist();
+ecjia.merchant.mh_comment.editlist();
 </script>
 <!-- {/block} -->
 
@@ -22,8 +22,18 @@ ecjia.merchant.merchant_comment.editlist();
   	<div class="clearfix"></div>
 </div>
 
-<div class="row">
+<div class="comment-list row">
 	<div class="col-lg-12">
+	   <table class="table table-striped table-hover table-hide-edit ecjiaf-tlf">
+    	   <tr>
+    	       <td style="width: 25%">评分级别：</td>
+    	       <td>好评    中评    差评</td>
+    	   </tr>
+    	   <tr>
+    	       <td style="width: 75%">有无晒图：</td>
+    	       <td>有  无</td>
+    	   </tr>
+	   </table>
 		<form class="form-inline f_r" action="{RC_Uri::url('goods/merchant/init')}{$get_url}" method="post" name="search_form">
 			<div class="screen f_r">
 				<div class="form-group">
@@ -43,7 +53,7 @@ ecjia.merchant.merchant_comment.editlist();
 	</div>
 </div>
 <div class="panel-body panel-body-small comment-list">
-	<section>
+	<section class="panel">
 		<table class="table table-striped table-hover table-hide-edit ecjiaf-tlf">
 			<tr>
 				<th class="width-20-p">用户名</th>
@@ -52,32 +62,32 @@ ecjia.merchant.merchant_comment.editlist();
 			</tr>
 		</table>
 	</section>
-		<ul>
-		    <li class="edit-hidden">			
-				<span class="width-20-p">
-					test
-				</span>
-				<div class="width-60-p hide-edit-area {if $goods.is_promote}ecjiafc-red{/if}">
-				    <p>
-				       <a href='{url path="goods/merchant/edit" args="goods_id=617"}'>精选菜薹300g</a>
-				    </p>
-				    <p>评论于 2017-03-03 16:16:00</p>
-					<span data-title="请输入商品名称">收到手机已经过去3天了，虽然还是有一些问题但是总体感觉是不错的。</span>
-					<br/>
-					<div class="edit-list">
-						<a class="data-pjax" href='{url path="goods/merchant/edit" args="goods_id={$goods.goods_id}"}'>查看详情&nbsp;</a>|
-						<a class="data-pjax" href='{url path="goods/merchant/edit_goods_desc" args="goods_id={$goods.goods_id}"}'>回复</a>
-					</div>
-				</div>	
-				<span class="width-20-p">
-					*****
-				</span>
-				<div class="comment-list-hr"></div>
-                <div class="form-group col-lg-11">
-                	<input type="text" class="form-control" name="keywords" value="{$smarty.get.keywords}" placeholder="感谢您对本店的支持！我们会更加的努力，为您提供更优质的服务。（可在此输入回复内容，也可选择系统自动回复）">
-                </div>
-                <input class="comment-list-reply btn btn-primary screen-btn" type="button" value="回复" />
-		    </li>
-		</ul>
+	<ul>
+	    <li class="edit-hidden">			
+			<span class="width-20-p">
+				test
+			</span>
+			<div class="width-60-p hide-edit-area {if $goods.is_promote}ecjiafc-red{/if}">
+			    <p>
+			       <a href='{url path="goods/merchant/edit" args="goods_id=617"}'>精选菜薹300g</a>
+			    </p>
+			    <p>评论于 2017-03-03 16:16:00</p>
+				<span data-title="请输入商品名称">收到手机已经过去3天了，虽然还是有一些问题但是总体感觉是不错的。</span>
+				<br/>
+				<div class="edit-list">
+					<a class="data-pjax" href='{url path="goods/merchant/edit" args="goods_id={$goods.goods_id}"}'>查看详情&nbsp;</a>|
+					<a class="data-pjax" href='{url path="goods/merchant/edit_goods_desc" args="goods_id={$goods.goods_id}"}'>回复</a>
+				</div>
+			</div>	
+			<span class="width-20-p">
+				*****
+			</span>
+			<div class="comment-list-hr"></div>
+            <div class="form-group col-lg-11">
+            	<input type="text" class="form-control" name="keywords" value="{$smarty.get.keywords}" placeholder="感谢您对本店的支持！我们会更加的努力，为您提供更优质的服务。（可在此输入回复内容，也可选择系统自动回复）">
+            </div>
+            <input class="comment-list-reply btn btn-primary screen-btn" type="button" value="回复" />
+	    </li>
+	</ul>
 </div>
 <!-- {/block} -->

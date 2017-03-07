@@ -1,6 +1,6 @@
 // JavaScript Document
 ;(function (app, $) {
-	app.merchant_comment = {
+	app.mh_comment = {
         editlist: function () {
 	    	$(".edit-hidden").mouseover(function(){
 	    		$(".edit-list").css('visibility', 'visible');

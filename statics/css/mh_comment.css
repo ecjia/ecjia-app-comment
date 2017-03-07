@@ -97,6 +97,7 @@ ul, ol {
 	position: relative;
 	overflow: hidden;
 	border-top: 1px solid #000;
+	padding-top: 1em;
 }
 .comment-list ul li .width-20-p,
 .comment-list table tr .width-20-p {
@@ -128,3 +129,10 @@ ul, ol {
 .comment-list .edit-list {
 	visibility: hidden;
 }
+.comment-list .panel {
+	margin-bottom: 0;
+}
+.comment-list.row {
+	margin: 0;
+}
+
