@@ -92,28 +92,31 @@ ul, ol {
 .comment-list section table {
 	margin-bottom: 0;
 }
-.comment-list ul li {
+.comment-list ul .edit-hidden {
 	list-style-type:none;
 	position: relative;
 	overflow: hidden;
-	border-top: 1px solid #000;
+	border-top: 1px solid #999;
 	padding-top: 1em;
 }
-.comment-list ul li .width-20-p,
+.comment-list ul .edit-hidden .width-20-p,
 .comment-list table tr .width-20-p {
 	width: 20%;
 	float: left;
 }
-.comment-list ul li .width-60-p,
+.comment-list ul .edit-hidden .width-60-p,
 .comment-list table tr .width-60-p {
 	width: 60%;
 	float: left;
+}
+.comment-list ul .edit-hidden .width-20-p .fa-star {
+	color: #FF9933;
 }
 .comment-list .table-striped>tbody>tr>th {
 	background-color: #FFF;
 	padding: 8px 0 8px 0;	
 }
-.comment-list ul>li:nth-child(even),
+.comment-list ul>.edit-hidden:nth-child(even),
 .comment-list.row .table-striped>tbody>tr>th {
 	background-color: #F2F2F2;
 }
@@ -121,7 +124,7 @@ ul, ol {
     margin-top: 8em;
     margin-bottom: 10px;
     border: 0;
-    border-bottom: 1px dashed #000;
+    border-bottom: 1px dashed #999;
 }
 .comment-list .comment-list-reply {
 	float: right;
@@ -152,12 +155,18 @@ ul, ol {
 .comment-list.row .filter .filter-box {
 	height: 1.6em;
 	width: 4.2em;
-	border: 1px solid #000;
+	border: 1px solid #999;
 	display: block;
 	overflow: hidden;
 	border-radius: 3px;
 	margin: 0 .2em 0 .2em;
 }
-.comment-list.row .filter .fl-l {
+.comment-list.row .filter .fl-l,
+.comment-list .edit-hidden .comment-img {
 	float: left;
+}
+.comment-list .edit-hidden .comment-img li {
+	list-style: none;
+	float: left;
+	margin: 0 .3em 0 0;
 }
