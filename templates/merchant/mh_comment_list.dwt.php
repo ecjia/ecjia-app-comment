@@ -24,13 +24,19 @@ ecjia.merchant.mh_comment.editlist();
 
 <div class="comment-list row">
 	<div class="col-lg-12">
-	   <table class="table table-striped table-hover table-hide-edit ecjiaf-tlf">
+	   <div class="filter">
+           <a href="javascript:;" class="fl-l">全部</a>
+           <span class="fl-l">&nbsp;>&nbsp;</span>
+           <div class="text-center filter-box fl-l">好评 <i class="cursor_pointer fa fa-times"></i></div>
+           <div class="text-center filter-box fl-l">有图 <i class="cursor_pointer fa fa-times"></i></div>
+	   </div>
+	   <table class="table table-bordered table-striped table-hover table-hide-edit ecjiaf-tlf">
     	   <tr>
-    	       <td style="width: 25%">评分级别：</td>
+    	       <th class="text-right" style="width: 20%;padding-right: 1em;">评分级别:</th>
     	       <td>好评    中评    差评</td>
     	   </tr>
     	   <tr>
-    	       <td style="width: 75%">有无晒图：</td>
+    	       <th class="text-right" style="width: 80%;padding-right: 1em;">有无晒图:</th>
     	       <td>有  无</td>
     	   </tr>
 	   </table>

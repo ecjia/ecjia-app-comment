@@ -8,6 +8,9 @@
 	   		$(".edit-hidden").mouseleave(function(){
 	   			$(".edit-list").css('visibility', 'hidden');
 	   		});
+	   		$(".cursor_pointer").click(function(){
+	   			$(".filter-box").css('visibility', 'hidden');
+	   		})
         },
 	}
 })(ecjia.merchant, jQuery);

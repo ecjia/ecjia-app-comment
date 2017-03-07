@@ -109,11 +109,12 @@ ul, ol {
 	width: 60%;
 	float: left;
 }
-.comment-list .table-striped>tbody>tr:nth-child(odd)>th {
+.comment-list .table-striped>tbody>tr>th {
 	background-color: #FFF;
 	padding: 8px 0 8px 0;	
 }
-.comment-list ul>li:nth-child(even) {
+.comment-list ul>li:nth-child(even),
+.comment-list.row .table-striped>tbody>tr>th {
 	background-color: #F2F2F2;
 }
 .comment-list .comment-list-hr {
@@ -135,4 +136,28 @@ ul, ol {
 .comment-list.row {
 	margin: 0;
 }
-
+.comment-list.row  .table-bordered {
+	border:1px solid #cccccc;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+.comment-list.row .table-striped>tbody>tr>td {
+	background-color: #FFF;
+}
+.comment-list.row .filter {
+	margin: 1em 0 1em 0;
+	float: left;
+}
+.comment-list.row .filter .filter-box {
+	height: 1.6em;
+	width: 4.2em;
+	border: 1px solid #000;
+	display: block;
+	overflow: hidden;
+	border-radius: 3px;
+	margin: 0 .2em 0 .2em;
+}
+.comment-list.row .filter .fl-l {
+	float: left;
+}
