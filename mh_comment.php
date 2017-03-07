@@ -53,15 +53,18 @@ class mh_comment extends ecjia_merchant {
 	public function __construct() {
 		parent::__construct();
 		
-		
-		RC_Script::enqueue_script('jquery-form');
-		RC_Script::enqueue_script('smoke');
+		RC_Style::enqueue_style('jquery-placeholder');
 		RC_Style::enqueue_style('uniform-aristo');
+// 		RC_Script::enqueue_script('smoke');
+// 		RC_Script::enqueue_script('jquery-ui');
+// 		RC_Script::enqueue_script('jquery-form');
+// 		RC_Script::enqueue_script('jquery-colorbox');
+		RC_Style::enqueue_style('jquery-colorbox');
 		
-		RC_Script::enqueue_script('bootstrap-editable-script', dirname(RC_App::app_dir_url(__FILE__)) . '/merchant/statics/assets/bootstrap-fileupload/bootstrap-fileupload.js', array());
+// 		RC_Script::enqueue_script('bootstrap-editable-script', dirname(RC_App::app_dir_url(__FILE__)) . '/merchant/statics/assets/bootstrap-fileupload/bootstrap-fileupload.js', array());
 		RC_Style::enqueue_style('bootstrap-fileupload', dirname(RC_App::app_dir_url(__FILE__)) . '/merchant/statics/assets/bootstrap-fileupload/bootstrap-fileupload.css', array(), false, false);
-		
-		RC_Script::enqueue_script('mh_comment', RC_App::apps_url('statics/js/mh_comment.js', __FILE__));
+		RC_Style::enqueue_style('comment', RC_App::apps_url('statics/css/comment.css', __FILE__), array());
+		RC_Script::enqueue_script('merchant_comment', RC_App::apps_url('statics/js/merchant_comment.js', __FILE__), array(), false, true);
 		
 		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('评论管理', RC_Uri::url('comment/mh_comment/init')));
 		ecjia_merchant_screen::get_current_screen()->set_parentage('comment', 'comment/mh_comment.php');

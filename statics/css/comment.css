@@ -82,5 +82,49 @@ ul, ol {
 	width: 19%;
 	margin-right:0px;
 }
-
-
+.comment-list {
+	background-color: #FFF;
+}
+.comment-list ul {
+    padding: 0;
+    margin: 0;
+}
+.comment-list section table {
+	margin-bottom: 0;
+}
+.comment-list ul li {
+	list-style-type:none;
+	position: relative;
+	overflow: hidden;
+	border-top: 1px solid #000;
+}
+.comment-list ul li .width-20-p,
+.comment-list table tr .width-20-p {
+	width: 20%;
+	float: left;
+}
+.comment-list ul li .width-60-p,
+.comment-list table tr .width-60-p {
+	width: 60%;
+	float: left;
+}
+.comment-list .table-striped>tbody>tr:nth-child(odd)>th {
+	background-color: #FFF;
+	padding: 8px 0 8px 0;	
+}
+.comment-list ul>li:nth-child(even) {
+	background-color: #F2F2F2;
+}
+.comment-list .comment-list-hr {
+    margin-top: 8em;
+    margin-bottom: 10px;
+    border: 0;
+    border-bottom: 1px dashed #000;
+}
+.comment-list .comment-list-reply {
+	float: right;
+	margin-right: 2%;
+}
+.comment-list .edit-list {
+	visibility: hidden;
+}
