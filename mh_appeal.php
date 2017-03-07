@@ -47,37 +47,71 @@
 defined('IN_ECJIA') or exit('No permission resources.');
 
 /**
- * 员工管理
+ * 申诉管理
  */
-class mh_comment extends ecjia_merchant {
+class mh_appeal extends ecjia_merchant {
 	public function __construct() {
 		parent::__construct();
 		
-		RC_Loader::load_app_func('global');
-		assign_adminlog_content();
 		
 		RC_Script::enqueue_script('jquery-form');
 		RC_Script::enqueue_script('smoke');
 		RC_Style::enqueue_style('uniform-aristo');
 		
 		RC_Script::enqueue_script('mh_appeal', RC_App::apps_url('statics/js/mh_appeal.js', __FILE__));
+		RC_Style::enqueue_style('mh_appeal', RC_App::apps_url('statics/css/mh_appeal.css', __FILE__), array());
 		
-		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('评论管理', RC_Uri::url('comment/mh_appeal/init')));
+		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('申诉管理', RC_Uri::url('comment/mh_appeal/init')));
 		ecjia_merchant_screen::get_current_screen()->set_parentage('comment', 'comment/mh_appeal.php');
 	}
 
 	
 	/**
-	 * 评论列表页面
+	 *申诉列表页面
 	 */
 	public function init() {
 	    $this->admin_priv('mh_appeal_manage');
 	    
 	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('申诉列表'));
 	    $this->assign('ur_here', '申诉列表');
+	    
+	    $appeal_list = $this->appeal_list($_SESSION['store_id']);
+	    $this->assign('appeal_list', $appeal_list);
 
 	   
 	    $this->display('mh_appeal_list.dwt');
+	}
+	
+	/**
+	 * 获取员工列表信息
+	 */
+	private function appeal_list($store_id) {
+		$db_comment_appeal = RC_DB::table('comment_appeal');
+	
+		$filter['keywords'] = empty($_GET['keywords']) ? '' : trim($_GET['keywords']);
+		if ($filter['keywords']) {
+			$db_comment_appeal->where('', 'like', '%'.mysql_like_quote($filter['keywords']).'%');
+		}
+	
+		$db_comment_appeal->where(RC_DB::raw('store_id'), $_SESSION['store_id']);
+	
+		$count = $db_comment_appeal->count();
+		$page = new ecjia_merchant_page($count,10, 5);
+		$data = $db_comment_appeal
+		->selectRaw('user_ident,parent_id,user_id,name,nick_name,mobile,email,group_id,last_login')
+		->orderby('user_id', 'asc')
+		->take(10)
+		->skip($page->start_id-1)
+		->get();
+		$res = array();
+		if (!empty($data)) {
+			foreach ($data as $row) {
+				$row['last_login'] = RC_Time::local_date(ecjia::config('time_format'), $row['last_login']);
+				$row['group_name'] = RC_DB::TABLE('staff_group')->where('group_id', $row['group_id'])->pluck('group_name');
+				$res[] = $row;
+			}
+		}
+		return array('staff_list' => $res, 'filter' => $filter, 'page' => $page->show(2), 'desc' => $page->page_desc());
 	}
 }
 
