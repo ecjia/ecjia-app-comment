@@ -3,13 +3,13 @@
 	app.mh_comment = {
         editlist: function () {
 	    	$(".edit-hidden").mouseover(function(){
-	    		$(".edit-list").css('visibility', 'visible');
+	    		$(this).children().find(".edit-list").css('visibility', 'visible');
 	   		});
 	   		$(".edit-hidden").mouseleave(function(){
-	   			$(".edit-list").css('visibility', 'hidden');
+	   			$(this).children().find(".edit-list").css('visibility', 'hidden');
 	   		});
 	   		$(".cursor_pointer").click(function(){
-	   			$(".filter-box").css('visibility', 'hidden');
+	   			$(this).parent().remove();
 	   		})
         },
 	}
