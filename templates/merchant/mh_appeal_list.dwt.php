@@ -60,11 +60,11 @@
 									</span>
 									<br>
 									<div class="edit-list">
-										<a class="data-pjax" href='{RC_Uri::url("comment/mh_appeal/detail", "id={$list.appeal_sn}")}' title="查看详情">查看详情</a>&nbsp;|&nbsp;
-										<a class="ajaxrevok ecjiafc-red" href='{RC_Uri::url("comment/mh_appeal/revok", "id={$list.appeal_sn}")}' title="撤销">撤销</a>
+										<a class="data-pjax" href='{url path="comment/mh_appeal/detail" args="appeal_sn={$list.appeal_sn}&check_status={$list.check_status}"}' title="查看详情">查看详情</a>
+										{if $list.check_status eq 1}&nbsp;|&nbsp;<a class="ajaxrevok ecjiafc-red" href='{RC_Uri::url("comment/mh_appeal/revok", "appeal_sn={$list.appeal_sn}")}' title="撤销">撤销</a>{/if}
 								    </div>
 								</td>
-								<td>{$list.check_status}</td>
+								<td>{$list.check_status_name}</td>
 							</tr>
 							<!-- {foreachelse} -->
 							   <tr><td class="no-records" colspan="6">{lang key='system::system.no_records'}</td></tr>

@@ -59,7 +59,7 @@ class comment_merchant_purview_api extends Component_Event_Api {
 
         	//申诉	
             array('action_name' => '申诉列表', 'action_code' => 'mh_appeal_manage', 'relevance' => ''),
-       
+        	array('action_name' => '发起申诉', 'action_code' => 'mh_appeal_update', 'relevance' => ''),
         );
         return $purviews;
     }

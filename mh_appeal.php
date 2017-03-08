@@ -85,6 +85,47 @@ class mh_appeal extends ecjia_merchant {
 	}
 	
 	/**
+	 *发起申诉
+	 */
+	public function add_appeal() {
+		$this->admin_priv('mh_appeal_update');
+			
+		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('申诉'));
+		$this->assign('ur_here', '申诉');
+		$this->assign('check_status', -1);
+		
+		$this->assign('form_action',RC_Uri::url('comment/mh_appeal/insert_appeal'));
+		$this->display('mh_appeal_info.dwt');
+	}
+	
+	
+	/**
+	 *发起申诉处理
+	 */
+	public function insert_appeal() {
+		$this->admin_priv('mh_appeal_update');
+
+	}
+	
+	
+	/**
+	 *申诉-查看详情
+	 */
+	public function detail() {
+		$this->admin_priv('mh_appeal_manage');
+		 
+		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('申诉详情'));
+		$this->assign('ur_here', '申诉详情');
+		
+		$appeal_sn 		= $_GET['appeal_sn'];
+		$check_status   = $_GET['check_status'];
+		$this->assign('check_status', $check_status);
+
+	
+		$this->display('mh_appeal_detail.dwt');
+	}
+	
+	/**
 	 * 获取员工列表信息
 	 */
 	private function appeal_list($store_id) {
@@ -123,13 +164,13 @@ class mh_appeal extends ecjia_merchant {
 			foreach ($data as $row) {
 				$row['appeal_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['appeal_time']);
 				if($row['check_status'] == 1){
-					$row['check_status'] = '待处理';
+					$row['check_status_name'] = '待处理';
 				}elseif ($row['check_status'] == 2){
-					$row['check_status'] = '通过';
+					$row['check_status_name'] = '通过';
 				}elseif ($row['check_status'] == 3){
-					$row['check_status'] = '驳回';
+					$row['check_status_name'] = '驳回';
 				}elseif($row['check_status'] == 4){
-					$row['check_status'] = '撤销';
+					$row['check_status_name'] = '撤销';
 				}
 				$list[] = $row;
 			}
