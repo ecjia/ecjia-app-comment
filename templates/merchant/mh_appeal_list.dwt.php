@@ -3,7 +3,7 @@
 
 <!-- {block name="footer"} -->
 <script type="text/javascript">
-	ecjia.appeal.appeal_list.init();
+	ecjia.merchant.appeal_list.init();
 </script>
 <!-- {/block} -->
 
@@ -23,22 +23,26 @@
 	</div>
 </div>
 
-
-
 <div class="row">
 	<div class="col-lg-12">
 		<div class="panel">
 			<div class="panel-body panel-body-small">
+				<ul class="nav nav-pills pull-left">
+					<li class="{if $type eq ''}active{/if}"><a class="data-pjax" href='{url path="comment/mh_appeal/init"}'>全部<span class="badge badge-info">{if $count.count}{$count.count}{else}0{/if}</span> </a></li>
+					<li class="{if $type eq 'untreated'}active{/if}"><a class="data-pjax" href='{url path="comment/mh_appeal/init" args="type=untreated"}'>待处理<span class="badge badge-info">{if $count.untreated}{$count.untreated}{else}0{/if}</span></a></li>
+					<li class="{if $type eq 'already'}active{/if}"><a class="data-pjax" href='{url path="comment/mh_appeal/init" args="type=already"}'>已处理<span class="badge badge-info">{if $count.already}{$count.already}{else}0{/if}</span> </a></li>
+				</ul>	
+			
 				<form class="form-inline pull-right" name="searchForm" method="post" action="{$search_action}">
 					<div class="form-group">
-						<input type="text" class="form-control" name="keywords" value="{$smarty.get.keywords}" placeholder="请输入申诉编号或用户名"/> 
+						<input type="text" class="form-control" name="keywords" value="{$smarty.get.keywords}" placeholder="请输入申诉编号"/> 
 						<button type="button" class="btn btn-primary"><i class="fa fa-search"></i>搜索</button>
 					</div>
 				</form>
 			</div>
 			<div class="panel-body panel-body-small">
 				<section class="panel">
-					<table class="table table-striped table-advance table-hover">
+					<table class="table table-striped table-hover table-hide-edit">
 						<thead>
 							<tr>
 								<th>申诉编号</th>
@@ -47,17 +51,20 @@
 							</tr>
 						</thead>
 						<tbody>
-							<!-- {foreach from=$appeal_list.appeal_list item=list} -->
+							<!-- {foreach from=$data.appeal_list item=list} -->
 							<tr>
-								<td>{$list.id}</td>
-								<td>{$list.content}</td>
-								<td>{$list.mobile}</td>
-								<td>
-									<a class="data-pjax" href='{RC_Uri::url("staff/merchant/allot", "user_id={$list.user_id}")}' title="分配权限"><button class="btn btn-primary btn-xs"><i class="fa fa-cog"></i></button></a>
-									<a class="data-pjax" href='{RC_Uri::url("staff/mh_log/init", "user_id={$list.user_id}")}' title="{lang key='staff::staff.view_log'}"><button class="btn btn-primary btn-xs"><i class="fa fa-file-text-o"></i></button></a>
-									<a class="data-pjax" href='{RC_Uri::url("staff/merchant/edit", "user_id={$list.user_id}&parent_id={$list.parent_id}")}' title="{lang key='system::system.edit'}"><button class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></button></a>
-									<a class="ajaxremove no-underline" data-toggle="ajaxremove" data-msg="{lang key='staff::staff.staff_confirm'}" href='{url path="staff/merchant/remove" args="user_id={$list.user_id}"}' title="{lang key='system::system.drop'}"><button class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></button></a>
+								<td>{$list.appeal_sn}</td>
+								<td class="hide-edit-area">
+									<span>
+										{$list.appeal_content}<br>{$list.appeal_time}
+									</span>
+									<br>
+									<div class="edit-list">
+										<a class="data-pjax" href='{RC_Uri::url("comment/mh_appeal/detail", "id={$list.appeal_sn}")}' title="查看详情">查看详情</a>&nbsp;|&nbsp;
+										<a class="ajaxrevok ecjiafc-red" href='{RC_Uri::url("comment/mh_appeal/revok", "id={$list.appeal_sn}")}' title="撤销">撤销</a>
+								    </div>
 								</td>
+								<td>{$list.check_status}</td>
 							</tr>
 							<!-- {foreachelse} -->
 							   <tr><td class="no-records" colspan="6">{lang key='system::system.no_records'}</td></tr>
@@ -65,7 +72,7 @@
 						</tbody>
 					</table>
 				</section>
-				<!-- {$staff_list.page} -->
+				<!-- {$data.page} -->
 			</div>
 		</div>
 	</div>

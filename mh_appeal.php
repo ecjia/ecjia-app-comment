@@ -75,9 +75,11 @@ class mh_appeal extends ecjia_merchant {
 	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('申诉列表'));
 	    $this->assign('ur_here', '申诉列表');
 	    
-	    $appeal_list = $this->appeal_list($_SESSION['store_id']);
-	    $this->assign('appeal_list', $appeal_list);
-
+	    $data = $this->appeal_list($_SESSION['store_id']);
+	    $this->assign('count', $data['count']);
+	    $this->assign('data', $data);
+	    
+	    $this->assign('search_action',RC_Uri::url('comment/mh_appeal/init'));
 	   
 	    $this->display('mh_appeal_list.dwt');
 	}
@@ -87,31 +89,52 @@ class mh_appeal extends ecjia_merchant {
 	 */
 	private function appeal_list($store_id) {
 		$db_comment_appeal = RC_DB::table('comment_appeal');
-	
+		$type = $_GET['type'];
 		$filter['keywords'] = empty($_GET['keywords']) ? '' : trim($_GET['keywords']);
 		if ($filter['keywords']) {
-			$db_comment_appeal->where('', 'like', '%'.mysql_like_quote($filter['keywords']).'%');
+			$db_comment_appeal->where('appeal_sn', 'like', '%'.mysql_like_quote($filter['keywords']).'%');
 		}
 	
 		$db_comment_appeal->where(RC_DB::raw('store_id'), $_SESSION['store_id']);
 	
+		$type_count = $db_comment_appeal->select(RC_DB::raw('count(*) as count'),
+				RC_DB::raw('SUM(IF(check_status = 1,1,0)) as untreated'),
+				RC_DB::raw('SUM(IF(check_status != 1,1,0)) as already'))->first();
+		
+		if ($type == 'untreated') {
+			$db_comment_appeal->where('check_status', '=', 1);
+		}
+		
+		if ($type == 'already') {
+			$db_comment_appeal->where('check_status', '<>', 1);
+		}
+
 		$count = $db_comment_appeal->count();
-		$page = new ecjia_merchant_page($count,10, 5);
+		$page = new ecjia_merchant_page($count, 10, 5);
 		$data = $db_comment_appeal
-		->selectRaw('user_ident,parent_id,user_id,name,nick_name,mobile,email,group_id,last_login')
-		->orderby('user_id', 'asc')
+		->selectRaw('appeal_sn,comment_id,appeal_content,check_status,appeal_time,process_time')
+		->orderby('appeal_time', 'asc')
 		->take(10)
 		->skip($page->start_id-1)
 		->get();
-		$res = array();
+		
+		$list = array();
 		if (!empty($data)) {
 			foreach ($data as $row) {
-				$row['last_login'] = RC_Time::local_date(ecjia::config('time_format'), $row['last_login']);
-				$row['group_name'] = RC_DB::TABLE('staff_group')->where('group_id', $row['group_id'])->pluck('group_name');
-				$res[] = $row;
+				$row['appeal_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['appeal_time']);
+				if($row['check_status'] == 1){
+					$row['check_status'] = '待处理';
+				}elseif ($row['check_status'] == 2){
+					$row['check_status'] = '通过';
+				}elseif ($row['check_status'] == 3){
+					$row['check_status'] = '驳回';
+				}elseif($row['check_status'] == 4){
+					$row['check_status'] = '撤销';
+				}
+				$list[] = $row;
 			}
 		}
-		return array('staff_list' => $res, 'filter' => $filter, 'page' => $page->show(2), 'desc' => $page->page_desc());
+		return array('appeal_list' => $list, 'filter' => $filter, 'page' => $page->show(2), 'desc' => $page->page_desc(), 'count' => $type_count);
 	}
 }
 
