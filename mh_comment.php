@@ -83,6 +83,19 @@ class mh_comment extends ecjia_merchant {
 	   
 	    $this->display('mh_comment_list.dwt');
 	}
+	
+	/**
+	 * 评论详情页面
+	 */
+	public function comment_detail() {
+	    $this->admin_priv('mh_comment_manage');
+	    
+	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('评论详情'));
+	    $this->assign('ur_here', '评论详情');
+
+	   
+	    $this->display('mh_comment_detail.dwt');
+	}
 }
 
 //end

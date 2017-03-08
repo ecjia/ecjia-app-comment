@@ -85,8 +85,8 @@ ecjia.merchant.mh_comment.editlist();
 <!-- 			         <img class="w80 h80" src="http://ecjia-cityo2o.dev/content/system/statics/images/nopic.png" /> -->
 <!-- 			    </div> -->
 				<div class="edit-list">
-					<a class="data-pjax" href='{url path="goods/merchant/edit" args="goods_id={$goods.goods_id}"}'>查看详情&nbsp;</a>|
-					<a class="data-pjax" href='{url path="goods/merchant/edit_goods_desc" args="goods_id={$goods.goods_id}"}'>回复</a>
+					<a class="data-pjax" href='{url path="comment/mh_comment/comment_detail"}'>查看详情&nbsp;</a>|
+					<a class="data-pjax" href='{url path="orders/merchant/init"}'>回复</a>
 				</div>
 			</div>	
 			<div class="width-20-p">
@@ -112,14 +112,14 @@ ecjia.merchant.mh_comment.editlist();
 			    </p>
 			    <p>评论于 2017-03-03 16:16:00</p>
 				<p style="overflow: hidden;">收到手机已经过去3天了，虽然还是有一些问题但是总体感觉是不错的。</p>
-<!-- 			    <div> -->
-<!-- 			         <img class="w80 h80" src="http://ecjia-cityo2o.dev/content/system/statics/images/nopic.png" /> -->
-<!-- 			         <img class="w80 h80" src="http://ecjia-cityo2o.dev/content/system/statics/images/nopic.png" /> -->
-<!-- 			         <img class="w80 h80" src="http://ecjia-cityo2o.dev/content/system/statics/images/nopic.png" /> -->
-<!-- 			    </div> -->
+			    <div>
+			         <img class="w80 h80" src="http://ecjia-cityo2o.dev/content/system/statics/images/nopic.png" />
+			         <img class="w80 h80" src="http://ecjia-cityo2o.dev/content/system/statics/images/nopic.png" />
+			         <img class="w80 h80" src="http://ecjia-cityo2o.dev/content/system/statics/images/nopic.png" />
+			    </div>
 				<div class="edit-list">
-					<a class="data-pjax" href='{url path="goods/merchant/edit" args="goods_id={$goods.goods_id}"}'>查看详情&nbsp;</a>|
-					<a class="data-pjax" href='{url path="goods/merchant/edit_goods_desc" args="goods_id={$goods.goods_id}"}'>回复</a>
+					<a class="data-pjax" href='{url path="comment/mh_comment/comment_detail"}'>查看详情&nbsp;</a>|
+					<a class="data-pjax" href='{url path="orders/merchant/init"}'>回复</a>
 				</div>
 			</div>	
 			<div class="width-20-p">
