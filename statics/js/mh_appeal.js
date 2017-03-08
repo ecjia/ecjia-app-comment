@@ -15,22 +15,14 @@
         }
     };
  
-    app.appeal_edit = {
+    app.appeal_info = {
         init: function () {        	
-    		var $form = $("form[name='staffForm']");
+    		var $form = $("form[name='theForm']");
 			var option = {
-		            rules: {
-		            	name: "required"
-		            },
-		            messages: {
-		            	name: "请输入申诉内容"
-		            },
-
 					submitHandler : function() {
 						$form.ajaxSubmit({
 							dataType : "json",
 							success : function(data) {
-								top.location.reload();
 								ecjia.merchant.showmessage(data);
 							}
 						});

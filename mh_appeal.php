@@ -104,7 +104,10 @@ class mh_appeal extends ecjia_merchant {
 	 */
 	public function insert_appeal() {
 		$this->admin_priv('mh_appeal_update');
-
+		$appeal_content = trim($_POST['appeal_content']);
+		if(empty($appeal_content)){
+			return $this->showmessage('请输入申诉理由', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+		};
 	}
 	
 	

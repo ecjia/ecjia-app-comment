@@ -3,7 +3,7 @@
 
 <!-- {block name="footer"} -->
 <script type="text/javascript">
-// 	ecjia.merchant.goods_info.init();
+	ecjia.merchant.appeal_info.init();
 </script>
 <!-- {/block} -->
 <!-- {block name="home-content"} -->
