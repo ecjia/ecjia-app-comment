@@ -41,28 +41,21 @@
 			                <img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">
 						</div>
 		            </div>    
-				</div>                        
-				<form class="form-horizontal" action='{url path="goods/merchant/add_link_goods" args="goods_id={$smarty.get.goods_id}{if $code}&extension_code={$code}{/if}"}' method="post" name="theForm">
-					<div class="form-group">
-						<div class="tab-content">
-							<fieldset>
-								
-							</fieldset>
+				</div> 
+				<div class="appeal_bottom"> 
+					<h4>申诉内容</h4>               
+					<form class="form-horizontal" action='{$form_action}' method="post" name="theForm">
+						<textarea class="form-control" id="appeal_content" name="appeal_content" placeholder="请输入申诉理由" ></textarea>
+						<br>
+						<div class="appeal-goods">
+			                <img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">
 						</div>
-					</div>
-					<div class="form-group">
-						<fieldset class="t_c">
-							<input type="hidden" name="goods_id" value="{$goods_id}" />
-							<input type="hidden" name="cat_id" />
-							{if $step}
-							<button class="btn btn-info next_step" disabled type="button" data-url='{url path="goods/merchant/add"}'>{lang key='goods::goods.next_step'}</button>
-							<input type="hidden" name="step" value="{$step}" />
-							{else}
-							<button class="btn btn-info" type="submit">{lang key='goods::goods.save'}</button>
-							{/if}
-						</fieldset>
-					</div>
-				</form>
+						<br>
+						<input type="hidden" name="goods_id" value="" />
+						<input type="hidden" name="user_id" value=""/>
+						<button class="btn btn-info" type="submit">提交申诉</button>
+					</form>
+				</div>
 			</div>
 		</div>
 	</div>

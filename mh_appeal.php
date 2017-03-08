@@ -121,7 +121,6 @@ class mh_appeal extends ecjia_merchant {
 		$check_status   = $_GET['check_status'];
 		$this->assign('check_status', $check_status);
 
-	
 		$this->display('mh_appeal_detail.dwt');
 	}
 	
