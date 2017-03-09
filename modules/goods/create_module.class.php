@@ -54,98 +54,131 @@ defined('IN_ECJIA') or exit('No permission resources.');
 class create_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
     	
+    	//如果用户登录获取其session
+    	$this->authSession();
 		$user_id = $_SESSION['user_id'];
 		if ($user_id < 1) {
 			return new ecjia_error(100, 'Invalid session');
 		}
 		
-		$rec_id		= _POST('rec_id');
-		$content	= _POST('content');
-		$comment_rank	= _POST('comment_rank');
-		$comment_image	= _POST('comment_image');
-		$is_anonymous	= _POST('is_anonymous', 0);
+		$rec_id			= $this->requestData('rec_id');
+		$object_id 		= $this->requestData('object_id');
+		$object_type 	= $this->requestData('object_type', 'goods');
+		$user_name 		= $_SESSION['user_name'];
+		$order_id 		= $this->requestData('order_id', 0);
+		$content 		= $this->requestData('content');
+		$rank 			= $this->requestData('rank');
+		$is_anonymous 	= $this->requestData('is_anonymous', 1);
 		
+		$store_id = $this->requestData('store_id');
+		$goods_attr = $this->requestData('goods_attr');
+		
+// 		if ($is_anonymous) {
+// 			$len = mb_strlen($user_name);
+// 			if ($len > 2) {
+// 				$user_name = mb_substr($user_name, 0, 1) . '***' . mb_substr($user_name, $len-1, $len);
+// 			} else  {
+// 				$user_name = mb_substr($user_name, 0, 1) . '*';
+// 			}
+// 		}
 		if (empty($rec_id)) {
 			return new ecjia_error('invalid_parameter', '参数错误！');
 		}
 		
-		$order_db = RC_Model::model('orders/order_order_infogoods_viewmodel');
-		$order_db->view = array(
-				'order_goods' => array(
-						'type'	=> Component_Model_View::TYPE_LEFT_JOIN,
-						'alias'	=> 'og',
-						'on'	=> 'oi.order_id = og.order_id'
-				),
-		);
-		$order_info = $order_db->where(array('oi.user_id' => $_SESSION['user_id'], 'og.rec_id' => $rec_id))->find();
+		$save_path = 'data/comment/'.$object_id;
+		$upload = RC_Upload::uploader('image', array('save_path' => $save_path, 'auto_sub_dirs' => true));
+		
+// 		$order_db = RC_Model::model('orders/order_order_infogoods_viewmodel');
+// 		$order_db->view = array(
+// 			'order_goods' => array(
+// 				'type'	=> Component_Model_View::TYPE_LEFT_JOIN,
+// 				'alias'	=> 'og',
+// 				'on'	=> 'oi.order_id = og.order_id'
+// 			),
+// 		);
+// 		$order_info = $order_db->where(array('oi.user_id' => $user_id, 'og.rec_id' => $rec_id))->find();
+		
+		$order_info = RC_DB::table('order_info as oi')
+			->leftJoin('order_goods as og', RC_DB::raw('oi.order_od'), '=', RC_DB::raw('og.order_id'))
+			->where(RC_DB::raw('oi.user_id'), $user_id)
+			->where(RC_DB::raw('og.rec_id'), $rec_id)
+			->pluck();
 	
 		if (empty($order_info)) {
 			return new ecjia_error('order_error', '订单信息不存在！');
 		}
 		
-		$comment_info = RC_Model::model('comment/comment_model')->where(array('rec_id' => $rec_id, 'user_id' => $_SESSION['user_id'], 'comment_type' => 0))->find();
-		if (empty($comment_info) && empty($content) && empty($comment_rank)) {
+// 		$comment_info = RC_Model::model('comment/comment_model')->where(array('rec_id' => $rec_id, 'user_id' => $_SESSION['user_id'], 'comment_type' => 0))->find();
+
+// 		$comment_info = RC_DB::table('comment')->where('rec_id', $rec_id)->where('user_id', $user_id)->where('comment_type', $object_type)->pluck();
+// 		if (empty($comment_info) && empty($content) && empty($rank)) {
+
+		if (empty($content) && empty($rank)) {
 			return new ecjia_error('invalid_parameter', '参数错误！');
 		}
+		$save_path = 'data/comment/'.RC_Time::local_date('Ym');
+		$upload = RC_Upload::uploader('image', array('save_path' => $save_path, 'auto_sub_dirs' => true));
 		
-		if (empty($comment_info)) {
-			/* 评论是否需要审核 */
-			$status = 1 - ecjia::config('comment_check');
-			$goods_id = RC_Model::model('orders/order_goods_model')->where(array('rec_id' => $rec_id))->get_field('goods_id');
-			
-			$user_name = $_SESSION['user_name'];
-			if ($is_anonymous) {
-				$len = mb_strlen($user_name);
-				if ($len > 2) {
-					$user_name = mb_substr($user_name, 0, 1) . '***' . mb_substr($user_name, $len-1, $len);
-				} else  {
-					$user_name = mb_substr($user_name, 0, 1) . '*';
+		if (!empty($_FILES['picture'])) {
+			$count = count($_FILES['picture']['name']);
+			$type_array = array('image/jpeg', 'image/png', 'image/x-png', 'image/pjpeg');
+			for ($i=0; $i<$count; $i++) {
+				if (!in_array($_FILES['picture']['type'][$i], $type_array)) {
+					return new ecjia_error('picture_type_error', '图片类型错误');
+				}
+				//限制大小2M
+				if ($_FILES['picture']['size'][$i] > 2097152) {
+					return new ecjia_error('picture_size_error', '超出限制文件大小');
 				}
 			}
+		}
+		$image_info	= $upload->batch_upload($_FILES);
+		
+// 		if (empty($comment_info)) {
+			/* 评论是否需要审核 */
+			$status = 1 - ecjia::config('comment_check');
+// 			$goods_id = RC_Model::model('orders/order_goods_model')->where(array('rec_id' => $rec_id))->get_field('goods_id');
+// 			$goods_id = RC_DB::table('order_goods')->where('rec_id', $rec_id)->lists('goods_id');
 			
 			$data = array(
-					'comment_type'	=> 0,
-					'id_value'		=> $goods_id,
-					'user_name'		=> $user_name,
-					'content'		=> $content,
-					'comment_rank'	=> $comment_rank,
-					'add_time'		=> RC_Time::gmtime(),
-					'ip_address'	=> RC_Ip::client_ip(),
-					'status'		=> $status,
-					'parent_id'		=> 0,
-					'user_id'		=> $_SESSION['user_id'],
-					'rec_id'		=> $rec_id,
+				'comment_type'	=> $object_type,
+				'id_value'		=> $object_id,
+				'user_name'		=> $user_name,
+				'is_anonymous'  => $is_anonymous,
+				'content'		=> $content,
+				'comment_rank'	=> $rank,
+				'add_time'		=> RC_Time::gmtime(),
+				'ip_address'	=> RC_Ip::client_ip(),
+				'status'		=> $status,
+				'parent_id'		=> 0,
+				'user_id'		=> $user_id,
+				'store_id'		=> $store_id,
+				'order_id'   	=> $rec_id,
+				'goods_attr'	=> $goods_attr
 			);
 			$comment_id = RC_Model::model('comment/comment_model')->insert($data);
-		} else {
-			$comment_id = $comment_info['comment_id'];
-		}
-		
-// 		$comment_img = RC_Model::model('comment/comment_img_model')->find(array('comment_id' => $comment_id));
-// 		if (empty($comment_img) && !empty($_FILES)) {
-// 			$save_path = 'data/cmt_img/'.RC_Time::local_date('Ym');
-// 			$upload = RC_Upload::uploader('image', array('save_path' => $save_path, 'auto_sub_dirs' => true));
-	
-// 			$image_info	= $upload->batch_upload($_FILES);
-// 			foreach ($image_info as $key => $val) {
-// 				if (!empty($val)) {
-// 					$image_url	= $upload->get_position($image_info[$key]);
-// 					RC_Model::model('comment/comment_img_model')->insert(array(
-// 						'user_id'		=> $_SESSION['user_id'],
-// 						'goods_id'		=> $order_info['goods_id'],
-// 						'comment_id'	=> $comment_id,
-// 						'comment_img'	=> $image_url,
-// 						'img_thumb'		=> $image_url,
-// 					));
-// 				}
-// 			}
+// 		} else {
+// 			$comment_id = $comment_info['comment_id'];
 // 		}
+
+		foreach ($image_info as $key => $val) {
+			if (!empty($val)) {
+				$image_url	= $upload->get_position($image_info[$key]);
+				$data = array(
+					'object_app'	=> 'ecjia.comment',
+					'object_group'	=> 'comment',
+					'object_id'		=> $comment_id,
+					'file_path'		=> $image_url,
+					'is_image'		=> 1,
+					'user_id'		=> $user_id,
+					'add_time'		=> RC_Time::gmtime(),
+					'add_ip'		=> RC_Ip::client_ip(),
+				);
+				RC_DB::table('term_attachment')->insert($data);
+			}
+		}
 		return array();
-		
 	}
 }
-
-
-
 
 // end
