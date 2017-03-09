@@ -121,14 +121,16 @@ class create_module extends api_front implements api_interface {
 		
 		if (!empty($_FILES['picture'])) {
 			$count = count($_FILES['picture']['name']);
-			$type_array = array('image/jpeg', 'image/png', 'image/x-png', 'image/pjpeg');
-			for ($i=0; $i<$count; $i++) {
-				if (!in_array($_FILES['picture']['type'][$i], $type_array)) {
-					return new ecjia_error('picture_type_error', '图片类型错误');
-				}
-				//限制大小2M
-				if ($_FILES['picture']['size'][$i] > 2097152) {
-					return new ecjia_error('picture_size_error', '超出限制文件大小');
+			for ($i = 0; $i < $count; $i++) {
+				$picture = array(
+					'name' 		=> 	$_FILES['picture']['name'][$i],
+					'type' 		=> 	$_FILES['picture']['type'][$i],
+					'tmp_name' 	=> 	$_FILES['picture']['tmp_name'][$i],
+					'error'		=> 	$_FILES['picture']['error'][$i],
+					'size'		=> 	$_FILES['picture']['size'][$i],
+				);
+				if (!$upload->check_upload_file($picture)) {
+					return new ecjia_error('picture_error', $upload->error());
 				}
 			}
 		}
