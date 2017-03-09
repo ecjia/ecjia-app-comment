@@ -90,7 +90,7 @@ class create_module extends api_front implements api_interface {
 // 		$order_info = $order_db->where(array('oi.user_id' => $user_id, 'og.rec_id' => $rec_id))->find();
 		
 		$order_info = RC_DB::table('order_info as oi')
-			->selectRaw('oi.*, og.*')
+			->selectRaw('oi.goods_id, oi.store_id, og.goods_attr_id')
 			->leftJoin('order_goods as og', RC_DB::raw('oi.order_id'), '=', RC_DB::raw('og.order_id'))
 			->where(RC_DB::raw('oi.user_id'), $user_id)
 			->where(RC_DB::raw('og.rec_id'), $rec_id)
