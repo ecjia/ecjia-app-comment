@@ -104,10 +104,26 @@ class mh_appeal extends ecjia_merchant {
 	 */
 	public function insert_appeal() {
 		$this->admin_priv('mh_appeal_update');
+		
+		$store_id = $_SESSION['store_id'];
+		$comment_id= 1;
 		$appeal_content = trim($_POST['appeal_content']);
+		$appeal_time = RC_Time::gmtime();
+		$appeal_sn_six = rand(100000, 999999);
+		$appeal_sn = RC_Time::local_date('Ymd', $appeal_time).$appeal_sn_six;
 		if(empty($appeal_content)){
 			return $this->showmessage('请输入申诉理由', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		};
+		$data = array(
+			'store_id' 	    => $store_id,
+			'appeal_sn' 	=> $appeal_sn,
+			'comment_id' 	=> $comment_id,
+			'appeal_content'=> $appeal_content,
+			'check_status'	=> 1,
+			'appeal_time'	=> $appeal_time,
+		);
+		$appeal_id = RC_DB::table('comment_appeal')->insertGetId($data);
+		return $this->showmessage('申诉提交成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('comment/mh_appeal/detail', array('check_status' => 1,'appeal_sn'=>$appeal_sn))));
 	}
 	
 	
@@ -122,7 +138,10 @@ class mh_appeal extends ecjia_merchant {
 		
 		$appeal_sn 		= $_GET['appeal_sn'];
 		$check_status   = $_GET['check_status'];
+		$appeal = RC_DB::table('comment_appeal')->where('appeal_sn', $appeal_sn)->first();
+		$appeal['appeal_time'] = RC_Time::local_date(ecjia::config('time_format'), $appeal['appeal_time']);
 		$this->assign('check_status', $check_status);
+		$this->assign('appeal', $appeal);
 
 		$this->display('mh_appeal_detail.dwt');
 	}

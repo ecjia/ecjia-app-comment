@@ -25,68 +25,33 @@
 <div class="row-fluid edit-page">
    <div class="panel">
         <div class="panel-body">
-			<div class="span12">
-				<div class="tabbable">
-					{if $action eq 'edit'}
-					<ul class="nav nav-tabs">
-						<!-- {foreach from=$tags item=tag} -->
-						<li {if $tag.active} class="active"{/if}><a class="data-pjax" {if $tag.active} href="javascript:;"{else} data-toggle="alertgo" data-message="{lang key='goods::goods.discard_changes'}" href='{$tag.href}'{/if}><!-- {$tag.name} --></a></li>
-						<!-- {/foreach} -->
-					</ul>
-					{/if}
-					<form class="form-horizontal" action='{url path="goods/merchant/add_link_goods" args="goods_id={$smarty.get.goods_id}{if $code}&extension_code={$code}{/if}"}' method="post" name="theForm">
-						<div class="form-group">
-							<div class="tab-content">
-								<fieldset>
-									<div class="control-group draggable goods-cat-container">
-										<div class="ms-container goods_cat_container" id="ms-custom-navigation" data-url='{url path="goods/merchant/get_cat_list"}'>
-											<div class="ms-selectable">
-												<div class="search-header">
-													<input class="form-control" id="ms-search_zero" type="text" placeholder="请输入商品分类关键字" autocomplete="off">
-												</div>
-												<ul class="ms-list nav-list-ready level_0">
-													<!-- {foreach from=$cat_list item=item} -->
-													<li class="ms-elem-selectable" data-id="{$item.cat_id}" data-level="{$item.level}"><span>{$item.cat_name}</span></li>
-													<!-- {foreachelse} -->
-													<li class="ms-elem-selectable disabled"><span>暂无内容</span></li>
-													<!-- {/foreach} -->
-												</ul>
-											</div>
-											<div class="ms-selectable">
-												<div class="search-header">
-													<input class="form-control" id="ms-search_one" type="text" placeholder="请输入商品分类关键字" autocomplete="off">
-												</div>
-												<ul class="ms-list nav-list-ready level_1">
-													<li class="ms-elem-selectable disabled"><span>暂无内容</span></li>
-												</ul>
-											</div>
-											<div class="ms-selectable">
-												<div class="search-header">
-													<input class="form-control" id="ms-search_two" type="text" placeholder="请输入商品分类关键字" autocomplete="off">
-												</div>
-												<ul class="ms-list nav-list-ready level_2">
-													<li class="ms-elem-selectable disabled"><span>暂无内容</span></li>
-												</ul>
-											</div>
-										</div>
-									</div>
-								</fieldset>
-							</div>
+			<div class="span12 appeal_bottom">
+				<div class="appeal_top">
+					<div class="panel-body">
+						<a class="appeal-thumb">
+							<img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg" >
+						</a>
+						<div class="appeal-thumb-details">
+							<h1>送钱</h1>
+							<p>2016-11-04 17：02:33<span>IP:10.10.10.41</span></p><br>
 						</div>
-						<div class="form-group">
-							<fieldset class="t_c">
-								<input type="hidden" name="goods_id" value="{$goods_id}" />
-								<input type="hidden" name="cat_id" />
-								{if $step}
-								<button class="btn btn-info next_step" disabled type="button" data-url='{url path="goods/merchant/add"}'>{lang key='goods::goods.next_step'}</button>
-								<input type="hidden" name="step" value="{$step}" />
-								{else}
-								<button class="btn btn-info" type="submit">{lang key='goods::goods.save'}</button>
-								{/if}
-							</fieldset>
+						<div class="appeal-goods">
+						  	<p>商品评分：</p>
+			                <p>收到手机已经过去三天了，我觉得无法使用，所以给差评</p>
+			                <img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">
 						</div>
-					</form>
-				</div>
+		            </div>    
+				</div> 
+				<h4>申诉内容</h4>        
+				<div class="appeal_top">
+					<div class="panel-body">
+						<div class="appeal-appeal">
+			                <p>{$appeal.appeal_content}</p>
+			                <img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">
+			                <p>{$appeal.appeal_time}</p>
+						</div>
+		            </div>    
+				</div> 
 			</div>
 		</div>
 	</div>

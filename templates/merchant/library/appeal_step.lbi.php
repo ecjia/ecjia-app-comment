@@ -10,8 +10,8 @@
 				</div>
 			</li>
 			<li>
-				<div class="{if $step eq '2'}step-cur{elseif $step gt '2'}step-done{/if}">
-					<div class="step-no">{if $step lt '3'}2{/if}</div>
+				<div class="{if $check_status eq '1'}step-cur{elseif $check_status eq '1'}step-done{/if}">
+					<div class="step-no">{if $check_status eq '1'}2{/if}</div>
 					<div class="m_t5">审核中</div>
 				</div>
 			</li>
