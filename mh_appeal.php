@@ -53,7 +53,6 @@ class mh_appeal extends ecjia_merchant {
 	public function __construct() {
 		parent::__construct();
 		
-		
 		RC_Script::enqueue_script('jquery-form');
 		RC_Script::enqueue_script('smoke');
 		RC_Style::enqueue_style('uniform-aristo');
@@ -65,9 +64,8 @@ class mh_appeal extends ecjia_merchant {
 		ecjia_merchant_screen::get_current_screen()->set_parentage('comment', 'comment/mh_appeal.php');
 	}
 
-	
 	/**
-	 *申诉列表页面
+	 *申诉列表页面加载
 	 */
 	public function init() {
 	    $this->admin_priv('mh_appeal_manage');
@@ -98,7 +96,6 @@ class mh_appeal extends ecjia_merchant {
 		$this->display('mh_appeal_info.dwt');
 	}
 	
-	
 	/**
 	 *发起申诉处理
 	 */
@@ -126,7 +123,6 @@ class mh_appeal extends ecjia_merchant {
 		return $this->showmessage('申诉提交成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('comment/mh_appeal/detail', array('check_status' => 1,'appeal_sn'=>$appeal_sn))));
 	}
 	
-	
 	/**
 	 *申诉-查看详情
 	 */
@@ -147,7 +143,18 @@ class mh_appeal extends ecjia_merchant {
 	}
 	
 	/**
-	 * 获取员工列表信息
+	 * 申诉-撤销
+	 */
+	public function revoke() {
+		$this->admin_priv('mh_appeal_remove');
+	
+		$appeal_sn = $_GET['appeal_sn'];
+		RC_DB::table('comment_appeal')->where('appeal_sn', $appeal_sn)->delete();
+		return $this->showmessage('申诉撤销成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS,array('pjaxurl' => RC_Uri::url('comment/mh_appeal/init')));
+	}
+	
+	/**
+	 * 申诉-列表信息
 	 */
 	private function appeal_list($store_id) {
 		$db_comment_appeal = RC_DB::table('comment_appeal');
