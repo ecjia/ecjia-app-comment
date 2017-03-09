@@ -61,27 +61,17 @@ class create_module extends api_front implements api_interface {
 			return new ecjia_error(100, 'Invalid session');
 		}
 		
-		$rec_id			= $this->requestData('rec_id');
 		$object_id 		= $this->requestData('object_id');
 		$object_type 	= $this->requestData('object_type', 'goods');
 		$user_name 		= $_SESSION['user_name'];
 		$order_id 		= $this->requestData('order_id', 0);
 		$content 		= $this->requestData('content');
-		$rank 			= $this->requestData('rank');
-		$is_anonymous 	= $this->requestData('is_anonymous', 1);
+		$rank 			= $this->requestData('rank', 0);
+		$is_anonymous 	= $this->requestData('is_anonymous');
 		
-		$store_id = $this->requestData('store_id');
-		$goods_attr = $this->requestData('goods_attr');
+		$goods_attr 	= $this->requestData('goods_attr');
 		
-// 		if ($is_anonymous) {
-// 			$len = mb_strlen($user_name);
-// 			if ($len > 2) {
-// 				$user_name = mb_substr($user_name, 0, 1) . '***' . mb_substr($user_name, $len-1, $len);
-// 			} else  {
-// 				$user_name = mb_substr($user_name, 0, 1) . '*';
-// 			}
-// 		}
-		if (empty($rec_id)) {
+		if (empty($object_id) || empty($object_type) || empty($content) || empty($rank) || empty($is_anonymous)) {
 			return new ecjia_error('invalid_parameter', '参数错误！');
 		}
 		
@@ -101,21 +91,13 @@ class create_module extends api_front implements api_interface {
 		$order_info = RC_DB::table('order_info as oi')
 			->leftJoin('order_goods as og', RC_DB::raw('oi.order_od'), '=', RC_DB::raw('og.order_id'))
 			->where(RC_DB::raw('oi.user_id'), $user_id)
-			->where(RC_DB::raw('og.rec_id'), $rec_id)
+			->where(RC_DB::raw('og.rec_id'), $order_id)
 			->pluck();
 	
 		if (empty($order_info)) {
 			return new ecjia_error('order_error', '订单信息不存在！');
 		}
 		
-// 		$comment_info = RC_Model::model('comment/comment_model')->where(array('rec_id' => $rec_id, 'user_id' => $_SESSION['user_id'], 'comment_type' => 0))->find();
-
-// 		$comment_info = RC_DB::table('comment')->where('rec_id', $rec_id)->where('user_id', $user_id)->where('comment_type', $object_type)->pluck();
-// 		if (empty($comment_info) && empty($content) && empty($rank)) {
-
-		if (empty($content) && empty($rank)) {
-			return new ecjia_error('invalid_parameter', '参数错误！');
-		}
 		$save_path = 'data/comment/'.RC_Time::local_date('Ym');
 		$upload = RC_Upload::uploader('image', array('save_path' => $save_path, 'auto_sub_dirs' => true));
 		
@@ -136,32 +118,26 @@ class create_module extends api_front implements api_interface {
 		}
 		$image_info	= $upload->batch_upload($_FILES);
 		
-// 		if (empty($comment_info)) {
-			/* 评论是否需要审核 */
-			$status = 1 - ecjia::config('comment_check');
-// 			$goods_id = RC_Model::model('orders/order_goods_model')->where(array('rec_id' => $rec_id))->get_field('goods_id');
-// 			$goods_id = RC_DB::table('order_goods')->where('rec_id', $rec_id)->lists('goods_id');
-			
-			$data = array(
-				'comment_type'	=> $object_type,
-				'id_value'		=> $object_id,
-				'user_name'		=> $user_name,
-				'is_anonymous'  => $is_anonymous,
-				'content'		=> $content,
-				'comment_rank'	=> $rank,
-				'add_time'		=> RC_Time::gmtime(),
-				'ip_address'	=> RC_Ip::client_ip(),
-				'status'		=> $status,
-				'parent_id'		=> 0,
-				'user_id'		=> $user_id,
-				'store_id'		=> $store_id,
-				'order_id'   	=> $rec_id,
-				'goods_attr'	=> $goods_attr
-			);
-			$comment_id = RC_Model::model('comment/comment_model')->insert($data);
-// 		} else {
-// 			$comment_id = $comment_info['comment_id'];
-// 		}
+		/* 评论是否需要审核 */
+		$status = 1 - ecjia::config('comment_check');
+
+		$data = array(
+			'comment_type'	=> $object_type,
+			'id_value'		=> $object_id,
+			'user_name'		=> $user_name,
+			'is_anonymous'  => $is_anonymous,
+			'content'		=> $content,
+			'comment_rank'	=> $rank,
+			'add_time'		=> RC_Time::gmtime(),
+			'ip_address'	=> RC_Ip::client_ip(),
+			'status'		=> $status,
+			'parent_id'		=> 0,
+			'user_id'		=> $user_id,
+			'store_id'		=> $store_id,
+			'order_id'   	=> $order_id,
+			'goods_attr'	=> $goods_attr
+		);
+		$comment_id = RC_Model::model('comment/comment_model')->insert($data);
 
 		foreach ($image_info as $key => $val) {
 			if (!empty($val)) {
