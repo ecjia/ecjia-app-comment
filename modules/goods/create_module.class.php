@@ -65,6 +65,7 @@ class create_module extends api_front implements api_interface {
 		$object_type 	= $this->requestData('object_type', 'goods');
 		$user_name 		= $_SESSION['user_name'];
 		$order_id 		= $this->requestData('order_id', 0);
+		$rec_id			= $this->requestData('rec_id', 0);
 		$content 		= $this->requestData('content');
 		$rank 			= $this->requestData('rank', 0);
 		$is_anonymous 	= $this->requestData('is_anonymous');
@@ -89,10 +90,12 @@ class create_module extends api_front implements api_interface {
 // 		$order_info = $order_db->where(array('oi.user_id' => $user_id, 'og.rec_id' => $rec_id))->find();
 		
 		$order_info = RC_DB::table('order_info as oi')
-			->leftJoin('order_goods as og', RC_DB::raw('oi.order_od'), '=', RC_DB::raw('og.order_id'))
+			->selectRaw('oi.*, og.*')
+			->leftJoin('order_goods as og', RC_DB::raw('oi.order_id'), '=', RC_DB::raw('og.order_id'))
 			->where(RC_DB::raw('oi.user_id'), $user_id)
-			->where(RC_DB::raw('og.rec_id'), $order_id)
-			->pluck();
+			->where(RC_DB::raw('og.rec_id'), $rec_id)
+			->where(RC_DB::raw('oi.order_id'), $order_id)
+			->first();
 	
 		if (empty($order_info)) {
 			return new ecjia_error('order_error', '订单信息不存在！');
@@ -133,9 +136,9 @@ class create_module extends api_front implements api_interface {
 			'status'		=> $status,
 			'parent_id'		=> 0,
 			'user_id'		=> $user_id,
-			'store_id'		=> $store_id,
+			'store_id'		=> $order_info['store_id'],
 			'order_id'   	=> $order_id,
-			'goods_attr'	=> $goods_attr
+			'goods_attr'	=> $order_info['goods_attr_id']
 		);
 		$comment_id = RC_Model::model('comment/comment_model')->insert($data);
 
