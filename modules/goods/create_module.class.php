@@ -67,12 +67,10 @@ class create_module extends api_front implements api_interface {
 		$order_id 		= $this->requestData('order_id', 0);
 		$rec_id			= $this->requestData('rec_id', 0);
 		$content 		= $this->requestData('content');
-		$rank 			= $this->requestData('rank', 0);
-		$is_anonymous 	= $this->requestData('is_anonymous');
+		$rank 			= $this->requestData('rank', 5);
+		$is_anonymous 	= $this->requestData('is_anonymous', 1);
 		
-		$goods_attr 	= $this->requestData('goods_attr');
-		
-		if (empty($object_id) || empty($object_type) || empty($content) || empty($rank) || empty($is_anonymous)) {
+		if (empty($object_id) || empty($object_type) || empty($content)) {
 			return new ecjia_error('invalid_parameter', '参数错误！');
 		}
 		
