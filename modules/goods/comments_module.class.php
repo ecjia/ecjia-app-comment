@@ -114,7 +114,12 @@ function EM_assign_comment($id, $type, $page = 1, $page_size = 15) {
 			$arr['add_time'] 	= RC_Time::local_date(ecjia::config('time_format'), $row['add_time']);
 	
 			if ($row['has_image'] == 1) {
-				$picture_list = RC_DB::table('term_attachment')->where('object_group', 'comment')->where('object_id', $row['comment_id'])->lists('file_path');
+				$picture_list = RC_DB::table('term_attachment')
+					->where('object_group', 'comment')
+					->where('object_id', $row['comment_id'])
+					->where('object_app', 'ecjia.comment')
+					->where('object_group', 'comment')
+					->lists('file_path');
 				if (!empty($picture_list)) {
 					foreach ($picture_list as $k => $v) {
 						if (!empty($v) && file_exists(RC_Upload::upload_path($v))) {
