@@ -69,7 +69,6 @@ class create_module extends api_front implements api_interface {
 		$content 		= $this->requestData('content');
 		$rank 			= $this->requestData('rank', 0);
 		$is_anonymous 	= $this->requestData('is_anonymous');
-		
 		$goods_attr 	= $this->requestData('goods_attr');
 		
 		if (empty($object_id) || empty($object_type) || empty($content) || empty($rank) || empty($is_anonymous)) {
@@ -90,7 +89,7 @@ class create_module extends api_front implements api_interface {
 // 		$order_info = $order_db->where(array('oi.user_id' => $user_id, 'og.rec_id' => $rec_id))->find();
 		
 		$order_info = RC_DB::table('order_info as oi')
-			->selectRaw('oi.goods_id, oi.store_id, og.goods_attr_id')
+			->selectRaw('oi.goods_id, oi.store_id, og.goods_attr')
 			->leftJoin('order_goods as og', RC_DB::raw('oi.order_id'), '=', RC_DB::raw('og.order_id'))
 			->where(RC_DB::raw('oi.user_id'), $user_id)
 			->where(RC_DB::raw('og.rec_id'), $rec_id)
@@ -138,7 +137,7 @@ class create_module extends api_front implements api_interface {
 			'user_id'		=> $user_id,
 			'store_id'		=> $order_info['store_id'],
 			'order_id'   	=> $order_id,
-			'goods_attr'	=> $order_info['goods_attr_id']
+			'goods_attr'	=> $order_info['goods_attr']
 		);
 		$comment_id = RC_Model::model('comment/comment_model')->insert($data);
 
