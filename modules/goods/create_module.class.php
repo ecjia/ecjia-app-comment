@@ -67,7 +67,7 @@ class create_module extends api_front implements api_interface {
 		$order_id 		= $this->requestData('order_id', 0);
 		$rec_id			= $this->requestData('rec_id', 0);
 		$content 		= $this->requestData('content');
-		$rank 			= $this->requestData('rank', 0);
+		$rank 			= $this->requestData('rank');
 		$is_anonymous 	= $this->requestData('is_anonymous');
 		$goods_attr 	= $this->requestData('goods_attr');
 		
