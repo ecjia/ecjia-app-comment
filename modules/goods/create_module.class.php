@@ -117,8 +117,8 @@ class create_module extends api_front implements api_interface {
 					return new ecjia_error('picture_error', $upload->error());
 				}
 			}
+			$image_info	= $upload->batch_upload($_FILES);
 		}
-		$image_info	= $upload->batch_upload($_FILES);
 		
 		/* 评论是否需要审核 */
 		$status = 1 - ecjia::config('comment_check');
@@ -139,22 +139,27 @@ class create_module extends api_front implements api_interface {
 			'order_id'   	=> $order_id,
 			'goods_attr'	=> $order_info['goods_attr']
 		);
+		if (!empty($image_info)) {
+			$data['has_image'] = 1;
+		}
 		$comment_id = RC_Model::model('comment/comment_model')->insert($data);
 
-		foreach ($image_info as $key => $val) {
-			if (!empty($val)) {
-				$image_url	= $upload->get_position($image_info[$key]);
-				$data = array(
-					'object_app'	=> 'ecjia.comment',
-					'object_group'	=> 'comment',
-					'object_id'		=> $comment_id,
-					'file_path'		=> $image_url,
-					'is_image'		=> 1,
-					'user_id'		=> $user_id,
-					'add_time'		=> RC_Time::gmtime(),
-					'add_ip'		=> RC_Ip::client_ip(),
-				);
-				RC_DB::table('term_attachment')->insert($data);
+		if (!empty($image_info)) {
+			foreach ($image_info as $key => $val) {
+				if (!empty($val)) {
+					$image_url	= $upload->get_position($image_info[$key]);
+					$data = array(
+						'object_app'	=> 'ecjia.comment',
+						'object_group'	=> 'comment',
+						'object_id'		=> $comment_id,
+						'file_path'		=> $image_url,
+						'is_image'		=> 1,
+						'user_id'		=> $user_id,
+						'add_time'		=> RC_Time::gmtime(),
+						'add_ip'		=> RC_Ip::client_ip(),
+					);
+					RC_DB::table('term_attachment')->insert($data);
+				}
 			}
 		}
 		return array();
