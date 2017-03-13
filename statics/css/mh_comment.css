@@ -17,3 +17,9 @@ i.fa-star {
 .row .filter .fl-l {
 	float: left;
 }
+.active{
+	text-align:right;
+}
+.table-th-block{
+	border:1px solid #ddd;
+}
