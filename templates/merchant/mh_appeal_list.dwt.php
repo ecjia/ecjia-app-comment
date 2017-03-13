@@ -28,9 +28,9 @@
 		<div class="panel">
 			<div class="panel-body panel-body-small">
 				<ul class="nav nav-pills pull-left">
-					<li class="{if $type eq ''}active{/if}"><a class="data-pjax" href='{url path="comment/mh_appeal/init"}'>全部<span class="badge badge-info">{if $count.count}{$count.count}{else}0{/if}</span> </a></li>
-					<li class="{if $type eq 'untreated'}active{/if}"><a class="data-pjax" href='{url path="comment/mh_appeal/init" args="type=untreated"}'>待处理<span class="badge badge-info">{if $count.untreated}{$count.untreated}{else}0{/if}</span></a></li>
-					<li class="{if $type eq 'already'}active{/if}"><a class="data-pjax" href='{url path="comment/mh_appeal/init" args="type=already"}'>已处理<span class="badge badge-info">{if $count.already}{$count.already}{else}0{/if}</span> </a></li>
+					<li class="{if $smarty.get.type eq ''}active{/if}"><a class="data-pjax" href='{url path="comment/mh_appeal/init"}'>全部<span class="badge badge-info">{if $count.count}{$count.count}{else}0{/if}</span> </a></li>
+					<li class="{if $smarty.get.type eq 'untreated'}active{/if}"><a class="data-pjax" href='{url path="comment/mh_appeal/init" args="type=untreated"}'>待处理<span class="badge badge-info">{if $count.untreated}{$count.untreated}{else}0{/if}</span></a></li>
+					<li class="{if $smarty.get.type eq 'already'}active{/if}"><a class="data-pjax" href='{url path="comment/mh_appeal/init" args="type=already"}'>已处理<span class="badge badge-info">{if $count.already}{$count.already}{else}0{/if}</span> </a></li>
 				</ul>	
 			
 				<form class="form-inline pull-right" name="searchForm" method="post" action="{$search_action}">
