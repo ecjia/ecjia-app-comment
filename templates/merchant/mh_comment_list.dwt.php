@@ -3,7 +3,7 @@
 
 <!-- {block name="footer"} -->
 <script type="text/javascript">
-	ecjia.merchant.appeal_list.init();
+	ecjia.merchant.mh_comment.editlist();
 </script>
 <!-- {/block} -->
 
@@ -26,11 +26,45 @@
 <div class="row">
 	<div class="col-lg-12">
 		<div class="panel">
+			<div class="panel-body">
+				<div class="filter">
+	           		<a href="javascript:;" class="fl-l">全部</a>
+	           		<span class="fl-l">&nbsp;>&nbsp;</span>
+	           		<div class="text-center filter-box fl-l">好评 <i class="cursor_pointer fa fa-times"></i></div>
+	           		<div class="text-center filter-box fl-l">有图 <i class="cursor_pointer fa fa-times"></i></div>
+				</div>
+                <table class="table table-th-block">
+                    <tbody>
+                        <tr>
+                            <td class="active w200">评分级别：</td>
+                            <td>
+								好评 中评 差评
+							</td>
+                        </tr>
+                        <tr>
+                            <td class="active">有无晒图：</td>
+                            <td>
+								有 无
+							</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 			<div class="panel-body panel-body-small">
 				<form class="form-inline pull-right" name="searchForm" method="post" action="{$search_action}">
-					<div class="form-group">
-						<input type="text" class="form-control" name="keywords" value="{$smarty.get.keywords}" placeholder="请输入申诉编号"/> 
-						<button type="button" class="btn btn-primary"><i class="fa fa-search"></i>搜索</button>
+					<div class="screen f_r">
+						<div class="form-group">
+							<select class="w130" name="intro_type">
+								<option value="0">{lang key='goods::goods.intro_type'}</option>
+								<!-- {foreach from=$intro_list item=list key=key} -->
+								<option value="{$key}" {if $key == $smarty.get.intro_type}selected{/if}>{$list}</option>
+								<!-- {/foreach} -->
+							</select>
+						</div>
+						<div class="form-group">
+							<input type="text" class="form-control" name="keywords" value="{$smarty.get.keywords}" placeholder="输入用户名称">
+						</div>
+						<button class="btn btn-primary screen-btn" type="button"><i class="fa fa-search"></i> 搜索 </button>
 					</div>
 				</form>
 			</div>

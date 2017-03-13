@@ -1,3 +1,19 @@
 i.fa-star {
 	color: #FF9933;
 }
+.row .filter {
+	margin: 1em 0 1em 0;
+	float: left;
+}
+.row .filter .filter-box {
+	height: 1.6em;
+	width: 4.2em;
+	border: 1px solid #999;
+	display: block;
+	overflow: hidden;
+	border-radius: 3px;
+	margin: 0 .2em 0 .2em;
+}
+.row .filter .fl-l {
+	float: left;
+}
