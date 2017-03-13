@@ -49,6 +49,10 @@ function EM_assign_comment($id, $type, $page = 1, $page_size = 15) {
 		->where('comment_type', 0)
 		->where('id_value', $id)
 		->first();
+	$list['comment_number']['good'] = empty($list['comment_number']['good']) ? 0 : intval($list['comment_number']['good']);
+	$list['comment_number']['general'] = empty($list['comment_number']['good']) ? 0 : intval($list['comment_number']['general']);
+	$list['comment_number']['low'] = empty($list['comment_number']['good']) ? 0 : intval($list['comment_number']['low']);
+	$list['comment_number']['picture'] = empty($list['comment_number']['good']) ? 0 : intval($list['comment_number']['picture']);
 	
 	if ($list['comment_number']['all'] != 0) {
 		$list['comment_percent'] = ($list['comment_number']['good'] / $list['comment_number']['all']) * 100 .'%';
