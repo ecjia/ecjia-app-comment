@@ -36,7 +36,7 @@
                 <table class="table table-th-block">
                     <tbody>
                         <tr>
-                            <td class="active w200">评分级别：</td>
+                            <td class="active w150">评分级别：</td>
                             <td>
 								好评 中评 差评
 							</td>
