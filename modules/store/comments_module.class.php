@@ -1,7 +1,7 @@
 <?php
 defined('IN_ECJIA') or exit('No permission resources.');
 /**
- * 某商品的所有评论
+ * 某店铺的所有评论
  * @author royalwang
  *
  */
@@ -10,10 +10,10 @@ class comments_module extends api_front implements api_interface
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request)
     {	
     	$this->authSession();
-		$goods_id = $this->requestData('goods_id');
-		$comment_type = $this->requestData('comment_type');
+		$store_id = $this->requestData('store_id');
+		$comment_type = $this->requestData('comment_type', 'all');
 		
-		if (!$goods_id || !$comment_type) {
+		if (!$store_id || !$comment_type) {
 			return new ecjia_error('invalid_parameter', RC_Lang::get('system::system.invalid_parameter'));
 		}
 		
@@ -21,7 +21,7 @@ class comments_module extends api_front implements api_interface
 		$page		= $this->requestData('pagination.page', 1);
 		
 		//0评论的是商品,1评论的是文章
-		$comment_list = EM_assign_comment($goods_id, $comment_type, $page, $page_size);
+		$comment_list = EM_assign_comment($store_id, $comment_type, $page, $page_size);
 		return array('data' => $comment_list['data'], 'pager' => $comment_list['pager']);
 	}
 }
@@ -47,7 +47,7 @@ function EM_assign_comment($id, $type, $page = 1, $page_size = 15) {
 		->where('status', 1)
 		->where('parent_id', 0)
 		->where('comment_type', 0)
-		->where('id_value', $id)
+		->where('store_id', $id)
 		->first();
 	$list['comment_number']['good'] = empty($list['comment_number']['good']) ? 0 : intval($list['comment_number']['good']);
 	$list['comment_number']['general'] = empty($list['comment_number']['good']) ? 0 : intval($list['comment_number']['general']);
@@ -55,14 +55,14 @@ function EM_assign_comment($id, $type, $page = 1, $page_size = 15) {
 	$list['comment_number']['picture'] = empty($list['comment_number']['good']) ? 0 : intval($list['comment_number']['picture']);
 	
 	if ($list['comment_number']['all'] != 0) {
-		$list['comment_percent'] = ($list['comment_number']['good'] / $list['comment_number']['all']) * 100 .'%';
+		$list['comment_percent'] = round(($list['comment_number']['good'] / $list['comment_number']['all']) * 100) .'%';
 	} else {
 		$list['comment_percent'] = '100%';
 	}
 
 	$db_comment = RC_DB::table('comment')
 		->select('*')
-		->where('id_value', $id)
+		->where('store_id', $id)
 		->where('status', 1)
 		->where('parent_id', 0)
 		->where('comment_type', 0);

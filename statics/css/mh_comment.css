@@ -1,159 +1,12 @@
-.ms-container {
-	width: 300px;
-}
-
-.ms-container .select_user li.selected {
-	background-color: #48A6D2 !important;
-	color: #fff;
-}
-.ms-container .select_goods li.selected {
-	background-color: #48A6D2 !important;
-	color: #fff;
-}
-
-.tips {
-	padding-left: 10px;
-	color: #999;
-}
-
-.ms-elem-selectable {
-	padding-left: 5px;
-	border-bottom: 1px solid #f2f2f2;
-}
-
-.kong {
-	border-bottom: none;
-	color: #AAA;
-	font-size: 12px;
-	line-height: 16px;
-	padding: 4px 10px 3px;
-}
-
-.new_userinfo_wrap {
-	display: none
-}
-
-.vcard ul {
-    list-style: none;
-	margin: 10px 0 0 0;
-    overflow: hidden;
-}
-
-.vcard ul li {
-    padding: 8px 0px 8px 0;
-    border-bottom: 1px dashed #dcdcdc;
-	overflow: visible;
-}
-
-.vcard .v-heading {
-	padding-left: 10px;
-}
-
-.vcard ul li:last-child {
-	margin-bottom:10px;
-}
-
-ul, ol {
-    padding: 0;
-    margin: 0 0 10px 25px;
-}
-
-.cat_list label{
-	float: left;
-	padding-left: 5px;
-	width: 120px;
-	overflow: hidden;
-	text-overflow:ellipsis; 
-	white-space:nowrap; 
-	overflow:hidden;
-}
-
-.chzn-container .chzn-results { 
-	max-height:155px;
-	overflow-y:auto;
-}
-.tab_merchants {
-	float: right;
-    width: 78%;
-	overflow:visible;
-}
-
-.tab_merchants_nav {
-	width: 19%;
-	margin-right:0px;
-}
-.comment-list {
-	background-color: #FFF;
-}
-.comment-list ul {
-    padding: 0;
-    margin: 0;
-}
-.comment-list section table {
-	margin-bottom: 0;
-}
-.comment-list ul .edit-hidden {
-	list-style-type:none;
-	position: relative;
-	overflow: hidden;
-	border-top: 1px solid #999;
-	padding-top: 1em;
-}
-.comment-list ul .edit-hidden .width-20-p,
-.comment-list table tr .width-20-p {
-	width: 20%;
-	float: left;
-}
-.comment-list ul .edit-hidden .width-60-p,
-.comment-list table tr .width-60-p {
-	width: 60%;
-	float: left;
-}
-.comment-list ul .edit-hidden .width-20-p .fa-star {
+/*评论列表*/
+i.fa-star {
 	color: #FF9933;
 }
-.comment-list .table-striped>tbody>tr>th {
-	background-color: #FFF;
-	padding: 8px 0 8px 0;	
-}
-.comment-list ul>.edit-hidden:nth-child(even),
-.comment-list.row .table-striped>tbody>tr>th {
-	background-color: #F2F2F2;
-}
-.comment-list .comment-list-hr {
-    width: 100%;
-    height: 1px;
-    margin: 2em 0 1em 0;
-	border-bottom: 1px dashed #999;
-    overflow: hidden;
-}
-.comment-list .comment-list-reply {
-	float: right;
-	margin-right: 2%;
-}
-.comment-list .edit-list {
-	visibility: hidden;
-}
-.comment-list .panel {
-	margin-bottom: 0;
-}
-.comment-list.row {
-	margin: 0;
-}
-.comment-list.row  .table-bordered {
-	border:1px solid #cccccc;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
-}
-.comment-list.row .table-striped>tbody>tr>td {
-	background-color: #FFF;
-}
-.comment-list.row .filter {
+.row .filter {
 	margin: 1em 0 1em 0;
 	float: left;
 }
-.comment-list.row .filter .filter-box {
+.row .filter .filter-box {
 	height: 1.6em;
 	width: 4.2em;
 	border: 1px solid #999;
@@ -162,30 +15,56 @@ ul, ol {
 	border-radius: 3px;
 	margin: 0 .2em 0 .2em;
 }
-.comment-list.row .filter .fl-l {
+.row .filter .fl-l {
 	float: left;
 }
-.comment-detail .comment-substance-hr {
-	width: 100%;
-    height: 1px;
-	border-bottom: 1px solid #999;
-    overflow: hidden;
+.active{
+	text-align:right;
 }
-.comment-detail .comment-avatar {
-	height: 68px;
-	width: 68px;
-	border-radius: 100%;
-	border: 1px solid #999;
-	position: absolute;
-	right: 30px;
-	top: 45px;
-}
-.comment-detail .comment-avatar img {
-	height: 100%;
-	width: 100%;
-	border-radius: 100%;
-}
-.comment-detail .comment-substance .p-right {
-	margin-right: 90px;
+.table-th-block{
+	border:1px solid #ddd;
 }
 
+
+/*评论查看详情信息*/
+.comment_top{
+	border: 1px solid #CACACA;
+	border-radius:5px;
+}
+.comment-thumb {
+    width: 90px;
+    float: left;
+}
+.comment-thumb img {
+	border: 3px solid #bdc3c7;
+	width: 80px;
+	height: 80px;
+    border-radius: 100%;
+    -webkit-border-radius: 100%;
+       -moz-border-radius: 100%;
+        -ms-border-radius: 100%;
+         -o-border-radius: 100%;
+}
+.comment-thumb-details {
+    display: inline-block;
+    margin: 20px 0 0 10px;
+}
+.comment-thumb-details h1{
+    color: #000000;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+    font-weight: 400;
+}
+.comment-thumb-details p{
+    padding-top: 5px;
+    color: #000000;
+}
+.comment-thumb-details span{
+   margin-left: 50px;
+}
+
+.comment-goods img {
+	width: 50px;
+	height: 50px;
+}

@@ -79,9 +79,32 @@ class mh_comment extends ecjia_merchant {
 	    
 	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('评论列表'));
 	    $this->assign('ur_here', '评论列表');
-
+	    $data = $this->comment_list($_SESSION['store_id']);
+	    $this->assign('data', $data);
+	    
+	    $this->assign('search_action',RC_Uri::url('comment/mh_comment/init'));
 	   
 	    $this->display('mh_comment_list.dwt');
+	}
+	
+	/**
+	 * 管理员回复评论处理
+	 */
+	public function comment_reply() {
+	    $this->admin_priv('mh_comment_manage');
+	    
+	    $comment_id 	= $_GET['comment_id'];
+	    $reply_content  = $_GET['reply_content'];
+	    if(empty($reply_content)){
+	    	return $this->showmessage('请输入回复内容', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+	    };
+
+// 	    $data = array(
+// 	    		'comment_id' 	=> $comment_id,
+// 	    );
+// 	    $appeal_id = RC_DB::table('comment_appeal')->insertGetId($data);
+// 	    return $this->showmessage('回复提交成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('comment/mh_comment/comment_detail', array('comment_id' => $comment_id))));
+	   
 	}
 	
 	/**
@@ -92,10 +115,44 @@ class mh_comment extends ecjia_merchant {
 	    
 	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('评论详情'));
 	    $this->assign('ur_here', '评论详情');
-
+	    
+		$comment_id = $_GET['comment_id'];
+		$this->assign('comment_id', $comment_id);
 	   
 	    $this->display('mh_comment_detail.dwt');
 	}
+	
+	/**
+	 * 评论-列表信息
+	 */
+	private function comment_list($store_id) {
+		$db_comment = RC_DB::table('comment');
+		$filter['keywords'] = empty($_GET['keywords']) ? '' : trim($_GET['keywords']);
+		if ($filter['keywords']) {
+			$db_comment->where('user_name', 'like', '%'.mysql_like_quote($filter['keywords']).'%');
+		}
+	
+		$db_comment->where(RC_DB::raw('store_id'), $_SESSION['store_id']);
+		$count = $db_comment->count();
+		$page = new ecjia_merchant_page($count, 10, 5);
+		$data = $db_comment
+		->selectRaw('comment_id,user_name,content,add_time,id_value,comment_rank,id_value')
+		->orderby('add_time', 'asc')
+		->take(10)
+		->skip($page->start_id-1)
+		->get();
+	
+		$list = array();
+		if (!empty($data)) {
+			foreach ($data as $row) {
+				$row['add_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['add_time']);
+				$row['goods_name'] = RC_DB::TABLE('goods')->where('goods_id', $row['id_value'])->pluck('goods_name');
+				$list[] = $row;
+			}
+		}
+		return array('comment_list' => $list, 'filter' => $filter, 'page' => $page->show(2), 'desc' => $page->page_desc());
+	}
+	
 }
 
 //end
