@@ -74,7 +74,7 @@
 						<thead>
 							<tr>
 								<th class="w100">用户名</th>
-								<th class="w450">评论详情</th>
+								<th class="w400">评论详情</th>
 								<th class="w100">星级</th>
 							</tr>
 						</thead>
@@ -90,8 +90,8 @@
 									</span>
 									<br>
 									<div class="edit-list">
-										<a class="data-pjax" href='{url path="comment/mh_appeal/comment" args="comment_id={$list.comment_id}"}' title="查看详情">查看详情</a>&nbsp;|&nbsp;
-										<a class="data-pjax" href='{url path="comment/mh_appeal/comment" args="comment_id={$list.comment_id}"}' title="回复">回复</a>
+										<a class="data-pjax" href='{url path="comment/mh_comment/comment_detail" args="comment_id={$list.comment_id}"}' title="查看详情">查看详情</a>&nbsp;|&nbsp;
+										<a class="data-pjax" href='{url path="comment/mh_comment/comment_detail" args="comment_id={$list.comment_id}"}' title="回复">回复</a>
 								    </div>
 								</td>
 								<td>
@@ -102,7 +102,7 @@
 							</tr>
 							<tr>
 								<td colspan="2"><input class="form-control small" value="" name="reply_content" type="text" placeholder="感谢您对本店的支持！我们会更加的努力，为您提供更优质的服务。（可在此输入回复内容，也可选择系统自动回复）"></td>
-								<td><input type="hidden" name="comment_id" value="{$list.comment_id}" /><input class="comment_reply btn btn-primary" type="button" data-url="{url path='comment/mh_comment/comment_reply'}" value="回复" /></td>
+								<td><input type="hidden" name="comment_id" value="{$list.comment_id}" /><input class="comment_reply btn btn-primary" type="button" data-url="{url path='comment/mh_comment/comment_reply'}" value="快捷回复" /></td>
 							</tr>
 							<!-- {foreachelse} -->
 							   <tr><td class="no-records" colspan="6">{lang key='system::system.no_records'}</td></tr>

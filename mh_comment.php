@@ -88,7 +88,7 @@ class mh_comment extends ecjia_merchant {
 	}
 	
 	/**
-	 * 评论详情页面
+	 * 管理员回复评论处理
 	 */
 	public function comment_reply() {
 	    $this->admin_priv('mh_comment_manage');
@@ -107,7 +107,6 @@ class mh_comment extends ecjia_merchant {
 	   
 	}
 	
-	
 	/**
 	 * 评论详情页面
 	 */
@@ -116,7 +115,9 @@ class mh_comment extends ecjia_merchant {
 	    
 	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('评论详情'));
 	    $this->assign('ur_here', '评论详情');
-
+	    
+		$comment_id = $_GET['comment_id'];
+		$this->assign('comment_id', $comment_id);
 	   
 	    $this->display('mh_comment_detail.dwt');
 	}

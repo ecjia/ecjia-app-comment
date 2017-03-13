@@ -45,7 +45,7 @@
 				<h4>申诉内容</h4>        
 				<div class="appeal_top">
 					<div class="panel-body">
-						<div class="appeal-appeal">
+						<div class="appeal-content">
 			                <p>{$appeal.appeal_content}</p>
 			                <img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">
 			                <p>{$appeal.appeal_time}</p>
