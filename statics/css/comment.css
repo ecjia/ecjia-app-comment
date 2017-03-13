@@ -1,0 +1,50 @@
+.nav-heading{
+	height:45px;
+	position:relative;
+	margin-bottom:8px;
+}
+.nav-status{
+	float:left;
+	list-style:outside none none;
+	height:45px;
+	line-height:45px;
+	margin:0;
+	padding:0;
+}
+.nav-status a {
+	color:#08c;
+}
+.nav-status li {
+	float:left;
+	height:45px;
+	line-height:45px;
+	margin-left:9px;
+	font-size:17px;
+	color:#666;
+}
+.trash-btn{
+	float:right;
+	height:45px;
+	line-height:45px;
+}
+.close-status{
+	color:#c62626;
+}
+.row-batch{
+	clear:both;
+}
+.status-distance{
+	float:left;
+	padding:0 40px;
+	text-align:center;
+	width:50px;
+}
+.status-distance a {
+	text-decoration:none;
+}
+.status-td{
+	width:10%;
+	text-align:right;
+	font-weight:bold;
+	font-size:14px;
+}

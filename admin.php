@@ -30,7 +30,7 @@ class admin extends ecjia_admin {
 	}
 	
 	/**
-	 * 获取没有回复的评论列表
+	 * 获取商品评论列表
 	 */
 	public function init() {
 		$this->admin_priv('comment_manage');
@@ -39,50 +39,91 @@ class admin extends ecjia_admin {
 			$this->admin_priv('comment_delete');
 		}
 		
-		$here = $_GET['type'] == '1' ? RC_Lang::get('comment::comment_manage.goods_comment') : RC_Lang::get('comment::comment_manage.article_comment');
 		ecjia_screen::get_current_screen()->remove_last_nav_here();
-		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here($here));
-		$this->assign('ur_here', $here);
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('comment::comment_manage.goods_comment_list')));
+		$this->assign('ur_here', RC_Lang::get('comment::comment_manage.admin_goods_comment'));
 		
-		if ($_GET['type'] == 1) {
-			$this->assign('action_link', array('text' => RC_Lang::get('comment::comment_manage.add_goods_comment'), 'href'=> RC_Uri::url('comment/admin/add', array('type' => 1))));
-		} else {
-			$this->assign('action_link', array('text' => RC_Lang::get('comment::comment_manage.add_article_comment'), 'href'=> RC_Uri::url('comment/admin/add', array('type' => 2))));
-		}
+		$this->assign('action_link', array('text' => RC_Lang::get('comment::comment_manage.check_trash_comment'), 'href'=> RC_Uri::url('comment/admin/init')));
 		
-		if ($_GET['type'] == 1) {
-			ecjia_screen::get_current_screen()->add_help_tab(array(
-				'id'		=> 'overview',
-				'title'		=> RC_Lang::get('comment::comment_manage.overview'),
-				'content'	=> '<p>' . RC_Lang::get('comment::comment_manage.goods_comment_list_help') . '</p>'
-			));
-			
-			ecjia_screen::get_current_screen()->set_help_sidebar(
-				'<p><strong>' . RC_Lang::get('comment::comment_manage.more_info') . '</strong></p>' .
-				'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:商品评论" target="_blank">'.RC_Lang::get('comment::comment_manage.about_goods_comment_list').'</a>') . '</p>'
-			);
-		} else {
-			ecjia_screen::get_current_screen()->add_help_tab(array(
-				'id'		=> 'overview',
-				'title'		=> RC_Lang::get('comment::comment_manage.overview'),
-				'content'	=> '<p>' . RC_Lang::get('comment::comment_manage.article_comment_list_help') . '</p>'
-			));
-			
-			ecjia_screen::get_current_screen()->set_help_sidebar(
-				'<p><strong>' . RC_Lang::get('comment::comment_manage.more_info') . '</strong></p>' .
-				'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:文章评论" target="_blank">'.RC_Lang::get('comment::comment_manage.about_article_comment_list').'</a>') . '</p>'
-			);
-		}
+		ecjia_screen::get_current_screen()->add_help_tab(array(
+			'id'		=> 'overview',
+			'title'		=> RC_Lang::get('comment::comment_manage.overview'),
+			'content'	=> '<p>' . RC_Lang::get('comment::comment_manage.goods_comment_list_help') . '</p>'
+		));
+		
+		ecjia_screen::get_current_screen()->set_help_sidebar(
+			'<p><strong>' . RC_Lang::get('comment::comment_manage.more_info') . '</strong></p>' .
+			'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:商品评论" target="_blank">'.RC_Lang::get('comment::comment_manage.about_goods_comment_list').'</a>') . '</p>'
+		);
+		
 		
 		$list = $this->get_comment_list();
 		$this->assign('comment_list', $list);
 		
 		$this->assign('form_action', RC_Uri::url('comment/admin/batch'));
 		$this->assign('form_search', RC_Uri::url('comment/admin/init'));
-		$this->assign('dropback_comment', $this->admin_priv('dropback_comment', '', false));
+// 		$this->assign('dropback_comment', $this->admin_priv('dropback_comment', '', false));
 		
 		$this->display('comment_list.dwt');		
 	}
+	
+	
+	/**
+	 * 获取没有回复的评论列表
+	 */
+	public function init_bak() {
+		$this->admin_priv('comment_manage');
+	
+		if(isset($_GET['status']) && $_GET['status'] > 1) {
+			$this->admin_priv('comment_delete');
+		}
+	
+		$here = $_GET['type'] == '1' ? RC_Lang::get('comment::comment_manage.goods_comment') : RC_Lang::get('comment::comment_manage.article_comment');
+		ecjia_screen::get_current_screen()->remove_last_nav_here();
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here($here));
+		$this->assign('ur_here', $here);
+	
+		if ($_GET['type'] == 1) {
+			$this->assign('action_link', array('text' => RC_Lang::get('comment::comment_manage.add_goods_comment'), 'href'=> RC_Uri::url('comment/admin/add', array('type' => 1))));
+		} else {
+			$this->assign('action_link', array('text' => RC_Lang::get('comment::comment_manage.add_article_comment'), 'href'=> RC_Uri::url('comment/admin/add', array('type' => 2))));
+		}
+	
+		if ($_GET['type'] == 1) {
+			ecjia_screen::get_current_screen()->add_help_tab(array(
+			'id'		=> 'overview',
+			'title'		=> RC_Lang::get('comment::comment_manage.overview'),
+			'content'	=> '<p>' . RC_Lang::get('comment::comment_manage.goods_comment_list_help') . '</p>'
+					));
+				
+			ecjia_screen::get_current_screen()->set_help_sidebar(
+			'<p><strong>' . RC_Lang::get('comment::comment_manage.more_info') . '</strong></p>' .
+			'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:商品评论" target="_blank">'.RC_Lang::get('comment::comment_manage.about_goods_comment_list').'</a>') . '</p>'
+					);
+		} else {
+			ecjia_screen::get_current_screen()->add_help_tab(array(
+			'id'		=> 'overview',
+			'title'		=> RC_Lang::get('comment::comment_manage.overview'),
+			'content'	=> '<p>' . RC_Lang::get('comment::comment_manage.article_comment_list_help') . '</p>'
+					));
+				
+			ecjia_screen::get_current_screen()->set_help_sidebar(
+			'<p><strong>' . RC_Lang::get('comment::comment_manage.more_info') . '</strong></p>' .
+			'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:文章评论" target="_blank">'.RC_Lang::get('comment::comment_manage.about_article_comment_list').'</a>') . '</p>'
+					);
+		}
+	
+		$list = $this->get_comment_list();
+		$this->assign('comment_list', $list);
+	
+		$this->assign('form_action', RC_Uri::url('comment/admin/batch'));
+		$this->assign('form_search', RC_Uri::url('comment/admin/init'));
+		$this->assign('dropback_comment', $this->admin_priv('dropback_comment', '', false));
+	
+		$this->display('CopyOfcomment_list.dwt');
+	}
+	
+	
 	
 	/**
 	 * 添加评论
@@ -507,23 +548,33 @@ class admin extends ecjia_admin {
 	}
 
 	/**
-	 * 获取评论列表
+	 * 获取商品评论列表
 	 * @access  public
 	 * @return  array
 	 */
 	private function get_comment_list() {
-		$db_comment 		= RC_Loader::load_app_model('comment_model');
-		$db_comment_view 	= RC_Loader::load_app_model('comment_viewmodel');
+// 		$db_comment 		= RC_Loader::load_app_model('comment_model');
+// 		$db_comment_view 	= RC_Loader::load_app_model('comment_viewmodel');
 		
 		/* 查询条件 */
-		$filter['keywords'] = empty($_GET['keywords']) ? 0 : stripslashes(trim($_GET['keywords']));
-		$filter['type'] 	= in_array($_GET['type'], array('1', '2')) ? $_GET['type'] : '1';
-		
+// 		$filter['keywords'] = empty($_GET['keywords']) ? 0 : stripslashes(trim($_GET['keywords']));
+// 		$filter['type'] 	= in_array($_GET['type'], array('1', '2')) ? $_GET['type'] : '1';
+
 		$where = array();
-		if (isset($_GET['status'])) {
+		if (!empty($_GET['status'])) {
 			$filter['status'] = $where['status'] = $_GET['status'];
-		} else {
-			$where['status'] = array('lt' => '2');
+		}
+		
+		if (!empty($_GET['rank'])) {
+			$filter['rank'] = $where['comment_rank'] = $_GET['rank'];
+		}
+		
+		if (!empty($_GET['has_img'])) {
+			$filter['has_img'] = $where['has_img'] = $_GET['has_img'];
+		}
+		
+		if (empty($_GET['close_select'])) {
+			
 		}
 	
 		if ($_GET['type'] == '2') {
@@ -588,6 +639,90 @@ class admin extends ecjia_admin {
 		}
 		return array('item' => $arr, 'filter' => $filter, 'page' => $page->show(5), 'desc' => $page->page_desc(), 'com_count' => $com_count);
 	}
+
+	/**
+	 * 获取评论列表
+	 * @access  public
+	 * @return  array
+	 */
+	private function get_comment_list_bak() {
+		$db_comment 		= RC_Loader::load_app_model('comment_model');
+		$db_comment_view 	= RC_Loader::load_app_model('comment_viewmodel');
+	
+		/* 查询条件 */
+		$filter['keywords'] = empty($_GET['keywords']) ? 0 : stripslashes(trim($_GET['keywords']));
+		$filter['type'] 	= in_array($_GET['type'], array('1', '2')) ? $_GET['type'] : '1';
+	
+		$where = array();
+		if (isset($_GET['status'])) {
+			$filter['status'] = $where['status'] = $_GET['status'];
+		} else {
+			$where['status'] = array('lt' => '2');
+		}
+	
+		if ($_GET['type'] == '2') {
+			$where['comment_type'] = 1;
+			$com_where['comment_type'] = 1;
+	
+			$fields = 'c.*, a.title as comment_name';
+			$view = 'article';
+		} else {
+			$where['comment_type'] = 0;
+			$com_where['comment_type'] = 0;
+	
+			$fields = 'c.*, g.goods_name as comment_name';
+			$view = 'goods';
+		}
+	
+		$where['parent_id'] = $com_where['parent_id'] = 0;
+		if (!empty($filter['keywords'])) {
+			$where[] = "c.content LIKE '%" . mysql_like_quote($filter['keywords']) . "%' ";
+		}
+	
+		$field = "SUM(IF(status < 2, 1, 0)) AS count, SUM(IF(status = 0, 1, 0)) AS waitcheck, SUM(IF(status = 1, 1, 0)) AS checked, SUM(IF(status = 2, 1, 0)) AS trash_msg, SUM(IF(status = 3, 1, 0)) as trashed_msg";
+		$com_count = $db_comment->comment_info($com_where, $field);
+		//未记录时，设置默认总数0
+		$com_count = array(
+				'count'			=> empty($com_count['count']) 		? 0 : $com_count['count'],
+				'waitcheck'		=> empty($com_count['waitcheck']) 	? 0 : $com_count['waitcheck'],
+				'checked'		=> empty($com_count['checked']) 	? 0 : $com_count['checked'],
+				'trash_msg'		=> empty($com_count['trash_msg']) 	? 0 : $com_count['trash_msg'],
+				'trashed_msg' 	=> empty($com_count['trashed_msg']) ? 0 : $com_count['trashed_msg'],
+		);
+	
+		$option = array(
+				'table'	=> $view,
+				'where'	=> $where
+		);
+		$count = $db_comment_view->comment_count($option);
+		$page = new ecjia_page($count, 10, 5);
+		/* 获取评论数据 */
+		$options = array(
+				'table'	=> $view,
+				'field'	=> $fields,
+				'where'	=> $where,
+				'order'	=> array('comment_id' => 'desc'),
+				'limit'	=> $page->limit(),
+		);
+		$data = $db_comment_view->comment_select($options);
+	
+		$arr = array();
+		if (!empty($data)) {
+			foreach ($data as $key => $row) {
+				/* 标记是否回复过 */
+				$row['add_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['add_time']);
+				$row['ip_area'] = RC_Ip::area($row['ip_address']);
+				if ($_GET['type'] == '2') {
+					$row['url'] = RC_Uri::url('article/admin/preview', array('id' => $row['id_value']));
+				} else {
+					$row['url'] = RC_Uri::url('goods/admin/preview', array('id' => $row['id_value']));
+				}
+				$arr[] = $row;
+			}
+		}
+		return array('item' => $arr, 'filter' => $filter, 'page' => $page->show(5), 'desc' => $page->page_desc(), 'com_count' => $com_count);
+	}
+	
 }
 
 // end
