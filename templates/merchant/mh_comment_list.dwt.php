@@ -69,72 +69,35 @@ ecjia.merchant.mh_comment.editlist();
 		</table>
 	</section>
 	<ul>
-	    <li class="edit-hidden">			
-			<span class="width-20-p">
-				test
-			</span>
-			<div class="width-60-p hide-edit-area {if $goods.is_promote}ecjiafc-red{/if}">
-			    <p>
-			       <a href='{url path="goods/merchant/edit" args="goods_id=617"}'>精选菜薹300g</a>
-			    </p>
-			    <p>评论于 2017-03-03 16:16:00</p>
-				<p style="overflow: hidden;">收到手机已经过去3天了，虽然还是有一些问题但是总体感觉是不错的。</p>
-<!-- 			    <div> -->
-<!-- 			         <img class="w80 h80" src="http://ecjia-cityo2o.dev/content/system/statics/images/nopic.png" /> -->
-<!-- 			         <img class="w80 h80" src="http://ecjia-cityo2o.dev/content/system/statics/images/nopic.png" /> -->
-<!-- 			         <img class="w80 h80" src="http://ecjia-cityo2o.dev/content/system/statics/images/nopic.png" /> -->
-<!-- 			    </div> -->
-				<div class="edit-list">
-					<a class="data-pjax" href='{url path="comment/mh_comment/comment_detail"}'>查看详情&nbsp;</a>|
-					<a class="data-pjax" href='{url path="orders/merchant/init"}'>回复</a>
+		<!-- {foreach from=$data.comment_list item=list} -->
+		    <li class="edit-hidden">			
+				<span class="width-20-p">
+					{$list.user_name}
+				</span>
+				<div class="width-60-p hide-edit-area {if $goods.is_promote}ecjiafc-red{/if}">
+				    <p>
+				       <a href='{url path="goods/merchant/edit" args="goods_id=617"}'>{$list.goods_name}</a>
+				    </p>
+				    <p>{$list.add_time}</p>
+					<p style="overflow: hidden;">{$list.content}</p>
+					<div class="edit-list">
+						<a class="data-pjax" href='{url path="comment/mh_comment/comment_detail"}'>查看详情&nbsp;</a>|
+						<a class="data-pjax" href='{url path="comment/mh_comment/comment_reply"}'>回复</a>
+					</div>
+				</div>	
+				<div class="width-20-p">
+				{section name=loop loop=$list.comment_rank}   
+					<i class="fa fa-star"></i>
+				{/section}   
 				</div>
-			</div>	
-			<div class="width-20-p">
-				<i class="fa fa-star"></i>
-				<i class="fa fa-star"></i>
-				<i class="fa fa-star"></i>
-				<i class="fa fa-star"></i>
-				<i class="fa fa-star"></i>
-			</div>
-			<div class="comment-list-hr"></div>
-            <div class="form-group col-lg-11">
-            	<input type="text" class="form-control" name="keywords" value="{$smarty.get.keywords}" placeholder="感谢您对本店的支持！我们会更加的努力，为您提供更优质的服务。（可在此输入回复内容，也可选择系统自动回复）">
-            </div>
-            <input class="comment-list-reply btn btn-primary screen-btn" type="button" value="回复" />
-	    </li>
-	    <li class="edit-hidden">			
-			<span class="width-20-p">
-				test
-			</span>
-			<div class="width-60-p hide-edit-area {if $goods.is_promote}ecjiafc-red{/if}">
-			    <p>
-			       <a href='{url path="goods/merchant/edit" args="goods_id=617"}'>精选菜薹300g</a>
-			    </p>
-			    <p>评论于 2017-03-03 16:16:00</p>
-				<p style="overflow: hidden;">收到手机已经过去3天了，虽然还是有一些问题但是总体感觉是不错的。</p>
-			    <div>
-			         <img class="w80 h80" src="http://ecjia-cityo2o.dev/content/system/statics/images/nopic.png" />
-			         <img class="w80 h80" src="http://ecjia-cityo2o.dev/content/system/statics/images/nopic.png" />
-			         <img class="w80 h80" src="http://ecjia-cityo2o.dev/content/system/statics/images/nopic.png" />
-			    </div>
-				<div class="edit-list">
-					<a class="data-pjax" href='{url path="comment/mh_comment/comment_detail"}'>查看详情&nbsp;</a>|
-					<a class="data-pjax" href='{url path="orders/merchant/init"}'>回复</a>
-				</div>
-			</div>	
-			<div class="width-20-p">
-				<i class="fa fa-star"></i>
-				<i class="fa fa-star"></i>
-				<i class="fa fa-star"></i>
-				<i class="fa fa-star"></i>
-				<i class="fa fa-star"></i>
-			</div>
-			<div class="comment-list-hr"></div>
-            <div class="form-group col-lg-11">
-            	<input type="text" class="form-control" name="keywords" value="{$smarty.get.keywords}" placeholder="感谢您对本店的支持！我们会更加的努力，为您提供更优质的服务。（可在此输入回复内容，也可选择系统自动回复）">
-            </div>
-            <input class="comment-list-reply btn btn-primary screen-btn" type="button" value="回复" />
-	    </li>
+				<div class="comment-list-hr"></div>
+	            <div class="form-group col-lg-11">
+	            	<input type="text" class="form-control" name="keywords" value="{$smarty.get.keywords}" placeholder="感谢您对本店的支持！我们会更加的努力，为您提供更优质的服务。（可在此输入回复内容，也可选择系统自动回复）">
+	            </div>
+	            <input class="comment-list-reply btn btn-primary screen-btn" type="button" value="回复" />
+		    </li>
+		<!-- {foreachelse} -->
+		<!-- {/foreach} -->
 	</ul>
 </div>
 <!-- {/block} -->

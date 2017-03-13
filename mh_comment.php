@@ -79,7 +79,11 @@ class mh_comment extends ecjia_merchant {
 	    
 	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('评论列表'));
 	    $this->assign('ur_here', '评论列表');
-
+	    $data = $this->comment_list($_SESSION['store_id']);
+	    $this->assign('data', $data);
+// 	    _dump($data,1);
+	    
+	    $this->assign('search_action',RC_Uri::url('comment/mh_comment/init'));
 	   
 	    $this->display('mh_comment_list.dwt');
 	}
@@ -96,6 +100,38 @@ class mh_comment extends ecjia_merchant {
 	   
 	    $this->display('mh_comment_detail.dwt');
 	}
+	
+	/**
+	 * 评论-列表信息
+	 */
+	private function comment_list($store_id) {
+		$db_comment = RC_DB::table('comment');
+		$filter['keywords'] = empty($_GET['keywords']) ? '' : trim($_GET['keywords']);
+		if ($filter['keywords']) {
+			$db_comment->where('user_name', 'like', '%'.mysql_like_quote($filter['keywords']).'%');
+		}
+	
+		$db_comment->where(RC_DB::raw('store_id'), $_SESSION['store_id']);
+		$count = $db_comment->count();
+		$page = new ecjia_merchant_page($count, 10, 5);
+		$data = $db_comment
+		->selectRaw('user_name,content,add_time,id_value,comment_rank,id_value')
+		->orderby('add_time', 'asc')
+		->take(10)
+		->skip($page->start_id-1)
+		->get();
+	
+		$list = array();
+		if (!empty($data)) {
+			foreach ($data as $row) {
+				$row['add_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['add_time']);
+				$row['goods_name'] = RC_DB::TABLE('goods')->where('goods_id', $row['id_value'])->pluck('goods_name');
+				$list[] = $row;
+			}
+		}
+		return array('comment_list' => $list, 'filter' => $filter, 'page' => $page->show(2), 'desc' => $page->page_desc());
+	}
+	
 }
 
 //end
