@@ -76,7 +76,7 @@ function EM_assign_comment($id, $type, $page = 1, $page_size = 15) {
 	} elseif ($type == 'low') {
 		$db_comment->where('comment_rank', '=', 1);
 	} elseif ($type == 'picture') {
-		$db_comment->where('has_picture', '=', 1);
+		$db_comment->where('has_image', '=', 1);
 	}
 	
 	/* 取得评论列表 */
