@@ -56,48 +56,29 @@ class create_module extends api_front implements api_interface {
     	
     	//如果用户登录获取其session
     	$this->authSession();
-		$user_id = $_SESSION['user_id'];
+		$user_id = $_SESSION['user_id'];//26
 		if ($user_id < 1) {
 			return new ecjia_error(100, 'Invalid session');
 		}
 		
-		$object_id 		= $this->requestData('object_id');
-		$object_type 	= $this->requestData('object_type', 'goods');
 		$user_name 		= $_SESSION['user_name'];
-		$order_id 		= $this->requestData('order_id', 0);
-		$rec_id			= $this->requestData('rec_id', 0);
+		$rec_id			= $this->requestData('rec_id', 0);//3123
 		$content 		= $this->requestData('content');
-		$rank 			= $this->requestData('rank');
-		$is_anonymous 	= $this->requestData('is_anonymous');
-		$goods_attr 	= $this->requestData('goods_attr');
+		$rank 			= $this->requestData('rank', 5);
+		$is_anonymous 	= $this->requestData('is_anonymous', 1);
 		
-		if (empty($object_id) || empty($object_type) || empty($content) || empty($rank) || empty($is_anonymous)) {
+		if ( empty($rec_id) || empty($content) || empty($rank)) {
 			return new ecjia_error('invalid_parameter', '参数错误！');
 		}
 		
-		$save_path = 'data/comment/'.$object_id;
-		$upload = RC_Upload::uploader('image', array('save_path' => $save_path, 'auto_sub_dirs' => true));
-		
-// 		$order_db = RC_Model::model('orders/order_order_infogoods_viewmodel');
-// 		$order_db->view = array(
-// 			'order_goods' => array(
-// 				'type'	=> Component_Model_View::TYPE_LEFT_JOIN,
-// 				'alias'	=> 'og',
-// 				'on'	=> 'oi.order_id = og.order_id'
-// 			),
-// 		);
-// 		$order_info = $order_db->where(array('oi.user_id' => $user_id, 'og.rec_id' => $rec_id))->find();
-		
 		$order_info = RC_DB::table('order_info as oi')
-			->selectRaw('oi.goods_id, oi.store_id, og.goods_attr')
-			->leftJoin('order_goods as og', RC_DB::raw('oi.order_id'), '=', RC_DB::raw('og.order_id'))
-			->where(RC_DB::raw('oi.user_id'), $user_id)
-			->where(RC_DB::raw('og.rec_id'), $rec_id)
-			->where(RC_DB::raw('oi.order_id'), $order_id)
-			->first();
-	
+    		->selectRaw('oi.store_id, oi.shipping_time, og.goods_attr, og.order_id, og.goods_id')
+    		->leftJoin('order_goods as og', RC_DB::raw('oi.order_id'), '=', RC_DB::raw('og.order_id'))
+    		->where(RC_DB::raw('oi.user_id'), $user_id)
+    		->where(RC_DB::raw('og.rec_id'), $rec_id)
+    		->first();
 		if (empty($order_info)) {
-			return new ecjia_error('order_error', '订单信息不存在！');
+		    return new ecjia_error('order_error', '订单信息不存在！');
 		}
 		
 		$save_path = 'data/comment/'.RC_Time::local_date('Ym');
@@ -124,19 +105,21 @@ class create_module extends api_front implements api_interface {
 		$status = 1 - ecjia::config('comment_check');
 
 		$data = array(
-			'comment_type'	=> $object_type,
-			'id_value'		=> $object_id,
+			'comment_type'	=> 0,
+			'id_value'		=> $order_info['goods_id'],
 			'user_name'		=> $user_name,
 			'is_anonymous'  => $is_anonymous,
 			'content'		=> $content,
 			'comment_rank'	=> $rank,
 			'add_time'		=> RC_Time::gmtime(),
+		    'order_time'    => empty($order_info['shipping_time']) ? RC_Time::gmtime() : $order_info['shipping_time'],
 			'ip_address'	=> RC_Ip::client_ip(),
 			'status'		=> $status,
 			'parent_id'		=> 0,
 			'user_id'		=> $user_id,
 			'store_id'		=> $order_info['store_id'],
-			'order_id'   	=> $order_id,
+			'order_id'   	=> $order_info['order_id'],
+		    'rec_id'        => $rec_id,
 			'goods_attr'	=> $order_info['goods_attr']
 		);
 		if (!empty($image_info)) {
@@ -152,11 +135,19 @@ class create_module extends api_front implements api_interface {
 						'object_app'	=> 'ecjia.comment',
 						'object_group'	=> 'comment',
 						'object_id'		=> $comment_id,
+					    'attach_label'  => $image_info[$key]['name'],
+					    'file_name'     => $image_info[$key]['name'],
 						'file_path'		=> $image_url,
+					    'file_size'     => $image_info[$key]['size'] / 1000,
+					    'file_ext'      => $image_info[$key]['ext'],
+					    'file_hash'     => $image_info[$key]['sha1'],
+					    'file_mime'     => $image_info[$key]['type'],
 						'is_image'		=> 1,
 						'user_id'		=> $user_id,
+					    'user_type'     => 'user',
 						'add_time'		=> RC_Time::gmtime(),
 						'add_ip'		=> RC_Ip::client_ip(),
+					    'in_status'     => 0
 					);
 					RC_DB::table('term_attachment')->insert($data);
 				}
