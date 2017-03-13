@@ -28,14 +28,14 @@
             <div class="panel-body">
 				<div class="comment_top">
 					<div class="panel-body">
-						<a class="appeal-thumb">
+						<a class="comment-thumb">
 							<img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg" >
 						</a>
-						<div class="appeal-thumb-details">
+						<div class="comment-thumb-details">
 							<h1>送钱</h1>
 							<p>2016-11-04 17：02:33<span>IP:10.10.10.41</span></p><br>
 						</div>
-						<div class="appeal-goods">
+						<div class="comment-goods">
 						  	<p>商品评分：</p>
 			                <p>收到手机已经过去三天了，我觉得无法使用，所以给差评</p>
 			                <img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">

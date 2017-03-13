@@ -31,11 +31,11 @@ i.fa-star {
 	border: 1px solid #CACACA;
 	border-radius:5px;
 }
-.appeal-thumb {
+.comment-thumb {
     width: 90px;
     float: left;
 }
-.appeal-thumb img {
+.comment-thumb img {
 	border: 3px solid #bdc3c7;
 	width: 80px;
 	height: 80px;
@@ -45,31 +45,26 @@ i.fa-star {
         -ms-border-radius: 100%;
          -o-border-radius: 100%;
 }
-.appeal-thumb-details {
+.comment-thumb-details {
     display: inline-block;
     margin: 20px 0 0 10px;
 }
-.appeal-thumb-details h1{
+.comment-thumb-details h1{
     color: #000000;
     font-size: 16px;
     margin: 0;
     padding: 0;
     font-weight: 400;
 }
-.appeal-thumb-details p{
+.comment-thumb-details p{
     padding-top: 5px;
     color: #000000;
 }
-.appeal-thumb-details span{
+.comment-thumb-details span{
    margin-left: 50px;
 }
 
-.appeal-goods img {
+.comment-goods img {
 	width: 50px;
 	height: 50px;
-}
-.appeal-content img {
-	width: 50px;
-	height: 50px;
-	margin-bottom: 10px;
 }
