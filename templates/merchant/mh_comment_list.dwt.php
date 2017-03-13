@@ -3,7 +3,7 @@
 
 <!-- {block name="footer"} -->
 <script type="text/javascript">
-	ecjia.merchant.mh_comment.editlist();
+	ecjia.merchant.mh_comment.comment_list();
 </script>
 <!-- {/block} -->
 
@@ -101,8 +101,8 @@
 								</td>
 							</tr>
 							<tr>
-								<td colspan="2"><input class="form-control small" value="" type="text" placeholder="感谢您对本店的支持！我们会更加的努力，为您提供更优质的服务。（可在此输入回复内容，也可选择系统自动回复）"></td>
-								<td > <input class="btn btn-primary " type="button" value="回复" /></td>
+								<td colspan="2"><input class="form-control small" value="" name="reply_content" type="text" placeholder="感谢您对本店的支持！我们会更加的努力，为您提供更优质的服务。（可在此输入回复内容，也可选择系统自动回复）"></td>
+								<td><input type="hidden" name="comment_id" value="{$list.comment_id}" /><input class="comment_reply btn btn-primary" type="button" data-url="{url path='comment/mh_comment/comment_reply'}" value="回复" /></td>
 							</tr>
 							<!-- {foreachelse} -->
 							   <tr><td class="no-records" colspan="6">{lang key='system::system.no_records'}</td></tr>

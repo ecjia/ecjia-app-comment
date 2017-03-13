@@ -81,12 +81,32 @@ class mh_comment extends ecjia_merchant {
 	    $this->assign('ur_here', '评论列表');
 	    $data = $this->comment_list($_SESSION['store_id']);
 	    $this->assign('data', $data);
-// 	    _dump($data,1);
 	    
 	    $this->assign('search_action',RC_Uri::url('comment/mh_comment/init'));
 	   
 	    $this->display('mh_comment_list.dwt');
 	}
+	
+	/**
+	 * 评论详情页面
+	 */
+	public function comment_reply() {
+	    $this->admin_priv('mh_comment_manage');
+	    
+	    $comment_id 	= $_GET['comment_id'];
+	    $reply_content  = $_GET['reply_content'];
+	    if(empty($reply_content)){
+	    	return $this->showmessage('请输入回复内容', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+	    };
+
+// 	    $data = array(
+// 	    		'comment_id' 	=> $comment_id,
+// 	    );
+// 	    $appeal_id = RC_DB::table('comment_appeal')->insertGetId($data);
+// 	    return $this->showmessage('回复提交成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('comment/mh_comment/comment_detail', array('comment_id' => $comment_id))));
+	   
+	}
+	
 	
 	/**
 	 * 评论详情页面
