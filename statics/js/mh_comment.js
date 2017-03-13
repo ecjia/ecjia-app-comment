@@ -11,9 +11,20 @@
 	   		$(".cursor_pointer").click(function(){
 	   			$(this).parent().remove();
 	   		})
+	   		
+	        $("form[name='searchForm'] .btn-primary").on('click', function (e) {
+	            e.preventDefault();
+	            var url = $("form[name='searchForm']").attr('action');
+	            var keywords = $("input[name='keywords']").val();
+	            if (keywords != '') {
+	                url += '&keywords=' + keywords;
+	            }
+	            ecjia.pjax(url);
+	        });
+	   		
 	   		app.mh_comment.comment_reply();
         },
-        
+
         comment_reply: function () {			
             $(".comment_reply").on('click', function (e) {
                 e.preventDefault();
