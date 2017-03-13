@@ -71,6 +71,15 @@ class create_module extends api_front implements api_interface {
 			return new ecjia_error('invalid_parameter', '参数错误！');
 		}
 		
+		$commecnt_exist = RC_DB::table('comment')->where('rec_id', $rec_id)->where('parent_id', 0)->count();
+		if ($commecnt_exist) {
+		    return new ecjia_error('comment_exist', '评论已完成，请勿重复评论');//追加评论可以两条，需判断
+		}
+		$commecnt_exist = RC_DB::table('comment')->where('rec_id', $rec_id)->where('parent_id', '<>', 0)->count();
+		if ($commecnt_exist) {
+		    return new ecjia_error('comment_exist', '评论已完成，请勿重复评论');//追加评论可以两条，需判断
+		}
+		
 		$order_info = RC_DB::table('order_info as oi')
     		->selectRaw('oi.store_id, oi.shipping_time, og.goods_attr, og.order_id, og.goods_id')
     		->leftJoin('order_goods as og', RC_DB::raw('oi.order_id'), '=', RC_DB::raw('og.order_id'))
