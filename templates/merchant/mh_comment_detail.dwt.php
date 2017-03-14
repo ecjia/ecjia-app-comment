@@ -28,9 +28,9 @@
             <div class="panel-body">
 				<div class="comment_top">
 					<div class="panel-body">
-						<a class="comment-thumb">
+						<div class="comment-thumb">
 							<img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg" >
-						</a>
+						</div>
 						<div class="comment-thumb-details">
 							<h1>送钱</h1>
 							<p>2016-11-04 17：02:33<span>IP:10.10.10.41</span></p><br>
@@ -44,7 +44,7 @@
 		            </div>    
 				</div><br>
 				
-		        <div class="comment_all" id="accordionOne">
+		        <div id="accordionOne">
 		            <div class="panel panel-info">
 		                <div class="panel-heading">
 		                    <a data-toggle="collapse" data-parent="#accordionOne" href="#collapseOne" class="accordion-toggle">
@@ -53,35 +53,59 @@
 		                    </a>
 		                </div>
 		                <div id="collapseOne" class="panel-collapse collapse in">
-	                         <div class="comment-substance panel-body">
+	                         <div class="panel-body">
 	                              <div class="text-right">
-		                              <p>admin</p>
-		                              <p>2017-03-08 11:40:00</p>
-		                              <img src="https://cityo2o.ecjia.com/content/uploads/data/avatar_img/201701101718165302.png" />
-		                              <p>感谢您对本店的支持！我们会更加的努力，为您提供做优质的服务。</p>
+	                                 <div class="comment-all-right-thumb">
+											<img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg" >
+									 </div>
+						  			 <div class="comment-thumb-details">
+										<h1>admin</h1>
+										<p>2017-03-08 11:40:00</p><br>
+									 </div>
+									  <p>感谢您对本店的支持！我们会更加的努力，为您提供做优质的服务感谢您对本店的支持！</p>
+	                              </div>
+	                              <hr>
+	                             <div class="text-left">
+	                                 <div class="comment-all-left-thumb">
+										<img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg" >
+									 </div>
+						  			 <div class="comment-thumb-details">
+										<h1>admin</h1>
+										<p>2017-03-08 11:40:00</p><br>
+									 </div>
+									  <p>感谢您对本店的支持！我们会更加的努力，为您提供做优质的服务感谢您对本店的支持！</p>
 	                              </div>
 	                          </div>
 		                </div>
 		              </div>
 		        </div>
 		        
-				<div class="comment_top">
+		       	<div class="comment-reply">
 					<div class="panel-body">
-						<a class="comment-thumb">
-							<img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg" >
-						</a>
-						<div class="comment-thumb-details">
-							<h1>送钱</h1>
-							<p>2016-11-04 17：02:33<span>IP:10.10.10.41</span></p><br>
-						</div>
-						<div class="comment-goods">
-						  	<p>商品评分：</p>
-			                <p>收到手机已经过去三天了，我觉得无法使用，所以给差评</p>
-			                <img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">
-						</div><br>
-						<a href='{url path="comment/mh_appeal/add_appeal" args="comment_id={$comment_id}"}'><button class="btn btn-info" type="button">申诉</button></a>
+						<h4>回复评论</h4>
+						<form class="form-horizontal" action='{$form_action}' method="post" name="theForm">
+							 <div class="reply-content">
+                                 <h5 class="reply-title">回复内容:</h5>
+                                 <div class="col-lg-10">
+                                      <textarea class="form-control" id="appeal_content" name="appeal_content" placeholder="请输入申诉理由" ></textarea>
+                                      <p class="help-block">提示：此条评论已有回复，如果继续回复将更新原来回复内容</p>
+                                 </div>
+                             </div>
+                             <div class="text-right">
+								<input id="is_ok" name="is_ok" value="1" type="checkbox">
+								<label for="is_ok">邮件通知</label>
+								<div class="col-lg-4">
+									<input class="form-control" placeholder="请输入电子邮箱" type="text" name="reply_email">
+								</div>
+                             </div>
+							 <input type="hidden" name="goods_id" value="" />
+							 <input type="hidden" name="user_id" value=""/>
+							 <div class="reply-btn">
+						   		<input class="btn btn-info" type="submit" value="回复"/>
+						     </div>
+						</form>
 		            </div>    
-				</div> 
+				</div>
             </div>
         </section>
     </div>

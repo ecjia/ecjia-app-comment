@@ -28,9 +28,9 @@
 			<div class="span12 appeal_bottom">
 				<div class="appeal_top">
 					<div class="panel-body">
-						<a class="appeal-thumb">
+						<div class="appeal-thumb">
 							<img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg" >
-						</a>
+						</div>
 						<div class="appeal-thumb-details">
 							<h1>送钱</h1>
 							<p>2016-11-04 17：02:33<span>IP:10.10.10.41</span></p><br>
