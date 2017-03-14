@@ -136,6 +136,7 @@ return array(
 	'move_to_recycle'		=> '移至回收站',
 	'no_trash_msg'			=> '不是垃圾评论',
 	'restore_review'		=> '还原评论',
+	'wait_check'			=> '待审核',
 	
 	'comment_on'			=> '评论于',
 	'reject'				=> '驳回',
