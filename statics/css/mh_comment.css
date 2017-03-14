@@ -114,5 +114,19 @@ i.fa-star {
 .col-lg-4 input{
 	margin-top:-5px;
 }
+.comment-goods-detail img{
+	width: 100px;
+	height: 100px;
+	margin-top:5px;
+}
+.comment-goods-detail p{
+	margin-top:5px;
+}
+.goods-all-reply p{
+	margin-top:15px;
+}
+
+
+
 
 

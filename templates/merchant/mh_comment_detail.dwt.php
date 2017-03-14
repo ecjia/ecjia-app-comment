@@ -111,7 +111,7 @@
     </div>
     <div class="col-lg-4">
         <div class="panel panel-body">
-            <div class="appeal-goods">
+            <div class="comment-goods-detail">
 			  	<h4>商品信息</h4>
 			  	<img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">
                 <p>收到手机已经过去三天了，我觉得无法使用，所以给差评</p>
@@ -120,11 +120,11 @@
 			</div>
         </div>
         <section class="panel panel-body">
-          <div class="appeal-goods">
+          <div class="goods-all-reply">
 			  	<h4>其他评价</h4>
-			  	<p>用户名<span>查看</span></p><br>
-                <p>收到手机已经过去三天了，我觉得无法使用，所以给差评</p><br>
+			  	<p>用户名<span>查看</span></p>
                 <p>收到手机已经过去三天了，我觉得无法使用，所以给差评</p>
+                <p class="text-right">aaa</p>
 		  </div>
         </section>
     </div>
