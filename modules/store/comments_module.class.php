@@ -55,9 +55,9 @@ function EM_assign_comment($id, $type, $page = 1, $page_size = 15) {
 	$list['comment_number']['picture'] = empty($list['comment_number']['good']) ? 0 : intval($list['comment_number']['picture']);
 	
 	if ($list['comment_number']['all'] != 0) {
-		$list['comment_percent'] = round(($list['comment_number']['good'] / $list['comment_number']['all']) * 100) .'%';
+		$list['comment_percent'] = round(($list['comment_number']['good'] / $list['comment_number']['all']) * 100);
 	} else {
-		$list['comment_percent'] = '100%';
+		$list['comment_percent'] = 100;
 	}
 
 	$db_comment = RC_DB::table('comment')
