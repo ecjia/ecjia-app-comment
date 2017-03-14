@@ -3,7 +3,7 @@
 
 <!-- {block name="footer"} -->
 <script type="text/javascript">
-	ecjia.admin.comment_manage.init();
+// 	ecjia.admin.comment_manage.init();
 </script>
 <!-- {/block} -->
 
@@ -11,24 +11,59 @@
 <div>
 	<h3 class="heading"> 
 		<!-- {if $ur_here}{$ur_here}{/if} -->
-		{if $action_link} 
-		<a class="btn plus_or_reply data-pjax" href="{$action_link.href}" id="sticky_a">
-			<i class="fontello-icon-plus"></i>{$action_link.text}
-		</a> 
-		{/if} 
 	</h3>
 </div>
-<div class="row-fluid batch">
-	<ul class="nav nav-pills">
-		<li class="{if $comment_list.filter.status eq ''}active{/if}"><a class="data-pjax" href='{url path="comment/admin/init" args="type={$comment_list.filter.type}"}'>{lang key='comment::comment_manage.all'}<span class="badge badge-info">{$comment_list.com_count.count}</span> </a></li>
-		<li class="{if $comment_list.filter.status eq '0'}active{/if}"><a class="data-pjax" href='{url path="comment/admin/init" args="type={$comment_list.filter.type}&status=0"}'>{lang key='comment::comment_manage.waitcheck'}<span class="badge badge-info use-plugins-num">{$comment_list.com_count.waitcheck}</span></a></li>
-		<li class="{if $comment_list.filter.status eq '1'}active{/if}"><a class="data-pjax" href='{url path="comment/admin/init" args="type={$comment_list.filter.type}&status=1"}'>{lang key='comment::comment_manage.checked'}<span class="badge badge-info unuse-plugins-num">{$comment_list.com_count.checked}</span></a></li>
-		<!-- {if $dropback_comment} -->
-		<li class="{if $comment_list.filter.status eq '2'}active{/if}"><a class="data-pjax" href='{url path="comment/admin/init" args="type={$comment_list.filter.type}&status=2"}' >{lang key='comment::comment_manage.trash_msg'}<span class="badge badge-info unuse-plugins-num">{$comment_list.com_count.trash_msg}</span></a></li>
-		<li class="{if $comment_list.filter.status eq '3'}active{/if}"><a class="data-pjax" href='{url path="comment/admin/init" args="type={$comment_list.filter.type}&status=3"}'>{lang key='comment::comment_manage.trashed_msg'}<span class="badge badge-info unuse-plugins-num">{$comment_list.com_count.trashed_msg}</span></a></li>
-		<!-- {/if} -->
+<div class="nav-heading">
+	<ul class="nav-status">
+		<li><span>全部</span></li>
+		<li><span>></span></li>
+		<li><a class="data-pjax btn" href='{url path="comment/admin/init" args="status={$smarty.get.status}&close_select={1}"}' style="padding:3px 5px;">待审核
+			<i class=" close-status fontello-icon-cancel cursor_pointer"></i></a>
+		</li>
+		<li><span>></span></li>
+		<li><a class="data-pjax btn" href='{url path="comment/admin/init" args="rank={$smarty.get.rank}&close_select={2}"}' style="padding:3px 5px;">好评
+			<i class=" close-status fontello-icon-cancel cursor_pointer"></i></a>
+		</li>
+		<li><span>></span></li>
+		<li><a class="data-pjax btn" href='{url path="comment/admin/init" args="has_img={$smarty.get.has_img}&close_select={3}"}' style="padding:3px 5px;">有图
+			<i class=" close-status fontello-icon-cancel cursor_pointer"></i></a>
+		</li>
 	</ul>
-	<div class="btn-group f_l m_r5">
+	<div class="trash-btn">
+		<a class="btn plus_or_reply data-pjax" href="{$action_link.href}" id="sticky_a">
+			<i class=""></i>{$action_link.text}
+		</a> 
+	</div>
+</div>
+<div class="heading-table">
+	<table class="table table-oddtd table-bordered">
+		<tr>
+			<td class="status-td" style="text-align:right; width:9%;">审核状态：</td>
+			<td>
+				<div class="data-pjax status-distance"><a  href='{url path="comment/admin/init" args="status=1{if $smarty.get.rank}&rank={$smarty.get.rank}{/if}{if $smarty.get.has_img}&has_img={$smarty.get.has_img}{/if}"}'>待审核</a></div>
+				<div class="status-distance"><a href='{url path="comment/admin/init" args="status=2{if $smarty.get.rank}&rank={$smarty.get.rank}{/if}{if $smarty.get.has_img}&has_img={$smarty.get.has_img}{/if}"}'>已批准</a></div>
+				<div class="status-distance"><a href='{url path="comment/admin/init" args="status=3{if $smarty.get.rank}&rank={$smarty.get.rank}{/if}{if $smarty.get.has_img}&has_img={$smarty.get.has_img}{/if}"}'>已驳回</a></div>
+			</td>
+		</tr>
+		<tr>
+			<td class="status-td" style="text-align:right; width:9%;">评分级别：</td>
+			<td>
+				<div class="status-distance"><a href='{url path="comment/admin/init" args="rank=1{if $smarty.get.status}&status={$smarty.get.status}{/if}{if $smarty.get.has_img}&has_img={$smarty.get.has_img}{/if}"}'>好评</a></div>
+				<div class="status-distance"><a href='{url path="comment/admin/init" args="rank=2{if $smarty.get.status}&status={$smarty.get.status}{/if}{if $smarty.get.has_img}&has_img={$smarty.get.has_img}{/if}"}'>中评</a></div>
+				<div class="status-distance"><a href='{url path="comment/admin/init" args="rank=3{if $smarty.get.status}&status={$smarty.get.status}{/if}{if $smarty.get.has_img}&has_img={$smarty.get.has_img}{/if}"}'>差评</a></div>
+			</td>
+		</tr>
+		<tr>
+			<td class="status-td" style="text-align:right; width:9%;">有无晒图：</td>
+			<td>
+				<div class="status-distance"><a href='{url path="comment/admin/init" args="has_img=1{if $smarty.get.status}&status={$smarty.get.status}{/if}{if $smarty.get.rank}&rank={$smarty.get.rank}{/if}"}'>有</a></div>
+				<div class="status-distance"><a href='{url path="comment/admin/init" args="has_img=0{if $smarty.get.status}&status={$smarty.get.status}{/if}{if $smarty.get.rank}&rank={$smarty.get.rank}{/if}"}'>无</a></div>
+			</td>
+		</tr>
+	</table>
+</div>
+<div class="row-fluid batch">
+	<div class="btn-group f_l m_r5 row-batch">
 		<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
 			<i class="fontello-icon-cog"></i>{lang key='comment::comment_manage.batch_operation'}
 			<span class="caret"></span>
@@ -72,9 +107,10 @@
 					<th class="table_checkbox w50"> 
 						<input class="uni_style" type="checkbox" data-toggle="selectall" data-children=".checkbox"/>
 					</th>
-					<th class="w100">{lang key='comment::comment_manage.user_name'}</th>
-					<th>{lang key='comment::comment_manage.list_comment_info'}</th>
-					<th class="w100">{lang key='comment::comment_manage.ip_address'}</th>
+					<th class="w100">用户名</th>
+					<th class='w100'>商家名称</th>
+					<th class="w500">商品详情</th>
+					<th class="w100">星级</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -87,6 +123,9 @@
 						{else}
 							{lang key='comment::comment_manage.anonymous'}
 						{/if}
+					</td>
+					<td>
+						{$comment.merchants_name}
 					</td>
 					<td class="hide-edit-area">
 						<div><a href='{$comment.url}' target="_blank">{$comment.comment_name}</a></div>
@@ -119,13 +158,12 @@
 						</div>
 					</td>
 					<td>
-						<div>{$comment.ip_address}</div>
-						{$comment.ip_area}
+						{$comment.comment_rank}
 					</td>
 				</tr>
 				<!-- {foreachelse} -->
 				<tr>
-					<td class="no-records" colspan="6">{lang key='system::system.no_records'}</td>
+					<td class="no-records" colspan="5">{lang key='system::system.no_records'}</td>
 				</tr>
 				<!-- {/foreach} -->
 			</tbody>

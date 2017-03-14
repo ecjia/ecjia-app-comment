@@ -89,6 +89,8 @@ return array(
 	'mail_notice_success'	=> '邮件通知成功',
 	'mail_send_fail'		=> '邮件发送失败',
 	'reply_success'			=> '评论回复成功',
+	'admin_goods_comment'	=> '平台-商品评论',
+	'check_trash_comment'	=> '查看回收站',
 	
 	'show_success'			=> '批准成功',
 	'valid_success'			=> '已成功设置为有效评论',
