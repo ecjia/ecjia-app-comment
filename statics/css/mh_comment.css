@@ -93,7 +93,7 @@ i.fa-star {
 .reply-content{
 	margin-left: -15px;
     margin-right: -15px;
-	margin-bottom: 15px;
+	margin-top: 25px;
 }
 .reply-title{
 	float: left;
@@ -108,22 +108,29 @@ i.fa-star {
 .col-lg-4{
 	float: right;
 	min-height: 1px;
-    padding-right: 2px;
+    padding-right: 25px;
     position: relative;
 }
 .col-lg-4 input{
 	margin-top:-5px;
 }
 .comment-goods-detail img{
-	width: 100px;
-	height: 100px;
-	margin-top:5px;
+	width: 200px;
+	height: 200px;
+	margin-top:10px;
 }
 .comment-goods-detail p{
-	margin-top:5px;
+	padding-top: 10px;
 }
 .goods-all-reply p{
-	margin-top:15px;
+    padding-top: 5px;
+    color: #000000;
+}
+.goods-all-reply span{
+   margin-left:257px;
+}
+.goods-img{
+	text-align:center;
 }
 
 

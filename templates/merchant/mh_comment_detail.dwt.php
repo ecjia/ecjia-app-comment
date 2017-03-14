@@ -87,8 +87,7 @@
 							 <div class="reply-content">
                                  <h5 class="reply-title">回复内容:</h5>
                                  <div class="col-lg-10">
-                                      <textarea class="form-control" id="appeal_content" name="appeal_content" placeholder="请输入申诉理由" ></textarea>
-                                      <p class="help-block">提示：此条评论已有回复，如果继续回复将更新原来回复内容</p>
+                                      <textarea class="form-control" id="appeal_content" name="appeal_content" placeholder="请输入申诉理由" ></textarea><br>
                                  </div>
                              </div>
                              <div class="text-right">
@@ -113,7 +112,9 @@
         <div class="panel panel-body">
             <div class="comment-goods-detail">
 			  	<h4>商品信息</h4>
-			  	<img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">
+			  	<div class="goods-img">
+			  		<img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">
+			  	</div>
                 <p>收到手机已经过去三天了，我觉得无法使用，所以给差评</p>
                 <p>价格：</p>
                 <p>购买于：</p>
@@ -122,9 +123,10 @@
         <section class="panel panel-body">
           <div class="goods-all-reply">
 			  	<h4>其他评价</h4>
-			  	<p>用户名<span>查看</span></p>
+			  	<p>用户名<span><a href="">查看</a></span></p>
                 <p>收到手机已经过去三天了，我觉得无法使用，所以给差评</p>
-                <p class="text-right">aaa</p>
+                <p class="text-right">{section name=loop loop=$list.comment_rank}<i class="fa fa-star"></i>{/section}</p>
+                <p class="text-right"><a href="">查看更多</a></p>
 		  </div>
         </section>
     </div>
