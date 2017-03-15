@@ -66,17 +66,17 @@ class create_module extends api_front implements api_interface {
 		$rank 			= $this->requestData('rank', 5);
 		$is_anonymous 	= $this->requestData('is_anonymous', 1);
 		
-		if ( empty($rec_id) || empty($content) || empty($rank)) {
+		if ( empty($rec_id)) {
 			return new ecjia_error('invalid_parameter', '参数错误！');
 		}
 		
-		$commecnt_exist = RC_DB::table('comment')->where('rec_id', $rec_id)->where('parent_id', 0)->count();
-		if ($commecnt_exist) {
-		    return new ecjia_error('comment_exist', '评论已完成，请勿重复评论');//追加评论可以两条，需判断
+		$comment_info = RC_DB::table('comment')->where('rec_id', $rec_id)->where('parent_id', 0)->first();
+		if (!empty($comment_info) && $comment_info['has_image'] == 1) {
+		    return new ecjia_error('comment_exist', '评价已完成，请勿重复评价');
 		}
-		$commecnt_exist = RC_DB::table('comment')->where('rec_id', $rec_id)->where('parent_id', '<>', 0)->count();
-		if ($commecnt_exist) {
-		    return new ecjia_error('comment_exist', '评论已完成，请勿重复评论');//追加评论可以两条，需判断
+		$comment_second_info = RC_DB::table('comment')->where('rec_id', $rec_id)->where('parent_id', '<>', 0)->first();
+		if (!empty($comment_second_info) && $comment_second_info['has_image'] == 1) {
+		    return new ecjia_error('comment_exist', '评价已完成，请勿重复评价');//追加
 		}
 		
 		$order_info = RC_DB::table('order_info as oi')
@@ -89,72 +89,91 @@ class create_module extends api_front implements api_interface {
 		    return new ecjia_error('order_error', '订单信息不存在！');
 		}
 		
-		$save_path = 'data/comment/'.RC_Time::local_date('Ym');
-		$upload = RC_Upload::uploader('image', array('save_path' => $save_path, 'auto_sub_dirs' => true));
-		
-		$image_info = null;
-		if (!empty($_FILES)) {
-			foreach ($_FILES as $images) {
-			    if (!$upload->check_upload_file($images)) {
-			        return new ecjia_error('picture_error', $upload->error());
-			    }
-			}
-			
-			$image_info	= $upload->batch_upload($_FILES);
-		}
-		
+		//评价传图
+		//评价无图
+		//补充图片
 		/* 评论是否需要审核 */
-		$status = 1 - ecjia::config('comment_check');
-
-		$data = array(
-			'comment_type'	=> 0,
-			'id_value'		=> $order_info['goods_id'],
-			'user_name'		=> $user_name,
-			'is_anonymous'  => $is_anonymous,
-			'content'		=> $content,
-			'comment_rank'	=> $rank,
-			'add_time'		=> RC_Time::gmtime(),
-		    'order_time'    => empty($order_info['shipping_time']) ? RC_Time::gmtime() : $order_info['shipping_time'],
-			'ip_address'	=> RC_Ip::client_ip(),
-			'status'		=> $status,
-			'parent_id'		=> 0,
-			'user_id'		=> $user_id,
-			'store_id'		=> $order_info['store_id'],
-			'order_id'   	=> $order_info['order_id'],
-		    'rec_id'        => $rec_id,
-			'goods_attr'	=> $order_info['goods_attr']
-		);
-		if (!empty($image_info)) {
-			$data['has_image'] = 1;
+		if (!empty($content) && !empty($rank)) {
+		    $status = 1 - ecjia::config('comment_check');
+		    
+		    $data = array(
+		        'comment_type'	=> 0,
+		        'id_value'		=> $order_info['goods_id'],
+		        'user_name'		=> $user_name,
+		        'is_anonymous'  => $is_anonymous,
+		        'content'		=> $content,
+		        'comment_rank'	=> $rank,
+		        'add_time'		=> RC_Time::gmtime(),
+		        'order_time'    => empty($order_info['shipping_time']) ? RC_Time::gmtime() : $order_info['shipping_time'],
+		        'ip_address'	=> RC_Ip::client_ip(),
+		        'status'		=> $status,
+		        'parent_id'		=> 0,
+		        'user_id'		=> $user_id,
+		        'store_id'		=> $order_info['store_id'],
+		        'order_id'   	=> $order_info['order_id'],
+		        'rec_id'        => $rec_id,
+		        'goods_attr'	=> $order_info['goods_attr']
+		    );
+		    if (!empty($image_info)) {
+		        $data['has_image'] = 1;
+		    }
+		    $comment_id = RC_Model::model('comment/comment_model')->insert($data);
 		}
-		$comment_id = RC_Model::model('comment/comment_model')->insert($data);
-
-		if (!empty($image_info)) {
-			foreach ($image_info as $image) {
-				if (!empty($image)) {
-					$image_url	= $upload->get_position($image);
-					$data = array(
-						'object_app'	=> 'ecjia.comment',
-						'object_group'	=> 'comment',
-						'object_id'		=> $comment_id,
-					    'attach_label'  => $image['name'],
-					    'file_name'     => $image['name'],
-						'file_path'		=> $image_url,
-					    'file_size'     => $image['size'] / 1000,
-					    'file_ext'      => $image['ext'],
-					    'file_hash'     => $image['sha1'],
-					    'file_mime'     => $image['type'],
-						'is_image'		=> 1,
-						'user_id'		=> $user_id,
-					    'user_type'     => 'user',
-						'add_time'		=> RC_Time::gmtime(),
-						'add_ip'		=> RC_Ip::client_ip(),
-					    'in_status'     => 0
-					);
-					RC_DB::table('term_attachment')->insert($data);
-				}
-			}
+		
+		//补充图片 或 第一次评价
+		if ((!empty($comment_info) && $comment_info['has_image'] == 0) || empty($comment_info)) {
+		    
+		    $save_path = 'data/comment/'.RC_Time::local_date('Ym');
+		    $upload = RC_Upload::uploader('image', array('save_path' => $save_path, 'auto_sub_dirs' => true));
+		    
+		    $image_info = null;
+		    if (!empty($_FILES)) {
+		        foreach ($_FILES as $images) {
+		            if (!$upload->check_upload_file($images)) {
+		                return new ecjia_error('picture_error', $upload->error());
+		            }
+		        }
+		        	
+		        $image_info	= $upload->batch_upload($_FILES);
+		    }
+		    
+		    if (!empty($image_info)) {
+		        if (!empty($comment_info) && $comment_info['has_image'] == 0) {
+		            $comment_id = $comment_info['comment_id'];
+		        }
+		        if (empty($comment_id)) {
+		            return new ecjia_error('comment_error', '评价主体信息丢失');
+		        }
+		        foreach ($image_info as $image) {
+		            if (!empty($image)) {
+		                $image_url	= $upload->get_position($image);
+		                $data = array(
+		                    'object_app'	=> 'ecjia.comment',
+		                    'object_group'	=> 'comment',
+		                    'object_id'		=> $comment_id,
+		                    'attach_label'  => $image['name'],
+		                    'file_name'     => $image['name'],
+		                    'file_path'		=> $image_url,
+		                    'file_size'     => $image['size'] / 1000,
+		                    'file_ext'      => $image['ext'],
+		                    'file_hash'     => $image['sha1'],
+		                    'file_mime'     => $image['type'],
+		                    'is_image'		=> 1,
+		                    'user_id'		=> $user_id,
+		                    'user_type'     => 'user',
+		                    'add_time'		=> RC_Time::gmtime(),
+		                    'add_ip'		=> RC_Ip::client_ip(),
+		                    'in_status'     => 0
+		                );
+		                $attach = RC_DB::table('term_attachment')->insert($data);
+		                if ($attach) {
+		                    RC_DB::table('comment')->where('comment_id', $comment_id)->update(array('has_image' => 1));
+		                }
+		            }
+		        }
+		    }
 		}
+		
 		return array();
 	}
 }
