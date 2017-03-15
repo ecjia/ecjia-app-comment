@@ -3,7 +3,7 @@
 
 <!-- {block name="footer"} -->
 <script type="text/javascript">
-// 	ecjia.admin.comment_manage.init();
+	ecjia.admin.comment_manage.init();
 </script>
 <!-- {/block} -->
 
@@ -16,21 +16,26 @@
 <div class="nav-heading">
 	<ul class="nav-status">
 		<li><span>全部</span></li>
-		
+		<!-- {if $smarty.get.select_status} -->
 		<li><span>></span></li>
-		<li><a class="data-pjax btn" href='{url path="comment/admin/init" args="{if $smarty.get.status}status={$smarty.get.status}{/if}{if $smarty.get.rank}&rank={$smarty.get.rank}{/if}{if $smarty.get.has_img}&has_img={$smarty.get.has_img}{/if}&close_select={1}"}' style="padding:3px 5px;">待审核
+		<li><a class="data-pjax btn" href='{url path="comment/admin/init" args="{if $smarty.get.status neq null}status={$smarty.get.status}{/if}{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $smarty.get.select}&select={$smarty.get.select}{/if}&close_select={1}"}' style="padding:3px 5px;">
+			{if $smarty.get.status eq 0}待审核{else}已批准{/if}
 			<i class=" close-status fontello-icon-cancel cursor_pointer"></i></a>
 		</li>
-		
+		<!-- {/if} -->
+		<!-- {if $smarty.get.select_rank} -->
 		<li><span>></span></li>
-		<li><a class="data-pjax btn" href='{url path="comment/admin/init" args="{if $smarty.get.rank}rank={$smarty.get.rank}{/if}{if $smarty.get.status}&status={$smarty.get.status}{/if}{if $smarty.get.has_img}&has_img={$smarty.get.has_img}{/if}&close_select={2}"}' style="padding:3px 5px;">好评
+		<li><a class="data-pjax btn" href='{url path="comment/admin/init" args="{if $smarty.get.rank neq null}rank={$smarty.get.rank}{/if}{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $smarty.get.select}&select={$smarty.get.select}{/if}&close_select={2}"}' style="padding:3px 5px;">
+			{if $smarty.get.rank eq 1} 好评 {elseif $smarty.get.rank eq 2} 中评 {elseif $smarty.get.rank eq 3}差评{/if}
 			<i class=" close-status fontello-icon-cancel cursor_pointer"></i></a>
 		</li>
-		
+		<!-- {/if} -->
+		<!-- {if $smarty.get.select_img} -->
 		<li><span>></span></li>
-		<li><a class="data-pjax btn" href='{url path="comment/admin/init" args="{if $smarty.get.has_img}has_img={$smarty.get.has_img}{/if}{if $smarty.get.status}&status={$smarty.get.status}{/if}{if $smarty.get.rank}&rank={$smarty.get.rank}{/if}&close_select={3}"}' style="padding:3px 5px;">有图
+		<li><a class="data-pjax btn" href='{url path="comment/admin/init" args="{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $smarty.get.select}&select={$smarty.get.select}{/if}&close_select={3}"}' style="padding:3px 5px;">{if $smarty.get.has_img eq 1}有图 {else}无图{/if}
 			<i class=" close-status fontello-icon-cancel cursor_pointer"></i></a>
 		</li>
+		<!-- {/if} -->
 	</ul>
 	<div class="trash-btn">
 		<a class="btn plus_or_reply data-pjax" href="{$action_link.href}" id="sticky_a">
@@ -43,23 +48,23 @@
 		<tr>
 			<td class="status-td" style="text-align:right; width:9%;">审核状态：</td>
 			<td>
-				<div class="data-pjax status-distance"><a  href='{url path="comment/admin/init" args="status=0{if $smarty.get.rank}&rank={$smarty.get.rank}{/if}{if $smarty.get.has_img}&has_img={$smarty.get.has_img}{/if}"}'>待审核</a></div>
-				<div class="status-distance"><a href='{url path="comment/admin/init" args="status=1{if $smarty.get.rank}&rank={$smarty.get.rank}{/if}{if $smarty.get.has_img}&has_img={$smarty.get.has_img}{/if}"}'>已批准</a></div>
+				<div class="status-distance"><a class="data-pjax" href='{url path="comment/admin/init" args="status=0&select_status=1{if $smarty.get.select_rank}&select_rank={$smarty.get.select_rank}{/if}{if $smarty.get.select_img}&select_img={$smarty.get.select_img}{/if}{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}"}'>待审核</a></div>
+				<div class="status-distance"><a class="data-pjax" href='{url path="comment/admin/init" args="status=1&select_status=1{if $smarty.get.select_rank}&select_rank={$smarty.get.select_rank}{/if}{if $smarty.get.select_img}&select_img={$smarty.get.select_img}{/if}{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}"}'>已批准</a></div>
 			</td>
 		</tr>
 		<tr>
 			<td class="status-td" style="text-align:right; width:9%;">评分级别：</td>
 			<td>
-				<div class="status-distance"><a href='{url path="comment/admin/init" args="rank=1{if $smarty.get.status}&status={$smarty.get.status}{/if}{if $smarty.get.has_img}&has_img={$smarty.get.has_img}{/if}"}'>好评</a></div>
-				<div class="status-distance"><a href='{url path="comment/admin/init" args="rank=2{if $smarty.get.status}&status={$smarty.get.status}{/if}{if $smarty.get.has_img}&has_img={$smarty.get.has_img}{/if}"}'>中评</a></div>
-				<div class="status-distance"><a href='{url path="comment/admin/init" args="rank=3{if $smarty.get.status}&status={$smarty.get.status}{/if}{if $smarty.get.has_img}&has_img={$smarty.get.has_img}{/if}"}'>差评</a></div>
+				<div class="status-distance"><a class="data-pjax" href='{url path="comment/admin/init" args="rank=1&select_rank=2{if $smarty.get.select_status}&select_status={$smarty.get.select_status}{/if}{if $smarty.get.select_img}&select_img={$smarty.get.select_img}{/if}{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}"}'>好评</a></div>
+				<div class="status-distance"><a class="data-pjax" href='{url path="comment/admin/init" args="rank=2&select_rank=2{if $smarty.get.select_status}&select_status={$smarty.get.select_status}{/if}{if $smarty.get.select_img}&select_img={$smarty.get.select_img}{/if}{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}"}'>中评</a></div>
+				<div class="status-distance"><a class="data-pjax" href='{url path="comment/admin/init" args="rank=3&select_rank=2{if $smarty.get.select_status}&select_status={$smarty.get.select_status}{/if}{if $smarty.get.select_img}&select_img={$smarty.get.select_img}{/if}{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}"}'>差评</a></div>
 			</td>
 		</tr>
 		<tr>
 			<td class="status-td" style="text-align:right; width:9%;">有无晒图：</td>
 			<td>
-				<div class="status-distance"><a href='{url path="comment/admin/init" args="has_img=1{if $smarty.get.status}&status={$smarty.get.status}{/if}{if $smarty.get.rank}&rank={$smarty.get.rank}{/if}"}'>有</a></div>
-				<div class="status-distance"><a href='{url path="comment/admin/init" args="has_img=0{if $smarty.get.status}&status={$smarty.get.status}{/if}{if $smarty.get.rank}&rank={$smarty.get.rank}{/if}"}'>无</a></div>
+				<div class="status-distance"><a class="data-pjax" href='{url path="comment/admin/init" args="has_img=1&select_img=3{if $smarty.get.select_status}&select_status={$smarty.get.select_status}{/if}{if $smarty.get.select_rank}&select_rank={$smarty.get.select_rank}{/if}{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}"}'>有</a></div>
+				<div class="status-distance"><a class="data-pjax" href='{url path="comment/admin/init" args="has_img=0&select_img=3{if $smarty.get.select_status}&select_status={$smarty.get.select_status}{/if}{if $smarty.get.select_rank}&select_rank={$smarty.get.select_rank}{/if}{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}"}'>无</a></div>
 			</td>
 		</tr>
 	</table>
@@ -131,10 +136,14 @@
 					<td class="hide-edit-area">
 						<div><a href='{url path="goods/admin/edit" args="goods_id={$comment.id_value}"}'' target="_blank">{$comment.goods_name}</a></div>
 						<div>{lang key='comment::comment_manage.comment_on'}&nbsp;&nbsp;{$comment.add_time}</div>
-						{$comment.content|truncate:100|escape:html}
-						<img class="thumbnail" alt="" src="http://10.10.10.47/o2o/content/system/statics/images/nopic.png">
-							<img class="thumbnail" alt="" src="http://10.10.10.47/o2o/content/system/statics/images/nopic.png">
-							<img class="thumbnail" alt="" src="http://10.10.10.47/o2o/content/system/statics/images/nopic.png">
+						<div>{$comment.content|truncate:100|escape:html}</div>
+						{if $comment.has_image eq 1}
+							<div class="img-style">
+								<img class="thumbnail" style="float:left;width:78px;height:78px;margin-right:8px;" alt="" src="http://10.10.10.47/o2o/content/system/statics/images/nopic.png">
+								<img class="thumbnail" style="float:left;width:78px;height:78px;margin-right:8px;" alt="" src="http://10.10.10.47/o2o/content/system/statics/images/nopic.png">
+								<img class="thumbnail" style="float:left;width:78px;height:78px;margin-right:8px;" alt="" src="http://10.10.10.47/o2o/content/system/statics/images/nopic.png">
+							</div>
+						{/if}
 						<div class="edit-list">
 						    {if $comment.status lt 2}
 								<a class="toggle_view" href='{url path="comment/admin/check" args="comment_id={$comment.comment_id}"}' data-pjax-url='{url path="comment/admin/init" args="type={$comment_list.filter.type}"}&status={$comment_list.filter.status}' data-val="{if $comment.status eq 0}allow{else}forbid{/if}">
@@ -154,16 +163,16 @@
 					</td>
 					<td>
 						{section name=loop loop=$comment.comment_rank}   
-							<i class="fontello-icon-star"></i>
+							<i class="fontello-icon-star" style="color:#FF9933;"></i>
 						{/section}
 					</td>
 				</tr>
 				<tr style="border-top:none;">
 					<td colspan="5" style="border-top:none;">
 						<div style="border-top: 2px dashed #ddd;">
-							<input class="form-control small span12" style="width:94.5%;margin-bottom:3px;margin-top:12px;" value="" name="reply_content" type="text" placeholder="感谢您对本店的支持！我们会更加的努力，为您提供更优质的服务。（可在此输入回复内容，也可选择系统自动回复）">
+							<input class="form-control small span12" style="width:94%;margin-bottom:3px;margin-top:12px;" value="" name="reply_content" type="text" placeholder="感谢您对本店的支持！我们会更加的努力，为您提供更优质的服务。（可在此输入回复内容，也可选择系统自动回复）">
 							<input style="float:right;" type="hidden" name="comment_id" value="{$list.comment_id}" />
-							<input class="btn btn-primary" style="height:36px;margin-left:2px;margin-top:9px;" type="button" data-url="{url path='comment/admin/reply'}" value="回复" />
+							<input class="btn btn-primary" style="height:36px;margin-top:9px;" type="button" data-url="{url path='comment/admin/reply'}" value="回复" />
 						</div>
 					</td>
 				</tr>
