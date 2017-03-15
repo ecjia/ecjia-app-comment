@@ -47,7 +47,7 @@ i.fa-star {
 }
 .comment-thumb-details {
     display: inline-block;
-    margin: 20px 0 0 10px;
+    margin: 20px 10px 0 10px;
 }
 .comment-thumb-details h1{
     color: #000000;
@@ -105,15 +105,18 @@ i.fa-star {
 .reply-btn{
 	margin-left: 13.667%;
 }
-.col-lg-4{
-	float: right;
-	min-height: 1px;
-    padding-right: 25px;
+.reply-content-textarea{
+	width: 85.3%;
+	float: left;
+    padding-right: 15px;
+}
+.reply-email{
+    float: right;
     position: relative;
+	width: 45%;
+	margin-top: 15px;
 }
-.col-lg-4 input{
-	margin-top:-5px;
-}
+
 .comment-goods-detail img{
 	width: 200px;
 	height: 200px;
@@ -127,11 +130,41 @@ i.fa-star {
     color: #000000;
 }
 .goods-all-reply span{
-   margin-left:257px;
+   margin-left:230px;
 }
 .goods-img{
 	text-align:center;
 }
+.label-warning-admin {
+    background-color: #3498db;
+}
+.label-warning {
+    background-color: #f0ad4e;
+}
+.label {
+    border-radius: 0.25em;
+    color: #fff;
+    display: inline;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    padding: 0.2em 0.6em 0.3em;
+    text-align: center;
+    vertical-align: baseline;
+    white-space: nowrap;
+}
+.goods-img-comment{
+	width: 10%;
+	float: left;
+    padding-left: 15px;
+	
+}
+.goods-info-comment{
+    float: left;
+    padding-left: 20px;
+	padding-top: 10px;
+}
+
 
 
 

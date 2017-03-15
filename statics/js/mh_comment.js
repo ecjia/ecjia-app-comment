@@ -24,19 +24,38 @@
 	   		
 	   		app.mh_comment.comment_reply();
         },
-
+        
         comment_reply: function () {			
             $(".comment_reply").on('click', function (e) {
                 e.preventDefault();
                 var url = $(this).attr('data-url');
+                var comment_id = $(this).attr('data-id');
                 var data = {
                 	reply_content: $("input[name='reply_content']").val(),
-                	comment_id: $("input[name='comment_id']").val()
+                	comment_id: comment_id
                 };
                 $.get(url, data, function (data) {
                 	ecjia.merchant.showmessage(data);
                 }, 'json');
             });
-		}
+		},
+        
+		comment_info: function () {
+            var $form = $("form[name='theForm']");
+            var option = {
+                submitHandler: function () {
+                    $form.ajaxSubmit({
+                        dataType: "json",
+                        success: function (data) {
+                        	ecjia.merchant.showmessage(data);
+                        }
+                    });
+                }
+            }
+            var options = $.extend(ecjia.merchant.defaultOptions.validate, option);
+            $form.validate(options);
+        
+			
+		},
 	}
 })(ecjia.merchant, jQuery);

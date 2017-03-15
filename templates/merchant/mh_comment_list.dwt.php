@@ -22,6 +22,26 @@
 		</h2>
 	</div>
 </div>
+{if $goods_comment_list}
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel">
+	    	<div class="panel-body">
+	        	<div class="row">
+	        	  <div class="goods-img-comment">
+	        		 <a href=""><img src="{RC_Upload::upload_url()}/{$goods_info.goods_thumb}" width="100" height="100"></a>
+	        	  </div>
+	        	  <div class="goods-info-comment">
+		        	   <p>{$goods_info.goods_name}</p>     
+		        	   <p>价格：<font color="#FF0000"><strong>¥&nbsp;{$goods_info.shop_price}</strong></font></p>     
+		        	   <p>综合评分：{section name=loop loop=$list.comment_rank}<i class="fa fa-star"></i>{/section}</p>     
+	        	  </div>
+	    		</div>
+			</div>
+		</div>
+	</div>
+</div>
+{/if}
 
 <div class="row">
 	<div class="col-lg-12">
@@ -102,12 +122,11 @@
 							</tr>
 							<tr>
 								<td colspan="2"><input class="form-control small" value="" name="reply_content" type="text" placeholder="感谢您对本店的支持！我们会更加的努力，为您提供更优质的服务。（可在此输入回复内容，也可选择系统自动回复）"></td>
-								<td><input type="hidden" name="comment_id" value="{$list.comment_id}" /><input class="comment_reply btn btn-primary" type="button" data-url="{url path='comment/mh_comment/comment_reply'}" value="快捷回复" /></td>
+								<td><input class="comment_reply btn btn-primary" type="button" data-id="{$list.comment_id}" data-url="{url path='comment/mh_comment/comment_reply'}" value="快捷回复" /></td>
 							</tr>
 							<!-- {foreachelse} -->
 							   <tr><td class="no-records" colspan="6">{lang key='system::system.no_records'}</td></tr>
 							<!-- {/foreach} -->
-							
 						</tbody>
 					</table>
 				</section>

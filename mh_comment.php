@@ -79,7 +79,7 @@ class mh_comment extends ecjia_merchant {
 	    
 	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('评论列表'));
 	    $this->assign('ur_here', '评论列表');
-	    $data = $this->comment_list($_SESSION['store_id']);
+	    $data = $this->comment_list();
 	    $this->assign('data', $data);
 	    
 	    $this->assign('search_action',RC_Uri::url('comment/mh_comment/init'));
@@ -88,7 +88,7 @@ class mh_comment extends ecjia_merchant {
 	}
 	
 	/**
-	 * 管理员回复评论处理
+	 * 管理员快捷回复评论处理
 	 */
 	public function comment_reply() {
 	    $this->admin_priv('mh_comment_manage');
@@ -96,15 +96,17 @@ class mh_comment extends ecjia_merchant {
 	    $comment_id 	= $_GET['comment_id'];
 	    $reply_content  = $_GET['reply_content'];
 	    if(empty($reply_content)){
-	    	return $this->showmessage('请输入回复内容', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
-	    };
-
-// 	    $data = array(
-// 	    		'comment_id' 	=> $comment_id,
-// 	    );
-// 	    $appeal_id = RC_DB::table('comment_appeal')->insertGetId($data);
-// 	    return $this->showmessage('回复提交成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('comment/mh_comment/comment_detail', array('comment_id' => $comment_id))));
-	   
+	    	$reply_content='感谢您对本店的支持！我们会更加的努力，为您提供更优质的服务。';
+	    }
+	    $data = array(
+	    	'comment_id' 	=> $comment_id,
+	    	'content' 		=> $reply_content,
+	    	'user_type'		=> 'merchant',
+	    	'user_id'		=> $_SESSION['staff_id'],
+	    	'add_time'		=> RC_Time::gmtime(),
+	    );
+	    RC_DB::table('comment_reply')->insertGetId($data);
+	   	return $this->showmessage('回复成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('comment/mh_comment/init')));
 	}
 	
 	/**
@@ -117,22 +119,116 @@ class mh_comment extends ecjia_merchant {
 	    $this->assign('ur_here', '评论详情');
 	    
 		$comment_id = $_GET['comment_id'];
-		$this->assign('comment_id', $comment_id);
-	   
+		$comment_info = RC_DB::table('comment')->where('comment_id', $comment_id)->first();
+		$comment_info['add_time'] = RC_Time::local_date(ecjia::config('time_format'), $comment_info['add_time']);
+		
+		$avatar_img = RC_DB::TABLE('users')->where('user_id', $comment_info['user_id'])->pluck('avatar_img');
+		
+		$replay_admin_list = RC_DB::TABLE('comment_reply')->where('comment_id', $comment_id)->where('user_id', $_SESSION['staff_id'])->select('content', 'add_time', 'user_id')->get();
+		foreach ($replay_admin_list as $key => $val) {
+			$replay_admin_list[$key]['add_time_new'] = RC_Time::local_date(ecjia::config('time_format'), $val['add_time']);
+			$staff_info = RC_DB::TABLE('staff_user')->where('user_id', $val['user_id'])->select('name', 'avatar')->first();
+			$replay_admin_list[$key]['staff_name'] = $staff_info['name'];
+			$replay_admin_list[$key]['staff_img']  =  RC_Upload::upload_url($staff_info['avatar']);
+		};
+		
+		$goods_info = RC_DB::TABLE('goods')->where('goods_id', $comment_info['id_value'])->select('goods_name', 'shop_price', 'goods_thumb')->first();
+		$order_time = RC_DB::TABLE('order_info')->where('order_id',  $comment_info['order_id'])->pluck('add_time');
+		$order_add_time = RC_Time::local_date(ecjia::config('time_format'), $order_time);
+	
+		$other_comment = RC_DB::TABLE('comment')->where('store_id', $_SESSION['store_id'])->where('id_value', $comment_info['id_value'])->where('comment_id', '!=', $comment_info['comment_id'])->select('user_name', 'content', 'comment_rank', 'comment_id','id_value')->take(4)->get();
+		$this->assign('comment_info', $comment_info);
+		$this->assign('avatar_img', $avatar_img);
+		$this->assign('replay_admin_list', $replay_admin_list);
+		$this->assign('goods_info', $goods_info);
+		$this->assign('order_add_time', $order_add_time);
+		$this->assign('other_comment', $other_comment);
+		
+		$this->assign('from_action',RC_Uri::url('comment/mh_comment/comment_detail_reply'));
+		
 	    $this->display('mh_comment_detail.dwt');
 	}
 	
 	/**
+	 * 管理员详情页面回复处理
+	 */
+	public function comment_detail_reply() {
+		$this->admin_priv('mh_comment_manage');
+		 
+		$comment_id 	= $_POST['comment_id'];
+		$reply_content  = $_POST['reply_content'];
+		if(empty($reply_content)){
+			 return $this->showmessage('请输入回复内容', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+		}
+		$data = array(
+			'comment_id' 	=> $comment_id,
+			'content' 		=> $reply_content,
+			'user_type'		=> 'merchant',
+			'user_id'		=> $_SESSION['staff_id'],
+			'add_time'		=> RC_Time::gmtime(),
+		);
+		$email_status = $_POST['is_ok'];
+		if($email_status){
+			$reply_email = $_POST['reply_email'];
+			$comment_info = RC_DB::TABLE('comment')->where('comment_id', $comment_id)->select('user_name', 'content')->first();
+			$user_name 			= $comment_info['user_name'];
+			$message_content 	= $comment_info['content'];
+			$message_note 		= $reply_content;
+			
+			if(!empty($reply_email)){
+				RC_DB::table('comment_reply')->insertGetId($data);
+				
+				$tpl_name = 'user_message';
+				$template   = RC_Api::api('mail', 'mail_template', $tpl_name);
+				if (!empty($template)) {
+					$this->assign('user_name', 	$user_name);
+					$this->assign('message_content', $message_content);
+					$this->assign('message_note',   $message_note);
+					$this->assign('shop_name',   ecjia::config('shop_name'));
+					$this->assign('send_date',   RC_Time::local_date(ecjia::config('date_format')));
+					RC_Mail::send_mail('', $reply_email, $template['template_subject'], $this->fetch_string($template['template_content']), $template['is_html']);
+				}
+			}else{
+				return $this->showmessage('请输入邮件地址', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			}
+		}else{
+			RC_DB::table('comment_reply')->insertGetId($data);
+		}
+	    return $this->showmessage('回复成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('comment/mh_comment/comment_detail',array('comment_id' => $comment_id))));
+	}
+	
+	
+	public function goods_comment_list() {
+		$this->admin_priv('mh_comment_manage');
+		
+		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('商品评论列表'));
+		$this->assign('ur_here', '商品评论列表');
+		
+		$this->assign('goods_comment_list', 'goods_comment_list');
+		$data = $this->comment_list($_GET['goods_id']);
+		$goods_info = RC_DB::TABLE('goods')->where('goods_id', $_GET['goods_id'])->select('goods_name', 'shop_price', 'goods_thumb')->first();
+		$this->assign('data', $data);
+		$this->assign('goods_info', $goods_info);
+		 
+		$this->assign('search_action',RC_Uri::url('comment/mh_comment/init'));
+		$this->display('mh_comment_list.dwt');
+	}
+
+	/**
 	 * 评论-列表信息
 	 */
-	private function comment_list($store_id) {
+	private function comment_list($goods_id) {
 		$db_comment = RC_DB::table('comment');
 		$filter['keywords'] = empty($_GET['keywords']) ? '' : trim($_GET['keywords']);
 		if ($filter['keywords']) {
 			$db_comment->where('user_name', 'like', '%'.mysql_like_quote($filter['keywords']).'%');
 		}
-	
-		$db_comment->where(RC_DB::raw('store_id'), $_SESSION['store_id']);
+		if(!empty($goods_id)){
+			$db_comment->where(RC_DB::raw('store_id'), $_SESSION['store_id'])->where(RC_DB::raw('id_value'), $goods_id);
+		}else{
+			$db_comment->where(RC_DB::raw('store_id'), $_SESSION['store_id']);
+		}
+		
 		$count = $db_comment->count();
 		$page = new ecjia_merchant_page($count, 10, 5);
 		$data = $db_comment
