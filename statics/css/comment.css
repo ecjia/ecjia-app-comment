@@ -48,3 +48,15 @@
 	font-weight:bold;
 	font-size:14px;
 }
+.comment-config .control-group {
+	padding-left: 10%;
+}
+.comment-config .term-checkbox {
+	margin: 0;
+}
+.comment-config .membership {
+	width: 70px;
+}
+.comment-config .goods_type {
+	margin-bottom: 14px;
+}
