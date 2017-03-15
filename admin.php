@@ -555,62 +555,72 @@ class admin extends ecjia_admin {
 	private function get_comment_list() {
 		/* 查询条件 */
 		$filter['keywords'] = empty($_GET['keywords']) ? '' : stripslashes(trim($_GET['keywords']));
-		$status   = empty($_GET['status']) ? 0 : (intval($_GET['status']));
-		$rank     = empty($_GET['rank']) ? 0 : (intval($_GET['rank']));
-		$has_img  = empty($_GET['has_img']) ? 0 : (intval($_GET['has_img']));
+// 		$status   = !isset($_GET['status']) ? 0 : (intval($_GET['status']));
+// 		$rank     = !isset($_GET['rank']) ? 0 : (intval($_GET['rank']));
+// 		$has_img  = !isset($_GET['has_img']) ? 0 : (intval($_GET['has_img']));
+		
 		
 		$db_comment = RC_DB::table('comment as c');
 		if (!empty($filter['keywords'])) {
 			$db_comment->where(RC_DB::raw('c.content'), 'like', '%'.mysql_like_quote($filter['keywords']).'%');
 		}
-		if (!empty($status)) {
-// 			$filter['status'] = $status;
-			$db_comment->where(RC_DB::raw('c.status'), '=', $status);
-		}
-		if (!empty($rank)) {
-// 			$filter['rank'] = $rank;
-			$db_comment->where(RC_DB::raw('c.rank'), '=', $rank);
-		}
-		if (!empty($has_img)) {
-// 			$filter['has_img'] = $has_img;
-			$db_comment->where(RC_DB::raw('c.has_img'), '=', $has_img);
-		}
-		if (!empty($_GET['close_select'])) {
-			if ($_GET['close_select'] == '1') {
-				$db_comment->where(RC_DB::raw('c.status'), '<>', $status);
-			}
-			if ($_GET['close_select'] == '2') {
-				$db_comment->where(RC_DB::raw('c.rank'), '<>', $rank);
-			}
-			if ($_GET['close_select'] == '3') {
-				$db_comment->where(RC_DB::raw('c.has_img'), '<>', $has_img);
-			}
+		
+// 		_dump($_GET['status'], 1);
+		
+		if (isset($_GET['status']) && (!empty($_GET['status']) || $_GET['status'] == '0')) {
+// 			_dump();
+			$db_comment->where(RC_DB::raw('c.status'), '=', $_GET['status']);
 		}
 		
+		if (isset($_GET['rank'])) {
+			if ($_GET['rank'] == '1') {
+				$db_comment->where(RC_DB::raw('c.comment_rank'), '=', '5');
+			} elseif ($_GET['rank'] == '2') {
+				$db_comment->whereIn(RC_DB::raw('c.comment_rank'), array('3','4'));
+			} elseif ($_GET['rank'] == '3') {
+				$db_comment->where(RC_DB::raw('c.comment_rank'), '<=', '2');
+			}
+		}
+		if (isset($_GET['has_img']) && (!empty($_GET['has_img']) || $_GET['has_img'] == '0')) {
+			$db_comment->where(RC_DB::raw('c.has_image'), '=', $_GET['has_img']);
+		}
+		
+// 		if (!empty($_GET['close_select'])) {
+// 			if ($_GET['close_select'] == '1') {
+// 				$db_comment->where(RC_DB::raw('c.status'), '<>', $status);
+// 			}
+// 			if ($_GET['close_select'] == '2') {
+// 				$db_comment->where(RC_DB::raw('c.comment_rank'), '<>', $rank);
+// 			}
+// 			if ($_GET['close_select'] == '3') {
+// 				$db_comment->where(RC_DB::raw('c.has_image'), '<>', $has_img);
+// 			}
+// 		}
+	
 		$count = $db_comment->count();
+		
+		
 		$page = new ecjia_page($count, 10, 5);
 		$data = $db_comment
 		->leftJoin('store_franchisee as sf', RC_DB::raw('c.store_id'), '=', RC_DB::raw('sf.store_id'))
 		->leftJoin('goods as g', RC_DB::raw('c.id_value'), '=', RC_DB::raw('g.goods_id'))
 		->selectRaw('c.comment_id,c.user_name,c.content,c.add_time,c.id_value,c.comment_rank,c.status,c.has_image,sf.merchants_name,g.goods_name')
-		->orderby('add_time', 'asc')
+		->orderby(RC_DB::raw('c.add_time'), 'asc')
 		->take(10)
 		->skip($page->start_id-1)
 		->get();
-		
+				
 		$list = array();
 		if (!empty($data)) {
 			foreach ($data as $row) {
 				$row['add_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['add_time']);
-				if ($row['has_img'] == '1') {
-					$row['has_img'] = RC_DB::table('term_attachment')
-										->where(RC_DB::raw('object_id'), '=', $row['comment_id'])->pluck('file_path');
-				}
+// 				if ($row['has_img'] == '1') {
+// 					$row['img'] = RC_DB::table('term_attachment')
+// 										->where(RC_DB::raw('object_id'), '=', $row['comment_id'])->pluck('file_path');
+// 				}
 				$list[] = $row;
 			}
 		}
-// 		$comment_list = array('item' => $list, 'filter' => $filter, 'page' => $page->show(2), 'desc' => $page->page_desc());
-// 		_dump($comment_list, 1);
 		return array('item' => $list, 'filter' => $filter, 'page' => $page->show(2), 'desc' => $page->page_desc());
 	}
 
