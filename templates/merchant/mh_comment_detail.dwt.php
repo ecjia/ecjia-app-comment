@@ -3,7 +3,7 @@
 
 <!-- {block name="footer"} -->
 <script type="text/javascript">
-
+	ecjia.merchant.mh_comment.comment_info();
 </script>
 <!-- {/block} -->
 
@@ -15,7 +15,7 @@
   	<div class="pull-right">
   		{if $action_link}
 		<a href="{$action_link.href}" class="btn btn-primary data-pjax">
-			<i class="fa fa-reply"></i> {$action_link.text}
+			<i class="fa fa-reply"></i>{$action_link.text}
 		</a>
 		{/if}
   	</div>
@@ -29,18 +29,23 @@
 				<div class="comment_top">
 					<div class="panel-body">
 						<div class="comment-thumb">
-							<img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg" >
+							{if $avatar_img}
+			                	<img src="{RC_Upload::upload_url()}/{$avatar_img}" >
+			                {else}
+			                	<img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">
+			                {/if}
+							
 						</div>
 						<div class="comment-thumb-details">
-							<h1>送钱</h1>
-							<p>2016-11-04 17：02:33<span>IP:10.10.10.41</span></p><br>
+							<h1>{$comment_info.user_name}</h1>
+							<p>{$comment_info.add_time}<span>{$comment_info.ip_address}</span></p><br>
 						</div>
 						<div class="comment-goods">
-						  	<p>商品评分：</p>
-			                <p>收到手机已经过去三天了，我觉得无法使用，所以给差评</p>
+						  	<p>商品评分：{section name=loop loop=$comment_info.comment_rank}<i class="fa fa-star"></i>{/section}</p>
+			                <p>{$comment_info.content}</p>
 			                <img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">
 						</div><br>
-						<a href='{url path="comment/mh_appeal/add_appeal" args="comment_id={$comment_id}"}'><button class="btn btn-info" type="button">申诉</button></a>
+						<a href='{url path="comment/mh_appeal/add_appeal" args="comment_id={$comment_info.comment_id}"}'><button class="btn btn-info" type="button">申诉</button></a>
 		            </div>    
 				</div><br>
 				
@@ -54,27 +59,22 @@
 		                </div>
 		                <div id="collapseOne" class="panel-collapse collapse in">
 	                         <div class="panel-body">
-	                              <div class="text-right">
-	                                 <div class="comment-all-right-thumb">
-											<img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg" >
-									 </div>
-						  			 <div class="comment-thumb-details">
-										<h1>admin</h1>
-										<p>2017-03-08 11:40:00</p><br>
-									 </div>
-									  <p>感谢您对本店的支持！我们会更加的努力，为您提供做优质的服务感谢您对本店的支持！</p>
-	                              </div>
-	                              <hr>
-	                             <div class="text-left">
-	                                 <div class="comment-all-left-thumb">
-										<img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg" >
-									 </div>
-						  			 <div class="comment-thumb-details">
-										<h1>admin</h1>
-										<p>2017-03-08 11:40:00</p><br>
-									 </div>
-									  <p>感谢您对本店的支持！我们会更加的努力，为您提供做优质的服务感谢您对本店的支持！</p>
-	                              </div>
+	                         	  <!-- {foreach from=$replay_admin_list item=list} -->
+		                              <div class="text-right">
+		                                 <div class="comment-all-right-thumb">
+											<img src="{$list.staff_img}" >
+										 </div>
+							  			 <div class="comment-thumb-details">
+											<h1><span><small class="label label-warning-admin">管理员</small></span>&nbsp;{$list.staff_name}</h1>
+											<p>{$list.add_time_new}</p><br>
+										 </div>
+										 <p>{$list.content}</p>
+		                              </div>
+		                          <!-- {foreachelse} -->
+		                           <div class="text-center">
+		                             	管理员暂时还未回复任何消息
+		                           	</div>
+	                              <!-- {/foreach} -->
 	                          </div>
 		                </div>
 		              </div>
@@ -83,22 +83,21 @@
 		       	<div class="comment-reply">
 					<div class="panel-body">
 						<h4>回复评论</h4>
-						<form class="form-horizontal" action='{$form_action}' method="post" name="theForm">
+						<form class="form-horizontal" action="{$from_action}" method="post" name="theForm">
 							 <div class="reply-content">
-                                 <h5 class="reply-title">回复内容:</h5>
-                                 <div class="col-lg-10">
-                                      <textarea class="form-control" id="appeal_content" name="appeal_content" placeholder="请输入申诉理由" ></textarea><br>
+                                 <h5 class="reply-title">回复内容：</h5>
+                                 <div class="reply-content-textarea">
+                                      <textarea class="form-control" id="reply_content" name="reply_content" placeholder="请输入回复内容" ></textarea>
                                  </div>
                              </div>
                              <div class="text-right">
-								<input id="is_ok" name="is_ok" value="1" type="checkbox">
-								<label for="is_ok">邮件通知</label>
-								<div class="col-lg-4">
-									<input class="form-control" placeholder="请输入电子邮箱" type="text" name="reply_email">
+								<input type="checkbox" id="is_ok" name="is_ok" value="1">
+								<label for="is_ok" style="margin-top:18px;">邮件通知</label>
+								<div class="reply-email">
+									<input class="form-control" placeholder="请输入电子邮箱" type="text" name="reply_email" value="{$comment_info.email}">
 								</div>
-                             </div>
-							 <input type="hidden" name="goods_id" value="" />
-							 <input type="hidden" name="user_id" value=""/>
+							 </div>
+                             <input type="hidden" name="comment_id" value="{$comment_info.comment_id}" />
 							 <div class="reply-btn">
 						   		<input class="btn btn-info" type="submit" value="回复"/>
 						     </div>
@@ -113,22 +112,31 @@
             <div class="comment-goods-detail">
 			  	<h4>商品信息</h4>
 			  	<div class="goods-img">
-			  		<img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">
+			  		<img src="{RC_Upload::upload_url()}/{$goods_info.goods_thumb}">
 			  	</div>
-                <p>收到手机已经过去三天了，我觉得无法使用，所以给差评</p>
-                <p>价格：</p>
-                <p>购买于：</p>
-			</div>
+                <p>{$goods_info.goods_name}</p>
+                <p>价格：<font color="#FF0000"><strong>¥&nbsp;{$goods_info.shop_price}</strong></font></p>
+                <p>购买于：{$order_add_time}</p>
+        </div>
         </div>
         <section class="panel panel-body">
           <div class="goods-all-reply">
-			  	<h4>其他评价</h4>
-			  	<p>用户名<span><a href="">查看</a></span></p>
-                <p>收到手机已经过去三天了，我觉得无法使用，所以给差评</p>
-                <p class="text-right">{section name=loop loop=$list.comment_rank}<i class="fa fa-star"></i>{/section}</p>
-                <p class="text-right"><a href="">查看更多</a></p>
+          	  <h4>其他评价</h4>
+	          <!-- {foreach from=$other_comment item=list} -->
+		          <p>{$list.user_name}<span><a href='{url path="comment/mh_comment/comment_detail" args="comment_id={$list.comment_id}"}'>查看</a></span></p>
+		          <p>{$list.content}</p>
+		          <p class="text-right">{section name=loop loop=$list.comment_rank}<i class="fa fa-star"></i>{/section}</p>
+		          <hr>
+	          <!-- {foreachelse} -->
+		          <div class="text-center">
+		          		暂无其他相关评论
+		          </div>
+	          <!-- {/foreach} -->
+	          {if $other_comment|@count neq 0}
+	           	  <p class="text-right"><a href='{url path="comment/mh_comment/goods_comment_list" args="goods_id={$comment_info.id_value}"}'>查看更多</a></p>
+			  {/if} 
 		  </div>
-        </section>
-    </div>
+		</section>
+	</div>
 </div>
 <!-- {/block} -->
