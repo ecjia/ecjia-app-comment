@@ -55,7 +55,7 @@ function EM_assign_comment($id, $type, $page = 1, $page_size = 15) {
 	$list['comment_number']['picture'] = empty($list['comment_number']['good']) ? 0 : intval($list['comment_number']['picture']);
 	
 	if ($list['comment_number']['all'] != 0) {
-		$list['comment_percent'] = ($list['comment_number']['good'] / $list['comment_number']['all']) * 100 .'%';
+		$list['comment_percent'] = round(($list['comment_number']['good'] / $list['comment_number']['all']) * 100) .'%';
 	} else {
 		$list['comment_percent'] = '100%';
 	}
@@ -93,7 +93,7 @@ function EM_assign_comment($id, $type, $page = 1, $page_size = 15) {
 	}
 		
 	$page_row = new ecjia_page($count, $page_size, 6, '', $page);
-	$data = $db_comment->select('*')->orderBy('comment_id', 'desc')->take($page_size)->skip($page->start_id-1)->get();
+	$data = $db_comment->select('*')->orderBy('comment_id', 'desc')->take($page_size)->skip($page_row->start_id-1)->get();
 	
 	$arr = $ids = array();
 	if (!empty($data)) {
