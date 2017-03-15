@@ -405,67 +405,48 @@ class admin extends ecjia_admin {
 	}
 	
 	/**
-	 * 列表更新评论的状态为显示或者禁止
+	 * 列表更新评论的状态为批准或者驳回
 	 */
 	public function check() {
 		$this->admin_priv('comment_update', ecjia::MSGTYPE_JSON);
 
-		$id		 	= !empty($_GET['id']) 		? intval($_GET['id'])		: 0;
+		$id		 	= !empty($_GET['comment_id']) 		? intval($_GET['comment_id'])		: 0;
+		$page		= !empty($_GET['page']) 		? intval($_GET['page'])		: 1;
 		$type 		= !empty($_GET['type'])		? intval($_GET['type'])		: 1;
 		$allow 		= !empty($_POST['check']) 	? $_POST['check']			: '';
 		$status		= $_POST['status'];
 		
 		if ($status === '') {
-			$pjaxurl = RC_Uri::url('comment/admin/init', array('type' => $type));
+			$pjaxurl = RC_Uri::url('comment/admin/init', array('type' => $type, 'page' => $page));
 		} else {
-			$pjaxurl = RC_Uri::url('comment/admin/init', array('type' => $type, 'status' => intval($status)));
+			$pjaxurl = RC_Uri::url('comment/admin/init', array('status' => intval($status), 'page' => $page));
 		}
 		
-		if ($allow == 'reply_allow' || $allow == 'reply_forbid') {
-			$pjaxurl = RC_Uri::url('comment/admin/reply', array('id' => $id));
-		}
+		$db_comment = RC_DB::table('comment');
 		
-		if ($allow == 'allow' || $allow =='reply_allow' ) {
-			/* 允许评论显示 */
+		if ($allow == 'allow') {
+			/*允许评论显示 */
 			$data = array(
-			    'comment_id' => $id,
 				'status'     => '1'
 			);
-			$this->db_comment->comment_manage($data);
+			$db_comment->where('comment_id', $id)->update($data);
 			
 			$message = RC_Lang::get('comment::comment_manage.show_success');
-		} elseif ($allow == 'forbid' || $allow == 'reply_forbid' || $allow =='no_trash' || $allow=='no_trashed') {
-			/* 禁止评论显示 */
+		} elseif ($allow == 'forbid') {
+			/*禁止评论显示 */
 			$data = array(
-			    'comment_id' => $id,
 				'status'     => '0'
 			);
-			$this->db_comment->comment_manage($data);
-			
-			if ($allow =='no_trash') {
-				$message = RC_Lang::get('comment::comment_manage.valid_success');
-			} elseif ($allow =='no_trashed') {
-				$message = RC_Lang::get('comment::comment_manage.reset_success');
-			} else {
-				$message = RC_Lang::get('comment::comment_manage.hide_success');
-			}
-		} elseif ($allow == "trash_comment") {
-			/* 垃圾评论 */
+			$db_comment->where('comment_id', $id)->update($data);
+		}
+		 elseif ($allow == "trash_comment") {
+			/* 移到回收站 */
 			$data = array(
-			    'comment_id' => $id,
-				'status'     => '2'
-			);
-			$this->db_comment->comment_manage($data);
-			$message = RC_Lang::get('comment::comment_manage.trash_success');
-		} elseif ($allow == "trashed_comment") {
-			/* 回收评论 */
-			$data = array(
-			    'comment_id' => $id,
 				'status'     => '3'
 			);
-			$this->db_comment->comment_manage($data);
-			$message = RC_Lang::get('comment::comment_manage.trashed_success');
-		}
+			$db_comment->where('comment_id', $id)->update($data);
+			$message = RC_Lang::get('comment::comment_manage.trash_success');
+		} 
 		return $this->showmessage($message, ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => $pjaxurl));
 	}
 	
@@ -555,20 +536,15 @@ class admin extends ecjia_admin {
 	private function get_comment_list() {
 		/* 查询条件 */
 		$filter['keywords'] = empty($_GET['keywords']) ? '' : stripslashes(trim($_GET['keywords']));
-// 		$status   = !isset($_GET['status']) ? 0 : (intval($_GET['status']));
-// 		$rank     = !isset($_GET['rank']) ? 0 : (intval($_GET['rank']));
-// 		$has_img  = !isset($_GET['has_img']) ? 0 : (intval($_GET['has_img']));
-		
 		
 		$db_comment = RC_DB::table('comment as c');
+		$db_comment->where(RC_DB::raw('c.status'), '<>','3');
+		
 		if (!empty($filter['keywords'])) {
 			$db_comment->where(RC_DB::raw('c.content'), 'like', '%'.mysql_like_quote($filter['keywords']).'%');
 		}
 		
-// 		_dump($_GET['status'], 1);
-		
 		if (isset($_GET['status']) && (!empty($_GET['status']) || $_GET['status'] == '0')) {
-// 			_dump();
 			$db_comment->where(RC_DB::raw('c.status'), '=', $_GET['status']);
 		}
 		

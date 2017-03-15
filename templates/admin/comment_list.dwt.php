@@ -16,21 +16,21 @@
 <div class="nav-heading">
 	<ul class="nav-status">
 		<li><span>全部</span></li>
-		<!-- {if $smarty.get.select_status} -->
+		<!-- {if $smarty.get.select_status neq null} -->
 		<li><span>></span></li>
-		<li><a class="data-pjax btn" href='{url path="comment/admin/init" args="{if $smarty.get.status neq null}status={$smarty.get.status}{/if}{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $smarty.get.select}&select={$smarty.get.select}{/if}&close_select={1}"}' style="padding:3px 5px;">
+		<li><a class="data-pjax btn" href='{url path="comment/admin/init" args="{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $smarty.get.select}&select={$smarty.get.select}{/if}&close_select={1}"}' style="padding:3px 5px;">
 			{if $smarty.get.status eq 0}待审核{else}已批准{/if}
 			<i class=" close-status fontello-icon-cancel cursor_pointer"></i></a>
 		</li>
 		<!-- {/if} -->
-		<!-- {if $smarty.get.select_rank} -->
+		<!-- {if $smarty.get.select_rank neq null} -->
 		<li><span>></span></li>
-		<li><a class="data-pjax btn" href='{url path="comment/admin/init" args="{if $smarty.get.rank neq null}rank={$smarty.get.rank}{/if}{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $smarty.get.select}&select={$smarty.get.select}{/if}&close_select={2}"}' style="padding:3px 5px;">
+		<li><a class="data-pjax btn" href='{url path="comment/admin/init" args="{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $smarty.get.select}&select={$smarty.get.select}{/if}&close_select={2}"}' style="padding:3px 5px;">
 			{if $smarty.get.rank eq 1} 好评 {elseif $smarty.get.rank eq 2} 中评 {elseif $smarty.get.rank eq 3}差评{/if}
 			<i class=" close-status fontello-icon-cancel cursor_pointer"></i></a>
 		</li>
 		<!-- {/if} -->
-		<!-- {if $smarty.get.select_img} -->
+		<!-- {if $smarty.get.select_img neq null} -->
 		<li><span>></span></li>
 		<li><a class="data-pjax btn" href='{url path="comment/admin/init" args="{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $smarty.get.select}&select={$smarty.get.select}{/if}&close_select={3}"}' style="padding:3px 5px;">{if $smarty.get.has_img eq 1}有图 {else}无图{/if}
 			<i class=" close-status fontello-icon-cancel cursor_pointer"></i></a>
@@ -146,19 +146,14 @@
 						{/if}
 						<div class="edit-list">
 						    {if $comment.status lt 2}
-								<a class="toggle_view" href='{url path="comment/admin/check" args="comment_id={$comment.comment_id}"}' data-pjax-url='{url path="comment/admin/init" args="type={$comment_list.filter.type}"}&status={$comment_list.filter.status}' data-val="{if $comment.status eq 0}allow{else}forbid{/if}">
+								<a class="toggle_view" href='{url path="comment/admin/check" args="comment_id={$comment.comment_id}&status={$comment.status}&page={$smarty.get.page}"}' data-msg="您确定要更改此评论的状态吗？" data-val="{if $comment.status eq 0}allow{else}forbid{/if}" data-status="{$smarty.get.status}" >
 									{if $comment.status eq 0} {t}批准{/t} {elseif $comment.status eq 1} <span class="ecjiafc-red">{t}驳回{/t}</span> {/if}
 								</a>&nbsp;|&nbsp;
 								<a class="data-pjax" href='{url path="comment/admin/reply" args="comment_id={$comment.comment_id}"}'>
 									{t}查看及回复{/t}
 								</a>&nbsp;|&nbsp;
-								<a class="ecjiafc-red toggle_view" href='{url path="comment/admin/check" args="comment_id={$comment.comment_id}"}' data-msg="{t}您确定要将该用户[{$comment.user_name|default:{lang key='comment::comment_manage.anonymous'}}]的评论移至回收站吗？{/t}" data-pjax-url='{url path="comment/admin/init" args="type={$comment_list.filter.type}"}&status={$comment_list.filter.status}&page={$smarty.get.page}' data-val="trashed_comment">{t}移至回收站{/t}</a>
+								<a class="ecjiafc-red toggle_view" href='{url path="comment/admin/check" args="comment_id={$comment.comment_id}&page={$smarty.get.page}"}' data-msg="{t}您确定要将该用户[{$comment.user_name|default:{lang key='comment::comment_manage.anonymous'}}]的评论移至回收站吗？{/t}"  data-val="trashed_comment" >{t}移至回收站{/t}</a>
 						    {/if}
-							{if $comment.status eq 3}
-								<a class="ajaxremove ecjiafc-red" data-toggle="ajaxremove" data-msg="{t}您确定要删除该用户[{$comment.user_name}]的评论吗？{/t}" href='{url path="comment/admin/remove" args="id={$comment.comment_id}"}' title="{t}永久移除{/t}">
-									{t}永久删除{/t}
-								</a>
-							{/if}
 						</div>
 					</td>
 					<td>
