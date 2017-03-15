@@ -53,7 +53,6 @@ defined('IN_ECJIA') or exit('No permission resources.');
  */
 class create_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
-    	
     	//如果用户登录获取其session
     	$this->authSession();
 		$user_id = $_SESSION['user_id'];//26
@@ -93,20 +92,14 @@ class create_module extends api_front implements api_interface {
 		$save_path = 'data/comment/'.RC_Time::local_date('Ym');
 		$upload = RC_Upload::uploader('image', array('save_path' => $save_path, 'auto_sub_dirs' => true));
 		
-		if (!empty($_FILES['picture'])) {
-			$count = count($_FILES['picture']['name']);
-			for ($i = 0; $i < $count; $i++) {
-				$picture = array(
-					'name' 		=> 	$_FILES['picture']['name'][$i],
-					'type' 		=> 	$_FILES['picture']['type'][$i],
-					'tmp_name' 	=> 	$_FILES['picture']['tmp_name'][$i],
-					'error'		=> 	$_FILES['picture']['error'][$i],
-					'size'		=> 	$_FILES['picture']['size'][$i],
-				);
-				if (!$upload->check_upload_file($picture)) {
-					return new ecjia_error('picture_error', $upload->error());
-				}
+		$image_info = null;
+		if (!empty($_FILES)) {
+			foreach ($_FILES as $images) {
+			    if (!$upload->check_upload_file($images)) {
+			        return new ecjia_error('picture_error', $upload->error());
+			    }
 			}
+			
 			$image_info	= $upload->batch_upload($_FILES);
 		}
 		
@@ -137,20 +130,20 @@ class create_module extends api_front implements api_interface {
 		$comment_id = RC_Model::model('comment/comment_model')->insert($data);
 
 		if (!empty($image_info)) {
-			foreach ($image_info as $key => $val) {
-				if (!empty($val)) {
-					$image_url	= $upload->get_position($image_info[$key]);
+			foreach ($image_info as $image) {
+				if (!empty($image)) {
+					$image_url	= $upload->get_position($image);
 					$data = array(
 						'object_app'	=> 'ecjia.comment',
 						'object_group'	=> 'comment',
 						'object_id'		=> $comment_id,
-					    'attach_label'  => $image_info[$key]['name'],
-					    'file_name'     => $image_info[$key]['name'],
+					    'attach_label'  => $image['name'],
+					    'file_name'     => $image['name'],
 						'file_path'		=> $image_url,
-					    'file_size'     => $image_info[$key]['size'] / 1000,
-					    'file_ext'      => $image_info[$key]['ext'],
-					    'file_hash'     => $image_info[$key]['sha1'],
-					    'file_mime'     => $image_info[$key]['type'],
+					    'file_size'     => $image['size'] / 1000,
+					    'file_ext'      => $image['ext'],
+					    'file_hash'     => $image['sha1'],
+					    'file_mime'     => $image['type'],
 						'is_image'		=> 1,
 						'user_id'		=> $user_id,
 					    'user_type'     => 'user',
