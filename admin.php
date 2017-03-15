@@ -708,7 +708,20 @@ class admin extends ecjia_admin {
 	    $this->assign('ur_here', '评论设置');
 
 	    $this->display('comment_config.dwt');
+	}
 	
+	/**
+	 * 商品评论回收站
+	 */
+	public function trash() {
+	    $this->admin_priv('comment_manage');
+	    
+	    $this->assign('action_link', array('href'=> RC_Uri::url('comment/admin/init')));
+	    ecjia_screen::get_current_screen()->remove_last_nav_here();
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('回收站'));
+	    $this->assign('ur_here', '回收站');
+
+	    $this->display('comment_trash.dwt');
 	}
 	
 }
