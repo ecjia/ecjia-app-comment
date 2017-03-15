@@ -707,6 +707,20 @@ class admin extends ecjia_admin {
 		return array('item' => $arr, 'filter' => $filter, 'page' => $page->show(5), 'desc' => $page->page_desc(), 'com_count' => $com_count);
 	}
 	
+	/**
+	 * 评论设置
+	 */
+	public function config() {
+	    $this->admin_priv('comment_update');
+	
+	    ecjia_screen::get_current_screen()->remove_last_nav_here();
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('评论设置'));
+	    $this->assign('ur_here', '评论设置');
+
+	    $this->display('comment_config.dwt');
+	
+	}
+	
 }
 
 // end
