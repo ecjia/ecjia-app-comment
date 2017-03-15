@@ -730,7 +730,10 @@ class admin extends ecjia_admin {
 	    ecjia_screen::get_current_screen()->remove_last_nav_here();
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('回收站'));
 	    $this->assign('ur_here', '回收站');
-
+	    
+	    $list = $this->get_comment_list();
+	    $this->assign('comment_list', $list);
+	    
 	    $this->display('comment_trash.dwt');
 	}
 	

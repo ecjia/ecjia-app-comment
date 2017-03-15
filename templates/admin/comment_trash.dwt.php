@@ -43,6 +43,7 @@
 			</thead>
 			<tbody>
 				<!-- {foreach from=$comment_list.item item=comment} -->
+			    {if $comment.status eq 3}
 				<tr>
 					<td><input class="checkbox" type="checkbox" name="checkboxes[]" value="{$comment.comment_id}"></td>
 					<td>
@@ -59,24 +60,29 @@
 						<div><a href='{url path="goods/admin/edit" args="goods_id={$comment.id_value}"}'' target="_blank">{$comment.goods_name}</a></div>
 						<div>{lang key='comment::comment_manage.comment_on'}&nbsp;&nbsp;{$comment.add_time}</div>
 						{$comment.content|truncate:100|escape:html}
-						<img class="thumbnail" alt="" src="http://10.10.10.47/o2o/content/system/statics/images/nopic.png">
-							<img class="thumbnail" alt="" src="http://10.10.10.47/o2o/content/system/statics/images/nopic.png">
-							<img class="thumbnail" alt="" src="http://10.10.10.47/o2o/content/system/statics/images/nopic.png">
+						{if $comment.has_image eq 1}
+    						<div class="img-style">
+    						    <img class="thumbnail" style="float:left;width:78px;height:78px;margin-right:8px;" alt="" src="http://10.10.10.47/o2o/content/system/statics/images/nopic.png">
+    							<img class="thumbnail" style="float:left;width:78px;height:78px;margin-right:8px;" alt="" src="http://10.10.10.47/o2o/content/system/statics/images/nopic.png">
+    							<img class="thumbnail" style="float:left;width:78px;height:78px;margin-right:8px;" alt="" src="http://10.10.10.47/o2o/content/system/statics/images/nopic.png">
+    						</div>
+						{/if}
 						<div class="edit-list">
 								<a class="data-pjax" href='{url path="comment/admin/reply" args="comment_id={$comment.comment_id}"}'>
 									{t}查看{/t}
 								</a>&nbsp;|&nbsp;
-								<a class="ajaxremove ecjiafc-red" data-toggle="ajaxremove" data-msg="{t}您确定要删除该用户[{$comment.user_name}]的评论吗？{/t}" href='{url path="comment/admin/remove" args="id={$comment.comment_id}"}' title="{t}永久移除{/t}">
+								<a class="ajaxremove ecjiafc-red" data-toggle="ajaxremove" data-msg="{t}您确定要删除该用户[{$comment.user_name}]的评论吗？{/t}" href='{url path="comment/admin/remove" args="id={$comment.comment_id}"}'>
 									{t}删除{/t}
 								</a>
 						</div>
 					</td>
 					<td>
 						{section name=loop loop=$comment.comment_rank}   
-							<i class="fontello-icon-star"></i>
+							<i class="fontello-icon-star" style="color:#FF9933;"></i>
 						{/section}
 					</td>
 				</tr>
+				{/if}
 				<!-- {foreachelse} -->
 				<tr>
 					<td class="no-records" colspan="5">{lang key='system::system.no_records'}</td>
