@@ -114,9 +114,9 @@ class create_module extends api_front implements api_interface {
 		        'rec_id'        => $rec_id,
 		        'goods_attr'	=> $order_info['goods_attr']
 		    );
-		    if (!empty($image_info)) {
-		        $data['has_image'] = 1;
-		    }
+// 		    if (!empty($image_info)) {
+// 		        $data['has_image'] = 1;
+// 		    }
 		    $comment_id = RC_Model::model('comment/comment_model')->insert($data);
 		}
 		
