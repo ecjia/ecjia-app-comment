@@ -93,7 +93,7 @@ class create_module extends api_front implements api_interface {
 		//评价无图
 		//补充图片
 		/* 评论是否需要审核 */
-		if (!empty($content) && !empty($rank)) {
+		if (!empty($content) && !empty($rank) && empty($comment_info)) {
 		    $status = 1 - ecjia::config('comment_check');
 		    
 		    $data = array(
