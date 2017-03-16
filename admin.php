@@ -43,7 +43,7 @@ class admin extends ecjia_admin {
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('comment::comment_manage.goods_comment_list')));
 		$this->assign('ur_here', RC_Lang::get('comment::comment_manage.admin_goods_comment'));
 		
-		$this->assign('action_link', array('text' => RC_Lang::get('comment::comment_manage.check_trash_comment'), 'href'=> RC_Uri::url('comment/admin/init')));
+		$this->assign('action_link', array('text' => RC_Lang::get('comment::comment_manage.check_trash_comment'), 'href'=> RC_Uri::url('comment/admin/init', array('list' => 2))));
 		
 		ecjia_screen::get_current_screen()->add_help_tab(array(
 			'id'		=> 'overview',
@@ -67,6 +67,34 @@ class admin extends ecjia_admin {
 		$this->display('comment_list.dwt');		
 	}
 	
+	/**
+	 * 管理员快捷回复评论处理
+	 */
+	public function quick_reply() {
+		$this->admin_priv('comment_manage');
+		 
+		$comment_id 	  = $_GET['comment_id'];
+		$reply_content    = $_GET['reply_content'];
+		$status			  = $_GET['status'];
+		$db_comment_reply = RC_DB::table('comment_reply');
+		if(empty($reply_content)){
+			$reply_content='感谢您对本店的支持！我们会更加的努力，为您提供更优质的服务。';
+		}
+		$data = array(
+				'comment_id' 	=> $comment_id,
+				'content' 		=> $reply_content,
+				'user_type'		=> 'admin',
+				'user_id'		=> $_SESSION['admin_id'],
+				'add_time'		=> RC_Time::gmtime(),
+		);
+		$db_comment_reply->insertGetId($data);
+		if (isset($_GET['status']) && (!empty($_GET['status']) || $_GET['status'] == '0')) {
+			$pjaxurl = RC_Uri::url('comment/admin/init', array('status' => $_GET['status']));
+		} else {
+			$pjaxurl = RC_Uri::url('comment/admin/init');
+		}
+		return $this->showmessage('回复成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, $pjaxurl);
+	}
 	
 	/**
 	 * 获取没有回复的评论列表
@@ -412,12 +440,11 @@ class admin extends ecjia_admin {
 
 		$id		 	= !empty($_GET['comment_id']) 		? intval($_GET['comment_id'])		: 0;
 		$page		= !empty($_GET['page']) 		? intval($_GET['page'])		: 1;
-		$type 		= !empty($_GET['type'])		? intval($_GET['type'])		: 1;
 		$allow 		= !empty($_POST['check']) 	? $_POST['check']			: '';
 		$status		= $_POST['status'];
 		
 		if ($status === '') {
-			$pjaxurl = RC_Uri::url('comment/admin/init', array('type' => $type, 'page' => $page));
+			$pjaxurl = RC_Uri::url('comment/admin/init', array('page' => $page));
 		} else {
 			$pjaxurl = RC_Uri::url('comment/admin/init', array('status' => intval($status), 'page' => $page));
 		}
@@ -538,7 +565,12 @@ class admin extends ecjia_admin {
 		$filter['keywords'] = empty($_GET['keywords']) ? '' : stripslashes(trim($_GET['keywords']));
 		
 		$db_comment = RC_DB::table('comment as c');
-		$db_comment->where(RC_DB::raw('c.status'), '<>','3');
+		if ($_GET['list'] == '1') {
+			$db_comment->where(RC_DB::raw('c.status'), '<>','3');
+		} elseif ($_GET['list' == '2']) {
+			$db_comment->where(RC_DB::raw('c.status'), '=','3');
+		}
+		
 		
 		if (!empty($filter['keywords'])) {
 			$db_comment->where(RC_DB::raw('c.content'), 'like', '%'.mysql_like_quote($filter['keywords']).'%');

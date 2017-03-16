@@ -4,6 +4,7 @@
         init: function () {
             app.comment_manage.list_search();
             app.comment_manage.toggle_view();
+            app.comment_manage.quick_reply();
         },
  
         list_search: function () {
@@ -49,6 +50,22 @@
                 }
             });
         },
+        
+        quick_reply: function () {			
+            $(".quick_reply").on('click', function (e) {
+                e.preventDefault();
+                var url 	   = $(this).attr('data-url');
+                var comment_id = $(this).attr('data-id');
+                var status	   = $(this).attr('data-status');
+                var data = {
+                	reply_content: $("input[name='reply_content']").val(),
+                	comment_id: comment_id
+                };
+                $.get(url, data, function (data) {
+                	ecjia.admin.showmessage(data);
+                }, 'json');
+            });
+		},
     }
     
     /*评论详情*/

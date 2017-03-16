@@ -76,26 +76,9 @@
 			<span class="caret"></span>
 		</a>
 		<ul class="dropdown-menu">
-			<!-- {if $comment_list.filter.status lt '2'} -->
-			<!-- {if $comment_list.filter.status neq '1'} -->
 			<li><a class="batch-sale-btn"  data-toggle="ecjiabatch" data-idClass=".checkbox:checked" data-url="{$form_action}&sel_action=allow&type={$comment_list.filter.type}&status={$comment_list.filter.status}&page={$smarty.get.page}" data-msg="{lang key='comment::comment_manage.batch_allow_confirm'}" data-noSelectMsg="{lang key='comment::comment_manage.pls_select_comment'}" href="javascript:;"><i class="fontello-icon-eye"></i>{lang key='comment::comment_manage.allow'}</a></li>
-			<!-- {/if} -->
-			<!-- {if $comment_list.filter.status neq '0'} -->
 			<li><a class="batch-notsale-btn" data-toggle="ecjiabatch" data-idClass=".checkbox:checked" data-url="{$form_action}&sel_action=deny&type={$comment_list.filter.type}&status={$comment_list.filter.status}&page={$smarty.get.page}" data-msg="{lang key='comment::comment_manage.batch_fobid_confirm'}" data-noSelectMsg="{lang key='comment::comment_manage.pls_select_comment'}"  href="javascript:;"><i class="fontello-icon-eye-off"></i>{lang key='comment::comment_manage.forbid'}</a></li>
-			<!-- {/if} -->
-			<li><a data-toggle="ecjiabatch" data-idClass=".checkbox:checked" data-url="{$form_action}&sel_action=trash_comment&type={$comment_list.filter.type}&status={$comment_list.filter.status}&page={$smarty.get.page}" data-msg="{lang key='comment::comment_manage.batch_trash_confirm'}" data-noSelectMsg="{lang key='comment::comment_manage.pls_select_comment'}"  href="javascript:;"><i class="fontello-icon-heart-empty"></i>{lang key='comment::comment_manage.trash_msg'}</a></li>
 			<li><a data-toggle="ecjiabatch" data-idClass=".checkbox:checked" data-url="{$form_action}&sel_action=trashed_comment&type={$comment_list.filter.type}&status={$comment_list.filter.status}&page={$smarty.get.page}" data-msg="{lang key='comment::comment_manage.batch_move_confirm'}" data-noSelectMsg="{lang key='comment::comment_manage.pls_select_comment'}"  href="javascript:;"><i class="fontello-icon-box"></i>{lang key='comment::comment_manage.move_to_recycle'}</a></li>
-			<!-- {/if} -->
-			<!-- {if $dropback_comment} -->
-				<!-- {if $comment_list.filter.status eq '2'} -->
-				<li><a data-toggle="ecjiabatch" data-idClass=".checkbox:checked" data-url="{$form_action}&sel_action=deny&type={$comment_list.filter.type}&status={$comment_list.filter.status}&page={$smarty.get.page}" data-msg="{lang key='comment::comment_manage.batch_cancel_confirm'}" data-noSelectMsg="{lang key='comment::comment_manage.pls_select_comment'}" href="javascript:;"><i class="fontello-icon-heart"></i>{lang key='comment::comment_manage.no_trash_msg'}</a></li>
-				<li><a class="batch-trash-btn" data-toggle="ecjiabatch" data-idClass=".checkbox:checked" data-url="{$form_action}&sel_action=remove&type={$comment_list.filter.type}&status={$comment_list.filter.status}&page={$smarty.get.page}" data-msg="{lang key='comment::comment_manage.remove_confirm'}" data-noSelectMsg="{lang key='comment::comment_manage.pls_select_comment'}" href="javascript:;"> <i class="fontello-icon-trash"></i>{lang key='comment::comment_manage.drop_select'}</a></li>
-				<!-- {/if} -->
-				<!-- {if $comment_list.filter.status eq '3'} -->
-				<li><a data-toggle="ecjiabatch" data-idClass=".checkbox:checked" data-url="{$form_action}&sel_action=deny&type={$comment_list.filter.type}&status={$comment_list.filter.status}&page={$smarty.get.page}" data-msg="{lang key='comment::comment_manage.batch_restore_confirm'}" data-noSelectMsg="{lang key='comment::comment_manage.pls_select_comment'}"  href="javascript:;"><i class="fontello-icon-reply-all"></i>{lang key='comment::comment_manage.restore_review'}</a></li>
-				<li><a class="batch-trash-btn" data-toggle="ecjiabatch" data-idClass=".checkbox:checked" data-url="{$form_action}&sel_action=remove&type={$comment_list.filter.type}&status={$comment_list.filter.status}&page={$smarty.get.page}" data-msg="{lang key='comment::comment_manage.remove_confirm'}" data-noSelectMsg="{lang key='comment::comment_manage.pls_select_comment'}" href="javascript:;"> <i class="fontello-icon-trash"></i>{lang key='comment::comment_manage.drop_select'}</a></li>
-				<!-- {/if} -->
-			<!-- {/if} -->
 		</ul>
 	</div>
 	<div class="choose_list f_r" >
@@ -146,13 +129,13 @@
 						{/if}
 						<div class="edit-list">
 						    {if $comment.status lt 2}
-								<a class="toggle_view" href='{url path="comment/admin/check" args="comment_id={$comment.comment_id}&status={$comment.status}&page={$smarty.get.page}"}' data-msg="您确定要更改此评论的状态吗？" data-val="{if $comment.status eq 0}allow{else}forbid{/if}" data-status="{$smarty.get.status}" >
+								<a class="toggle_view" href='{url path="comment/admin/check" args="comment_id={$comment.comment_id}&status={$comment.status}{if $smarty.get.page}&page={$smarty.get.page}{/if}"}' data-msg="您确定要更改此评论的状态吗？" data-val="{if $comment.status eq 0}allow{else}forbid{/if}" data-status="{$smarty.get.status}" >
 									{if $comment.status eq 0} {t}批准{/t} {elseif $comment.status eq 1} <span class="ecjiafc-red">{t}驳回{/t}</span> {/if}
 								</a>&nbsp;|&nbsp;
 								<a class="data-pjax" href='{url path="comment/admin/reply" args="comment_id={$comment.comment_id}"}'>
 									{t}查看及回复{/t}
 								</a>&nbsp;|&nbsp;
-								<a class="ecjiafc-red toggle_view" href='{url path="comment/admin/check" args="comment_id={$comment.comment_id}&page={$smarty.get.page}"}' data-msg="{t}您确定要将该用户[{$comment.user_name|default:{lang key='comment::comment_manage.anonymous'}}]的评论移至回收站吗？{/t}"  data-val="trashed_comment" >{t}移至回收站{/t}</a>
+								<a class="ecjiafc-red toggle_view" href='{url path="comment/admin/check" args="comment_id={$comment.comment_id}{if $smarty.get.page}&page={$smarty.get.page}{/if}"}' data-msg="{t}您确定要将该用户[{$comment.user_name|default:{lang key='comment::comment_manage.anonymous'}}]的评论移至回收站吗？{/t}" data-status="{$smarty.get.status}" data-val="trashed_comment" >{t}移至回收站{/t}</a>
 						    {/if}
 						</div>
 					</td>
@@ -166,8 +149,7 @@
 					<td colspan="5" style="border-top:none;">
 						<div style="border-top: 2px dashed #ddd;">
 							<input class="form-control small span12" style="width:94%;margin-bottom:3px;margin-top:12px;" value="" name="reply_content" type="text" placeholder="感谢您对本店的支持！我们会更加的努力，为您提供更优质的服务。（可在此输入回复内容，也可选择系统自动回复）">
-							<input style="float:right;" type="hidden" name="comment_id" value="{$list.comment_id}" />
-							<input class="btn btn-primary" style="height:36px;margin-top:9px;" type="button" data-url="{url path='comment/admin/reply'}" value="回复" />
+							<input class="btn btn-primary quick_reply" style="height:36px;margin-top:9px;" type="button" data-url="{url path='comment/admin/quick_reply'}" data-id={$comment.comment_id} data-status={$comment.status} value="回复" />
 						</div>
 					</td>
 				</tr>
