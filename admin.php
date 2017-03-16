@@ -22,6 +22,10 @@ class admin extends ecjia_admin {
 		RC_Style::enqueue_style('uniform-aristo');
 		RC_Script::enqueue_script('jquery-chosen');
 		RC_Style::enqueue_style('chosen');
+		
+		RC_Script::enqueue_script('jquery.toggle.buttons', RC_Uri::admin_url('statics/lib/toggle_buttons/jquery.toggle.buttons.js'));
+		RC_Style::enqueue_style('bootstrap-toggle-buttons', RC_Uri::admin_url('statics/lib/toggle_buttons/bootstrap-toggle-buttons.css'));
+		
 		RC_Script::enqueue_script('comment_manage', RC_App::apps_url('statics/js/comment_manage.js', __FILE__), array(), false, false);
 		RC_Style::enqueue_style('comment', RC_App::apps_url('statics/css/comment.css', __FILE__));
 		RC_Style::enqueue_style('start', RC_App::apps_url('statics/css/start.css', __FILE__));
@@ -40,7 +44,7 @@ class admin extends ecjia_admin {
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('comment::comment_manage.goods_comment_list')));
 		$this->assign('ur_here', RC_Lang::get('comment::comment_manage.admin_goods_comment'));
 		
-		$this->assign('action_link', array('text' => RC_Lang::get('comment::comment_manage.check_trash_comment'), 'href'=> RC_Uri::url('comment/admin/init', array('list' => 2))));
+		$this->assign('action_link', array('text' => RC_Lang::get('comment::comment_manage.check_trash_comment'), 'href'=> RC_Uri::url('comment/admin/trash', array('list' => 2))));
 		
 		ecjia_screen::get_current_screen()->add_help_tab(array(
 			'id'		=> 'overview',
@@ -586,10 +590,18 @@ class admin extends ecjia_admin {
 		if (!empty($data)) {
 			foreach ($data as $row) {
 				$row['add_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['add_time']);
-// 				if ($row['has_img'] == '1') {
-// 					$row['img'] = RC_DB::table('term_attachment')
-// 										->where(RC_DB::raw('object_id'), '=', $row['comment_id'])->pluck('file_path');
-// 				}
+				if ($row['has_image'] == '1') {
+					$row['imgs'] = RC_DB::table('term_attachment')
+										->where(RC_DB::raw('object_id'), '=', $row['comment_id'])
+										->where(RC_DB::raw('object_group'), '=', 'comment')
+										->where(RC_DB::raw('object_app'), '=', 'ecjia.comment')
+										->select('file_path')->orderby(RC_DB::raw('add_time'), 'asc')->limit(5)->get();
+					if (!empty($row['imgs'])) {
+						foreach ($row['imgs'] as $key => $val) {
+							$row['imgs'][$key]['file_path'] =  RC_Upload::upload_url().'/'.$val['file_path'];
+						}
+					}
+				}
 				$list[] = $row;
 			}
 		}
@@ -688,10 +700,68 @@ class admin extends ecjia_admin {
 	    ecjia_screen::get_current_screen()->remove_last_nav_here();
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('评论设置'));
 	    $this->assign('ur_here', '评论设置');
-
+		
+	    $this->assign('close_comment', ecjia::config('close_comment'));
+	    $this->assign('comment_check', ecjia::config('comment_check'));
+	    $this->assign('comment_award_open', ecjia::config('comment_award_open'));  
+	    $this->assign('comment_factor', ecjia::config('comment_factor'));
+	    
+	    /* 评论送积分*/
+	    $user_rank_list = array();
+	    $db_user_rank = RC_DB::table('user_rank');
+	    $data = $db_user_rank->selectRaw('rank_id, rank_name')->get();
+	    if (!empty($data)) {
+	    	$comment_award_rules = unserialize(ecjia::config('comment_award_rules'));
+	    		
+	    	foreach ($data as $row) {
+	    		if (!empty($comment_award_rules[$row['rank_id']])) {
+	    			$row['comment_award'] = $comment_award_rules[$row['rank_id']];
+	    		}
+	    		$user_rank_list[] = $row;
+	    	}
+	    }
+	    $this->assign('user_rank_list', $user_rank_list);
+	    $this->assign('comment_award_open', ecjia::config('comment_award_open'));
+	    $this->assign('comment_award', ecjia::config('comment_award'));
+	    $this->assign('form_action', RC_Uri::url('comment/admin/update_config'));
+	    
 	    $this->display('comment_config.dwt');
 	}
 	
+	
+	/**
+	 * 评论设置处理
+	 */
+	public function update_config() {
+		$this->admin_priv('comment_update', ecjia::MSGTYPE_JSON);
+		/*评论送积分*/
+		$comment_award_open = isset($_POST['comment_award_open']) ? intval($_POST['comment_award_open']) : 0;
+		$comment_award 		= isset($_POST['comment_award']) ? intval($_POST['comment_award']) : 0;
+		$close_comment		= isset($_POST['close_comment']) ? intval($_POST['close_comment']) : 0;
+		$comment_check		= isset($_POST['comment_check']) ? intval($_POST['comment_check']) : 0;
+		$comment_factor		= isset($_POST['comment_factor']) ? intval($_POST['comment_factor']) : 0;
+				
+		ecjia_config::instance()->write_config('comment_award_open', $comment_award_open);
+		ecjia_config::instance()->write_config('comment_award', $comment_award);
+		ecjia_config::instance()->write_config('close_comment', $close_comment);
+		ecjia_config::instance()->write_config('comment_check', $comment_check);
+		ecjia_config::instance()->write_config('comment_factor', $comment_factor);
+		
+		$comment_award_rules = '';
+		if (isset($_POST['comment_award_rules'])) {
+			foreach ($_POST['comment_award_rules'] as $key => $val) {
+				if (empty($val)) {
+					continue;
+				}
+				$comment_award_rules[$key] = intval($val);
+			}
+			if (!empty($comment_award_rules)) {
+				$comment_award_rules = serialize($comment_award_rules);
+			}
+		}
+		ecjia_config::instance()->write_config('comment_award_rules', $comment_award_rules);
+		return $this->showmessage('评论设置更新成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('comment/admin/config')));
+	}
 	/**
 	 * 商品评论回收站
 	 */
