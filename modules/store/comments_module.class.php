@@ -60,11 +60,11 @@ function EM_assign_comment($id, $type, $page = 1, $page_size = 15) {
 		$list['comment_percent'] = 100;
 	}
 
-	$db_comment = RC_DB::table('comment')
+	$db_comment = RC_DB::table('comment as c')
 		->select('*')
 		->where('store_id', $id)
 		->where('status', 1)
-		->where('parent_id', 0)
+		->where(RC_DB::raw('c.parent_id'), 0)
 		->where('comment_type', 0);
 	
 	if ($type == 'all') {
@@ -93,7 +93,10 @@ function EM_assign_comment($id, $type, $page = 1, $page_size = 15) {
 	}
 		
 	$page_row = new ecjia_page($count, $page_size, 6, '', $page);
-	$data = $db_comment->select('*')->orderBy('comment_id', 'desc')->take($page_size)->skip($page_row->start_id-1)->get();
+	$data = $db_comment
+    	->leftJoin('users as u', RC_DB::raw('u.user_id'), '=', RC_DB::raw('c.user_id'))
+    	->selectRaw('c.*, u.avatar_img')
+    	->orderBy('comment_id', 'desc')->take($page_size)->skip($page_row->start_id-1)->get();
 	
 	$arr = $ids = array();
 	if (!empty($data)) {
@@ -109,6 +112,12 @@ function EM_assign_comment($id, $type, $page = 1, $page_size = 15) {
 				$arr['author'] = $user_name;
 			} else {
 				$arr['author'] = $row['user_name'];
+			}
+			
+			if(empty($row['avatar_img'])) {
+			    $arr['avatar_img'] = '';
+			} else {
+			    $arr['avatar_img'] = RC_Upload::upload_url($row['avatar_img']);
 			}
 	
 			$arr['content']  	= str_replace('\r\n', '<br />', htmlspecialchars($row['content']));
