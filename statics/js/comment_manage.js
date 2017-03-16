@@ -9,6 +9,15 @@
         },
  
         list_search: function () {
+        	  $(".no-show-status").on('click', function (e) {
+                  $('.hide-status').hide();
+              });
+        	  $(".no-show-rank").on('click', function (e) {
+                  $('.hide-rank').hide();
+              });
+        	  $(".no-show-img").on('click', function (e) {
+                  $('.hide-img').hide();
+              }); 
             $(".search_comment").on('click', function (e) {
                 var url = $("form[name='searchForm']").attr('action');
                 var keywords = $("input[name='keyword']").val();

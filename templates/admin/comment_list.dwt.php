@@ -17,22 +17,22 @@
 	<ul class="nav-status">
 		<li><span>全部</span></li>
 		<!-- {if $smarty.get.select_status neq null} -->
-		<li><span>></span></li>
-		<li><a class="data-pjax btn" href='{url path="comment/admin/init" args="{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $smarty.get.select}&select={$smarty.get.select}{/if}&close_select={1}"}' style="padding:3px 5px;">
+		<li class="hide-status"><span>></span></li>
+		<li class="hide-status"><a class="data-pjax btn no-show-status" href='{url path="comment/admin/init" args="{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $smarty.get.select}&select={$smarty.get.select}{/if} {if $smarty.get.select_status}&select_status={$smarty.get.select_status}{/if}"}' style="padding:3px 5px;">
 			{if $smarty.get.status eq 0}待审核{else}已批准{/if}
 			<i class=" close-status fontello-icon-cancel cursor_pointer"></i></a>
 		</li>
 		<!-- {/if} -->
 		<!-- {if $smarty.get.select_rank neq null} -->
-		<li><span>></span></li>
-		<li><a class="data-pjax btn" href='{url path="comment/admin/init" args="{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $smarty.get.select}&select={$smarty.get.select}{/if}&close_select={2}"}' style="padding:3px 5px;">
+		<li class="hide-rank"><span>></span></li>
+		<li class="hide-rank"><a class="data-pjax btn no-show-rank" href='{url path="comment/admin/init" args="{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $smarty.get.select}&select={$smarty.get.select}{/if}{if $smarty.get.select_rank}&select_rank={$smarty.get.select_rank}{/if}"}' style="padding:3px 5px;">
 			{if $smarty.get.rank eq 1} 好评 {elseif $smarty.get.rank eq 2} 中评 {elseif $smarty.get.rank eq 3}差评{/if}
 			<i class=" close-status fontello-icon-cancel cursor_pointer"></i></a>
 		</li>
 		<!-- {/if} -->
 		<!-- {if $smarty.get.select_img neq null} -->
-		<li><span>></span></li>
-		<li><a class="data-pjax btn" href='{url path="comment/admin/init" args="{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $smarty.get.select}&select={$smarty.get.select}{/if}&close_select={3}"}' style="padding:3px 5px;">{if $smarty.get.has_img eq 1}有图 {else}无图{/if}
+		<li class="hide-img"><span>></span></li>
+		<li class="hide-img"><a class="data-pjax btn no-show-img" href='{url path="comment/admin/init" args="{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $smarty.get.select}&select={$smarty.get.select}{/if}{if $smarty.get.select_img}&select_img={$smarty.get.select_img}{/if}"}' style="padding:3px 5px;">{if $smarty.get.has_img eq 1}有图 {else}无图{/if}
 			<i class=" close-status fontello-icon-cancel cursor_pointer"></i></a>
 		</li>
 		<!-- {/if} -->
