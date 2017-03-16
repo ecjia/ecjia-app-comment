@@ -121,71 +121,47 @@
         					<div class="comment-store-info">
         						{if $comment_info.is_anonymous eq 1 }{'匿名发表'}{else}{$comment_info.user_name}{/if}
         					</div>
-            					<div class="comment-goods">
-            					   <div class="goods_type">
-	    					  	       <label class="control-label store-attr">综合评分：</label>
-	    					  	       {section name=loop loop=$comment_info.comment_rank}<i class="fontello-icon-star" style="color:#FF9933;"></i>{/section}
-            					   </div>
-            					   <p>全部评论： </p>
-            					   <p>好评率： </p>
-            					</div>
-							<button class="btn btn-gebo" type="submit">{'进入店铺评价'}</button>
+        					<div class="comment-goods" style="font-size: 17px;">
+        					   <div class="goods_type">
+    					  	       <label class="control-label store-attr">综合评分：</label>
+    					  	       <span class="store-grade">{section name=loop loop=$comment_info.comment_rank}<i class="fontello-icon-star" style="color:#FF9933;"></i>{/section}</span>
+        					   </div>
+        					   <div class="goods_type">
+        					       <label class="control-label store-attr">全部评论： </label>
+        					       <span class="store-grade all-comment">100</span>
+        					   </div>
+        					   <div class="goods_type">
+        					       <label class="control-label store-attr">好评率： </label>
+        					       <span class="store-grade">100%</span>
+        					   </div>
+        					</div>
+						    <button class="btn btn-gebo" type="submit">{'进入店铺评价'}</button>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<div class="foldable-list move-mod-group" id="goods_info_sort_img">
-				<div class="accordion-group">
-					<div class="accordion-heading">
-						<a class="accordion-toggle collapsed move-mod-head" data-toggle="collapse" data-target="#goods_info_area_img">
-							<strong>{lang key='goods::category.cat_img'}</strong>
-						</a>
-					</div>
-					<div class="accordion-body in collapse" id="goods_info_area_img">
-						<div class="accordion-inner">
-							<label>{lang key='goods::category.lab_upload_picture'}</label>
-							<div class="ecjiaf-db">
-								<div class="fileupload {if $cat_info.category_img}fileupload-exists{else}fileupload-new{/if} m_t10" data-provides="fileupload">
-									<div class="fileupload-preview fileupload-exists thumbnail"><input type="hidden" name="old_img" value="1" />{if $cat_info.category_img}<img src="{$cat_info.category_img}" >{/if}</div>
-									<div>
-										<span class="btn btn-file">
-											<span class="fileupload-new">{lang key='goods::category.select_cat_img'}</span>
-											<span class="fileupload-exists">{lang key='goods::category.edit_cat_img'}</span>
-											<input type="file" name="cat_img" />
-										</span>
-										<a class="btn fileupload-exists" {if $cat_info.category_img eq ''} data-dismiss="fileupload" href="javascript:;"  {else} data-toggle="removefile" data-msg="{lang key='goods::category.drop_cat_img_confirm'}" data-href='{url path="goods/admin_category/remove_logo" args="cat_id={$cat_info.cat_id}"}' data-removefile="true"{/if}>{lang key='system::system.drop'}</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			
 			<div class="foldable-list move-mod-group" id="goods_info_sort_tvimg">
 				<div class="accordion-group">
 					<div class="accordion-heading">
 						<a class="accordion-toggle collapsed move-mod-head" data-toggle="collapse" data-target="#goods_info_area_tvimg">
-							<strong>{lang key='goods::category.tv_cat_img'}</strong>
+							<strong>{'该用户其他待审核评价'}</strong>
 						</a>
 					</div>
 					<div class="accordion-body in collapse" id="goods_info_area_tvimg">
 						<div class="accordion-inner">
-							<label>{lang key='goods::category.lab_upload_picture'}</label>
-							<div class="ecjiaf-db">
-								<div class="fileupload {if $cat_info.tv_image}fileupload-exists{else}fileupload-new{/if} m_t10" data-provides="fileupload">
-									<div class="fileupload-preview fileupload-exists thumbnail"><input type="hidden" name="old_img" value="1" />{if $cat_info.tv_image}<img src="{$cat_info.tv_image}" >{/if}</div>
-									<div>
-										<span class="btn btn-file">
-											<span class="fileupload-new">{lang key='goods::category.select_cat_img'}</span>
-											<span class="fileupload-exists">{lang key='goods::category.edit_cat_img'}</span>
-											<input type="file" name="cat_tvimg" />
-										</span>
-										<a class="btn fileupload-exists" {if $cat_info.tv_image eq ''} data-dismiss="fileupload" href="javascript:;" {else} data-toggle="removefile" data-msg="{lang key='goods::category.drop_cat_img_confirm'}" data-href='{url path="goods/admin_category/remove_logo_tv_image" args="cat_id={$cat_info.cat_id}"}' data-removefile="true" {/if}>{lang key='system::system.drop'}</a>
-									</div>
-								</div>
-							</div>
+						      <div class="formSep">
+                		         <p>用户名
+                		              <span style="float: right">
+                		                  <a href='{url path="comment/mh_comment/comment_detail" args="comment_id={$list.comment_id}"}'>查看及回复</a>
+                		              </span>
+                		          </p>
+                		          <p>这是评论内容</p>
+                		          <p class="text-right"><i class="fontello-icon-star" style="color:#FF9933;"></i></p>
+                    	          {if $other_comment|@count neq 0}
+                    	           	  <p class="text-right"><a href='{url path="comment/mh_comment/goods_comment_list" args="goods_id={$comment_info.id_value}"}'>查看更多</a></p>
+                    			  {/if} 
+                			 </div>
 						</div>
 					</div>
 				</div>

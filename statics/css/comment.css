@@ -116,8 +116,12 @@
 	margin: 35px;
 	font-size: 18px;
 }
-
-
+.comment_info .comment-goods .store-grade {
+	margin-left: 40px;
+}
+.comment_info .comment-goods .all-comment {
+	color: #005580;
+}
 
 
 
