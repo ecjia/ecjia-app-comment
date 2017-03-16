@@ -34,7 +34,8 @@ class admin extends ecjia_admin {
 	 */
 	public function init() {
 		$this->admin_priv('comment_manage');
-
+		
+		$_GET['list'] = !empty($_GET['list']) ?  $_GET['list'] : 1;
 		if(isset($_GET['status']) && $_GET['status'] > 1) {
 			$this->admin_priv('comment_delete');
 		}
@@ -320,7 +321,7 @@ class admin extends ecjia_admin {
 			$id_value = $this->db_goods->goods_field(array('goods_id' => $comment_info['id_value']), 'goods_name');
 			$comment_info['url'] = RC_Uri::url('goods/admin/preview', array('id' => $comment_info['id_value']));
 				
-			$here = RC_Lang::get('comment::comment_manage.goods_comment');
+			$here = RC_Lang::get('comment::comment_manage.comment_list');
 			$url = RC_Uri::url('comment/admin/init', array('type' => 1));
 			$comment_info['type'] = '1';
 			$this->assign('id_value', $id_value); 		//评论的对象
@@ -562,11 +563,11 @@ class admin extends ecjia_admin {
 	private function get_comment_list() {
 		/* 查询条件 */
 		$filter['keywords'] = empty($_GET['keywords']) ? '' : stripslashes(trim($_GET['keywords']));
-		
+
 		$db_comment = RC_DB::table('comment as c');
 		if ($_GET['list'] == '1') {
 			$db_comment->where(RC_DB::raw('c.status'), '<>','3');
-		} elseif ($_GET['list' == '2']) {
+		} elseif ($_GET['list'] == 2) {
 			$db_comment->where(RC_DB::raw('c.status'), '=','3');
 		}
 		
@@ -733,9 +734,9 @@ class admin extends ecjia_admin {
 	 */
 	public function trash() {
 	    $this->admin_priv('comment_manage');
+	    $_GET['list'] = !empty($_GET['list']) ?  $_GET['list'] : 2;
 	    
-	    $_GET['status'] = 3;
-	    $this->assign('action_link', array('href'=> RC_Uri::url('comment/admin/init')));
+	    $this->assign('action_link', array('href'=> RC_Uri::url('comment/admin/init',  array('list' => 1))));
 	    ecjia_screen::get_current_screen()->remove_last_nav_here();
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('回收站'));
 	    $this->assign('ur_here', '回收站');

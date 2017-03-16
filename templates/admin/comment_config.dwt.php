@@ -62,7 +62,7 @@
 						      <input class="w200" name="email" type="text" value="{$store.email}" />
 						</div>
 					    <div class="goods_type">
-    					    <label class="control-label membership">vip： </label>
+    					    <label class="control-label membership">VIP： </label>
     						<input class="w200" name="email" type="text" value="{$store.email}" />
 						</div>
 					    <div class="goods_type">
