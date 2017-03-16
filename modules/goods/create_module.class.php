@@ -55,7 +55,7 @@ class create_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
     	//如果用户登录获取其session
     	$this->authSession();
-		$user_id = $_SESSION['user_id'];//26
+		$user_id = $_SESSION['user_id'];//1036
 		if ($user_id < 1) {
 			return new ecjia_error(100, 'Invalid session');
 		}
@@ -123,7 +123,7 @@ class create_module extends api_front implements api_interface {
 // 		    }
 		    $comment_id = RC_Model::model('comment/comment_model')->insert($data);
 		}
-		
+
 		//补充图片 或 第一次评价
 		if ((!empty($comment_info) && $comment_info['has_image'] == 0) || empty($comment_info)) {
 		    
@@ -132,14 +132,22 @@ class create_module extends api_front implements api_interface {
 		    
 		    $image_info = null;
 		    if (!empty($_FILES)) {
-		        foreach ($_FILES as $images) {
-		            if (!empty($images['name'])) {
-		                if (!$upload->check_upload_file($images)) {
+		        $count = count($_FILES['picture']['name']);
+		        for ($i = 0; $i < $count; $i++) {
+		            $picture = array(
+		                'name' 		=> 	$_FILES['picture']['name'][$i],
+		                'type' 		=> 	$_FILES['picture']['type'][$i],
+		                'tmp_name' 	=> 	$_FILES['picture']['tmp_name'][$i],
+		                'error'		=> 	$_FILES['picture']['error'][$i],
+		                'size'		=> 	$_FILES['picture']['size'][$i],
+		            );
+		            if (!empty($picture['name'])) {
+		                if (!$upload->check_upload_file($picture)) {
 		                    return new ecjia_error('picture_error', $upload->error());
 		                }
 		            }
 		        }
-		        	
+		        
 		        $image_info	= $upload->batch_upload($_FILES);
 		    }
 		    

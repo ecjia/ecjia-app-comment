@@ -37,7 +37,7 @@
 						</div>
 						<div class="appeal-thumb-details">
 							<h1>{$comment_info.user_name}</h1>
-							<p>{$comment_info.add_time}<span>{$comment_info.ip_address}</span></p><br>
+							<p>{$comment_info.add_time}<span>IP：{$comment_info.ip_address}</span></p><br>
 						</div>
 						<div class="appeal-goods">
 						  	<p>商品评分：{section name=loop loop=$comment_info.comment_rank}<i class="fa fa-star"></i>{/section}</p>
@@ -53,7 +53,9 @@
 					<div class="panel-body">
 						<div class="appeal-content">
 			                <p>{$appeal.appeal_content}</p>
-			                <img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">
+			               	 <!-- {foreach from=$apple_img_list item=list} -->
+			                	<img src="{RC_Upload::upload_url()}/{$list.file_path}">
+			                 <!-- {/foreach} -->
 			                <p>{$appeal.appeal_time}</p>
 						</div>
 		            </div>    

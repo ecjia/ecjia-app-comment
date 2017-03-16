@@ -37,7 +37,7 @@
 						</a>
 						<div class="appeal-thumb-details">
 							<h1>{$comment_info.user_name}</h1>
-							<p>{$comment_info.add_time}<span>{$comment_info.ip_address}</span></p><br>
+							<p>{$comment_info.add_time}<span>IP：{$comment_info.ip_address}</span></p><br>
 						</div>
 						<div class="appeal-goods">
 						  	<p>商品评分：{section name=loop loop=$comment_info.comment_rank}<i class="fa fa-star"></i>{/section}</p>
@@ -53,9 +53,13 @@
 					<form class="form-horizontal" action='{$form_action}' method="post" name="theForm">
 						<textarea class="form-control" id="appeal_content" name="appeal_content" placeholder="请输入申诉理由" ></textarea>
 						<br>
+						
 						<div class="appeal-goods">
-			                <img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">
+						
 						</div>
+                        <div class="">
+                            <input type="file" class="default" name="apple_img" id="apple_img"/>
+                        </div>
 						<br>
 						<input type="hidden" name="comment_id" value="{$comment_info.comment_id}" />
 						<button class="btn btn-info" type="submit">提交申诉</button>
