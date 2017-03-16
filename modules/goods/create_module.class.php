@@ -130,7 +130,10 @@ class create_module extends api_front implements api_interface {
 		    $save_path = 'data/comment/'.RC_Time::local_date('Ym');
 		    $upload = RC_Upload::uploader('image', array('save_path' => $save_path, 'auto_sub_dirs' => true));
 		    
+		    
 		    $image_info = null;
+		    RC_Logger::getlogger('info')->info('comment/create,file:');
+		    RC_Logger::getlogger('info')->info($_FILES);
 		    if (!empty($_FILES)) {
 		        foreach ($_FILES as $images) {
 		            if (!empty($images['name'])) {
