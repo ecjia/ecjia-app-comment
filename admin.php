@@ -60,6 +60,10 @@ class admin extends ecjia_admin {
 		$list = $this->get_comment_list();
 		$this->assign('comment_list', $list);
 		
+		$this->assign('select_status', $_GET['select_status']);
+		$this->assign('select_rank', $_GET['select_rank']);
+		$this->assign('select_img', $_GET['select_img']);
+		
 		$this->assign('form_action', RC_Uri::url('comment/admin/batch'));
 		$this->assign('form_search', RC_Uri::url('comment/admin/init'));
 		//$this->assign('dropback_comment', $this->admin_priv('dropback_comment', '', false));
