@@ -29,16 +29,22 @@
 				<div class="appeal_top">
 					<div class="panel-body">
 						<div class="appeal-thumb">
-							<img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg" >
+							{if $avatar_img}
+			                	<img src="{RC_Upload::upload_url()}/{$avatar_img}" >
+			                {else}
+			                	<img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">
+			                {/if}
 						</div>
 						<div class="appeal-thumb-details">
-							<h1>送钱</h1>
-							<p>2016-11-04 17：02:33<span>IP:10.10.10.41</span></p><br>
+							<h1>{$comment_info.user_name}</h1>
+							<p>{$comment_info.add_time}<span>{$comment_info.ip_address}</span></p><br>
 						</div>
 						<div class="appeal-goods">
-						  	<p>商品评分：</p>
-			                <p>收到手机已经过去三天了，我觉得无法使用，所以给差评</p>
-			                <img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">
+						  	<p>商品评分：{section name=loop loop=$comment_info.comment_rank}<i class="fa fa-star"></i>{/section}</p>
+			                <p>{$comment_info.content}</p>
+			                <!-- {foreach from=$comment_pic_list item=list} -->
+			                	<img src="{RC_Upload::upload_url()}/{$list.file_path}">
+			                <!-- {/foreach} -->
 						</div>
 		            </div>    
 				</div> 

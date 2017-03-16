@@ -109,6 +109,9 @@
 										{$list.content}
 									</span>
 									<br>
+									<!-- {foreach from=$list.comment_pic_list item=list_pic} -->
+										<img src="{RC_Upload::upload_url()}/{$list_pic.file_path}" width="50" height="50" style="margin-top: 10px;">
+									<!-- {/foreach} -->
 									<div class="edit-list">
 										<a class="data-pjax" href='{url path="comment/mh_comment/comment_detail" args="comment_id={$list.comment_id}"}' title="查看详情">查看详情</a>&nbsp;|&nbsp;
 										<a class="data-pjax" href='{url path="comment/mh_comment/comment_detail" args="comment_id={$list.comment_id}"}' title="回复">回复</a>

@@ -90,9 +90,22 @@ class mh_appeal extends ecjia_merchant {
 			
 		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('申诉'));
 		$this->assign('ur_here', '申诉');
+
+		$comment_id = $_GET['comment_id'];
+		$comment_pic_list = RC_DB::TABLE('term_attachment')->where('object_id', $comment_id)->select('file_path')->get();
+		
+		$comment_info = RC_DB::table('comment')->where('comment_id', $comment_id)->first();
+		$comment_info['add_time'] = RC_Time::local_date(ecjia::config('time_format'), $comment_info['add_time']);
+		
+		$avatar_img = RC_DB::TABLE('users')->where('user_id', $comment_info['user_id'])->pluck('avatar_img');
+	
+		$this->assign('comment_pic_list', $comment_pic_list);
+		$this->assign('comment_info', $comment_info);
+		$this->assign('avatar_img', $avatar_img);
 		$this->assign('check_status', -1);
 		
 		$this->assign('form_action',RC_Uri::url('comment/mh_appeal/insert_appeal'));
+		
 		$this->display('mh_appeal_info.dwt');
 	}
 	
@@ -103,7 +116,7 @@ class mh_appeal extends ecjia_merchant {
 		$this->admin_priv('mh_appeal_update');
 		
 		$store_id = $_SESSION['store_id'];
-		$comment_id= 1;
+		$comment_id= $_POST['comment_id'];
 		$appeal_content = trim($_POST['appeal_content']);
 		$appeal_time = RC_Time::gmtime();
 		$appeal_sn_six = rand(100000, 999999);
@@ -136,8 +149,18 @@ class mh_appeal extends ecjia_merchant {
 		$check_status   = $_GET['check_status'];
 		$appeal = RC_DB::table('comment_appeal')->where('appeal_sn', $appeal_sn)->first();
 		$appeal['appeal_time'] = RC_Time::local_date(ecjia::config('time_format'), $appeal['appeal_time']);
+		
+		$comment_pic_list = RC_DB::TABLE('term_attachment')->where('object_id',  $appeal['comment_id'])->select('file_path')->get();
+		
+		$comment_info = RC_DB::table('comment')->where('comment_id', $appeal['comment_id'])->first();
+		$comment_info['add_time'] = RC_Time::local_date(ecjia::config('time_format'), $comment_info['add_time']);
+		$avatar_img = RC_DB::TABLE('users')->where('user_id', $comment_info['user_id'])->pluck('avatar_img');
+		
 		$this->assign('check_status', $check_status);
 		$this->assign('appeal', $appeal);
+		$this->assign('comment_pic_list', $comment_pic_list);
+		$this->assign('comment_info', $comment_info);
+		$this->assign('avatar_img', $avatar_img);
 
 		$this->display('mh_appeal_detail.dwt');
 	}

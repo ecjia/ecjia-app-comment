@@ -61,7 +61,7 @@ class create_module extends api_front implements api_interface {
 		}
 		
 		$user_name 		= $_SESSION['user_name'];
-		$rec_id			= $this->requestData('rec_id', 0);//3123
+		$rec_id			= $this->requestData('rec_id', 0);//4826
 		$content 		= $this->requestData('content');
 		$rank 			= $this->requestData('rank', 5);
 		$is_anonymous 	= $this->requestData('is_anonymous', 1);
@@ -96,6 +96,10 @@ class create_module extends api_front implements api_interface {
 		if (!empty($content) && !empty($rank) && empty($comment_info)) {
 		    $status = 1 - ecjia::config('comment_check');
 		    
+		    if ($rank > 5 || $rank < 1) {
+	            return new ecjia_error('invalid_parameter', 'rank参数错误！');
+		    }
+		    
 		    $data = array(
 		        'comment_type'	=> 0,
 		        'id_value'		=> $order_info['goods_id'],
@@ -129,8 +133,10 @@ class create_module extends api_front implements api_interface {
 		    $image_info = null;
 		    if (!empty($_FILES)) {
 		        foreach ($_FILES as $images) {
-		            if (!$upload->check_upload_file($images)) {
-		                return new ecjia_error('picture_error', $upload->error());
+		            if (!empty($images['name'])) {
+		                if (!$upload->check_upload_file($images)) {
+		                    return new ecjia_error('picture_error', $upload->error());
+		                }
 		            }
 		        }
 		        	

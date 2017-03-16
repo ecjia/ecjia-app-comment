@@ -34,7 +34,6 @@
 			                {else}
 			                	<img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">
 			                {/if}
-							
 						</div>
 						<div class="comment-thumb-details">
 							<h1>{$comment_info.user_name}</h1>
@@ -43,7 +42,9 @@
 						<div class="comment-goods">
 						  	<p>商品评分：{section name=loop loop=$comment_info.comment_rank}<i class="fa fa-star"></i>{/section}</p>
 			                <p>{$comment_info.content}</p>
-			                <img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">
+			                 <!-- {foreach from=$comment_pic_list item=list} -->
+			                	<img src="{RC_Upload::upload_url()}/{$list.file_path}">
+			                 <!-- {/foreach} -->
 						</div><br>
 						<a href='{url path="comment/mh_appeal/add_appeal" args="comment_id={$comment_info.comment_id}"}'><button class="btn btn-info" type="button">申诉</button></a>
 		            </div>    
