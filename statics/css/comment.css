@@ -51,14 +51,6 @@
 .img-style{
 	height:80px;
 }
-.img-style img .thumbnail-new{
-	height:75px;
-	width:75px;
-	float:left;
-	margin-right:8px;
-	overflow: hidden;
-	padding:0;
-}
 .comment-config .control-group {
 	padding-left: 10%;
 }

@@ -5,9 +5,19 @@
             app.comment_manage.list_search();
             app.comment_manage.toggle_view();
             app.comment_manage.quick_reply();
+            app.comment_manage.set_comment_config();
         },
  
         list_search: function () {
+        	  $(".no-show-status").on('click', function (e) {
+                  $('.hide-status').hide();
+              });
+        	  $(".no-show-rank").on('click', function (e) {
+                  $('.hide-rank').hide();
+              });
+        	  $(".no-show-img").on('click', function (e) {
+                  $('.hide-img').hide();
+              }); 
             $(".search_comment").on('click', function (e) {
                 var url = $("form[name='searchForm']").attr('action');
                 var keywords = $("input[name='keyword']").val();
@@ -65,6 +75,32 @@
                 	ecjia.admin.showmessage(data);
                 }, 'json');
             });
+		},
+		
+		set_comment_config: function () {
+			$('.info-toggle-button').toggleButtons({
+				label: {  
+                     enabled: "开启",  
+                     disabled: "关闭"  
+                },  
+                style: {
+                    enabled: "info",
+                    disabled: "success"
+                }
+            });
+            var $form = $("form[name='theForm']");
+            var option = {
+                submitHandler: function () {
+                    $form.ajaxSubmit({
+                        dataType: "json",
+                        success: function (data) {
+                        	ecjia.admin.showmessage(data);
+                        }
+                    });
+                }
+            }
+            var options = $.extend(ecjia.admin.defaultOptions.validate, option);
+            $form.validate(options);
 		},
     }
     
