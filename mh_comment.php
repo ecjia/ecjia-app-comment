@@ -247,12 +247,12 @@ class mh_comment extends ecjia_merchant {
 			foreach ($data as $row) {
 				$row['add_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['add_time']);
 				$row['goods_name'] = RC_DB::TABLE('goods')->where('goods_id', $row['id_value'])->pluck('goods_name');
+				$row['comment_pic_list'] = RC_DB::TABLE('term_attachment')->where('object_id',  $row['comment_id'])->select('file_path')->get();
 				$list[] = $row;
 			}
 		}
 		return array('comment_list' => $list, 'filter' => $filter, 'page' => $page->show(2), 'desc' => $page->page_desc());
 	}
-	
 }
 
 //end
