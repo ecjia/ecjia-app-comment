@@ -337,16 +337,35 @@ class admin extends ecjia_admin {
 			$comment_info['type'] = '2';
 // 			$this->assign('id_value', $id_value['title']); //评论的对象
 		}
-		
+
 		/* 获取管理员的用户名和Email地址 */
         $admin_email = is_numeric($_SESSION['email']) ? '' : $_SESSION['email'];
 		$admin_info = array('user_name' => $_SESSION['admin_name'], 'email' => $admin_email);
 		
+		/*获取用户头像*/
+		$avatar_img = RC_DB::TABLE('users')->where('user_id', $comment_info['user_id'])->pluck('avatar_img');
+
+		/* 管理员回复内容*/
+		$replay_admin_list = RC_DB::TABLE('comment_reply')
+                		->where('comment_id', $comment_info['comment_id'])
+                		->where('user_id', $comment_info['user_id'])
+                		->select('content', 'add_time', 'user_id')
+                		->get();
+		foreach ($replay_admin_list as $key => $val) {
+		    $replay_admin_list[$key]['add_time_new'] = RC_Time::local_date(ecjia::config('time_format'), $val['add_time']);
+		    $staff_info = RC_DB::TABLE('staff_user')->where('user_id', $val['user_id'])->select('name', 'avatar')->first();
+		    $replay_admin_list[$key]['staff_name'] = $staff_info['name'];
+		    $replay_admin_list[$key]['staff_img']  =  RC_Upload::upload_url($staff_info['avatar']);
+		};
+
 		/* 模板赋值 */
-		$this->assign('msg', $comment_info); 		//评论信息
+		$this->assign('comment_info', $comment_info); 		//评论信息
+		$this->assign('replay_admin_list', $replay_admin_list); 		//管理员回复信息
+		$this->assign('avatar_img', $avatar_img);     //用户头像
 		$this->assign('admin_info', $admin_info);   //管理员信息
 		$this->assign('reply_info', $reply_info);   //回复的内容
 		$this->assign('admin_ip', $admin_ip);		//当前管理员IP获取
+
 		
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here($here, $url));
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('comment::comment_manage.comment_info')));

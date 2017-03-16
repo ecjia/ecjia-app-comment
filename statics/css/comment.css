@@ -65,17 +65,22 @@
 .comment-config .term-checkbox {
 	margin: 0;
 }
-.comment-config .membership {
+.comment-config .membership,
+.comment_info .store-attr {
 	width: 70px;
 }
 .comment-config .goods_type {
 	margin-bottom: 14px;
 }
-.comment_info .comment_top .comment-thumb {
+.comment_info .comment-thumb {
     width: 90px;
     float: left;
 }
-.comment_info .comment_top .comment-thumb-details h1{
+.comment_info .comment-all-right-thumb {
+	width: 90px;
+	float: right;
+}
+.comment_info .comment-thumb-details h1 {
     color: #000000;
     font-size: 16px;
     margin: 0;
@@ -86,18 +91,39 @@
 	margin-left: 50px;
 }
 
-.comment_info .comment_top  .comment-thumb img {
+.comment_info .comment-thumb img {
+	border: 1px solid #bdc3c7;
     width: 80px;
     height: 80px;
 }
+.comment_info .comment-all-right-thumb img {
+	border: 1px solid #bdc3c7;
+	width: 80px;
+    height: 80px;
+    border-radius: 100%;
+    -webkit-border-radius: 100%	
+}
+.comment_info .comment_top .comment-goods img{
+	width: 50px;
+	height: 50px;
+}
+.comment_info .foldable-list .panel-body {
+	padding: 15px 0 15px 0;
+}
+.comment_info .form-control {
+    width: 100%;
+    padding: 10px 20px;
+}
 
+.comment_info .control-group .reply-title {
+	 font-weight: bold;
+	 margin: 10px 0 5px 0;
+}
 
-
-
-
-
-
-
+.comment_info .comment-store-info {
+	margin: 35px;
+	font-size: 18px;
+}
 
 
 

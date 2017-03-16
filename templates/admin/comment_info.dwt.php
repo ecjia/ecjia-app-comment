@@ -24,23 +24,36 @@
                 <div class="comment_top">
     				<div class="panel-body">
     					<div class="comment-thumb">
-    						{if $comment_info.user_name eq '1'}
+    						{if $avatar_img}
     		                	<img src="{RC_Upload::upload_url()}/{$avatar_img}" >
     		                {else}
     		                	<img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">
     		                {/if}
     					</div>
     					<div class="comment-thumb-details">
-    						<h1>{$comment_info.user_name}</h1>
+    						<h1>{if $comment_info.is_anonymous eq 1 }{'匿名发表'}{else}{$comment_info.user_name}{/if}</h1>
     						<p>{$comment_info.add_time}<span>IP: {$comment_info.ip_address}</span></p><br>
     					</div>
     					<div class="comment-goods">
-    					  	<p>商品评分：{section name=loop loop=$comment_info.comment_rank}<i class="fa fa-star"></i>{/section}</p>
+    					  	<p>商品评分：{section name=loop loop=$comment_info.comment_rank}<i class="fontello-icon-star" style="color:#FF9933;"></i>{/section}</p>
     		                <p>{$comment_info.content}</p>
     		                 <!-- {foreach from=$comment_pic_list item=list} -->
-    		                	<img src="{RC_Upload::upload_url()}/{$list.file_path}">
+    		                	<img src="">
     		                 <!-- {/foreach} -->
-    					</div><br>
+    					</div>
+    					<div class="edit-list">
+							<a class="data-pjax" href='{url path="comment/admin/reply" args="comment_id={$comment.comment_id}"}'>
+								{t}回复{/t}
+							</a>&nbsp;|&nbsp;
+							<a class="data-pjax" href='{url path="comment/admin/reply" args="comment_id={$comment.comment_id}"}'>
+								{t}待审核{/t}
+							</a>&nbsp;|&nbsp;
+							<a class="data-pjax" href='{url path="comment/admin/reply" args="comment_id={$comment.comment_id}"}'>
+								{t}驳回{/t}
+							</a>&nbsp;|&nbsp;
+							<a class="ecjiafc-red toggle_view" href='{url path="comment/admin/check" args="comment_id={$comment.comment_id}{if $smarty.get.page}&page={$smarty.get.page}{/if}"}' data-msg="{t}您确定要将该用户[{$comment.user_name|default:{lang key='comment::comment_manage.anonymous'}}]的评论移至回收站吗？{/t}" data-status="{$smarty.get.status}" data-val="trashed_comment" >{t}移至回收站{/t}</a>
+							
+						</div>
     	            </div>    
     			</div><br>
 			
@@ -55,142 +68,68 @@
 					</div>
 					<div class="accordion-body in collapse" id="goods_info_area_seo">
 						<div class="accordion-inner">
-							<div class="control-group control-group-small" >
-								<label class="control-label">{lang key='goods::category.label_keywords'}</label>
-								<div class="controls">
-									<input class="span12" type="text" name="keywords" value="{$cat_info.keywords|escape}" size="40" />
-									<br />
-									<p class="help-block w280 m_t5">{lang key='goods::category.use_commas_separate'}</p>
-								</div>
-							</div>
-							<div class="control-group control-group-small" >
-								<label class="control-label">{lang key='goods::category.label_cat_desc'}</label>
-								<div class="controls">
-									<textarea class="span12" name='cat_desc' rows="6" cols="48">{$cat_info.cat_desc}</textarea>
-								</div>
-							</div>
+						      <div class="panel-body">
+						          <!-- {foreach from=$replay_admin_list item=list} -->
+                                    <div class="text-right">
+                                        <div class="comment-all-right-thumb">
+									       <img src="{$list.staff_img}" >
+								        </div>
+        					  			 <div class="comment-thumb-details">
+        									<h1>{$list.staff_name}</h1>
+        									<p>{$list.add_time_new}</p><br>
+        								 </div>
+        								 <p>{$list.content}</p>
+                                    </div>
+                                  <!-- {foreachelse} -->
+                                    <div class="text-center">管理员暂时还未回复任何消息</div>
+                                  <!-- {/foreach} -->
+                            </div>
 						</div>
 					</div>
 				</div>
 			</div>
-
-			<!-- {if $action eq 'edit'} -->
-			<div class="foldable-list move-mod-group" id="goods_info_sort_note">
-				<div class="accordion-group">
-					<div class="accordion-heading">
-						<a class="accordion-toggle collapsed acc-in move-mod-head" data-toggle="collapse" data-target="#goods_info_term_meta">
-							<strong>{lang key='goods::category.term_meta'}</strong>
-						</a>
-					</div>
-					<div class="accordion-body in" id="goods_info_term_meta">
-						<div class="accordion-inner">
-								<!-- 自定义栏目模板区域 START -->
-								<!-- {if $data_term_meta} -->
-								<label><b>{lang key='goods::category.label_edit_term_mate'}</b></label>
-							<table class="table smpl_tbl ">
-								<thead>
-									<tr>
-										<td class="span4">{lang key='goods::category.name'}</td>
-										<td>{lang key='goods::category.value'}</td>
-									</tr>
-								</thead>
-								<tbody class="term_meta_edit" data-id="{$cat_info.cat_id}" data-active="{url path='goods/admin_category/update_term_meta'}">
-									<!-- {foreach from=$data_term_meta item=term_meta} -->
-									<tr>
-										<td>
-											<input class="span12" type="text" name="term_meta_key" value="{$term_meta.meta_key}" />
-
-											<input type="hidden" name="term_meta_id" value="{$term_meta.meta_id}">
-											<a class="data-pjax btn m_t5" data-toggle="edit_term_meta" href="javascript:;">{lang key='goods::category.update'}</a>
-											<a class="ajaxremove btn btn-danger m_t5" data-toggle="ajaxremove" data-msg="{lang key='goods::category.remove_custom_confirm'}" href='{url path="goods/admin_category/remove_term_meta" args="meta_id={$term_meta.meta_id}"}'>{lang key='system::system.drop'}</a>
-
-										</td>
-										<td><textarea class="span12 h70" name="term_meta_value">{$term_meta.meta_value}</textarea></td>
-									</tr>
-									<!-- {/foreach} -->
-								</tbody>
-							</table>
-							<!-- {/if} -->
-
-								<!-- 编辑区域 -->
-								<label><b>{lang key='goods::category.label_add_term_mate'}</b></label>
-
-								<div class="term_meta_add" data-id="{$cat_info.cat_id}" data-active="{url path='goods/admin_category/insert_term_meta'}">
-								<table class="table smpl_tbl ">
-									<thead>
-										<tr>
-											<td class="span4">{lang key='goods::category.name'}</td>
-											<td>{lang key='goods::category.value'}</td>
-										</tr>
-									</thead>
-									<tbody class="term_meta_edit" data-id="{$cat_info.cat_id}" data-active="{url path='goods/admin_category/update_term_meta'}">
-										<tr>
-											<td>
-												<!-- {if $term_meta_key_list} -->
-												<select class="span12" data-toggle="change_term_meta_key" >
-													<!-- {foreach from=$term_meta_key_list item=meta_key} -->
-													<option value="{$meta_key.meta_key}">{$meta_key.meta_key}</option>
-													<!-- {/foreach} -->
-												</select>
-												<input class="span12 hide" type="text" name="term_meta_key" value="{$term_meta_key_list.0.meta_key}" />
-												<div><a data-toggle="add_new_term_meta" href="javascript:;">{lang key='goods::category.add_new_mate'}</a></div>
-												<!-- {else} -->
-												<input class="span12" type="text" name="term_meta_key" value="" />
-												<!-- {/if} -->
-												<a class="btn m_t5" data-toggle="add_term_meta" href="javascript:;">{lang key='goods::category.add_term_mate'}</a>
-											</td>
-											<td><textarea class="span12" name="term_meta_value"></textarea></td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-							<!-- 自定义栏目模板区域 END -->
-						</div>
-					</div>
-				</div>
+			<div class="control-group">
+			    <div class="reply-title">回复： </div>
+    			<textarea class="span12 form-control" name="cat_desc" rows="6" cols="48" placeholder="回复内容"></textarea>
+    			<div class="text-right" style="margin: 10px 0">
+					<input type="checkbox" name="is_show" id="" value="1" /><span>{'邮件通知'}</span>
+    			    <input type="text" style="margin-left: 20px;" name="zipcode" placeholder="电子邮箱" />
+    			</div>
 			</div>
-			<!-- {/if} -->
-
+			<div class="control-group control-group-small">
+				<button class="btn btn-gebo" type="submit">回复</button>
+			</div>
 		</div>
+		
 		<div class="right-bar move-mod">
 			<div class="foldable-list move-mod-group edit-page" id="goods_info_sort_brand">
 				<div class="accordion-group">
 					<div class="accordion-heading">
 						<a class="accordion-toggle collapsed move-mod-head" data-toggle="collapse" data-target="#goods_info_area_brand">
-							<strong>{lang key='goods::category.promotion_info'}</strong>
+							<strong>{'店铺信息'}</strong>
 						</a>
 					</div>
 					<div class="accordion-body in in_visable collapse" id="goods_info_area_brand">
 						<div class="accordion-inner">
-							<div class="control-group control-group-small">
-								<label class="control-label">{lang key='goods::category.label_sort_order'}</label>
-								<div class="controls">
-									<input class="w200" type="text" name='sort_order' {if $cat_info.sort_order}value='{$cat_info.sort_order}'{else} value="50"{/if} size="15" />
-								</div>
-							</div>
-							<div class="control-group control-group-small">
-								<label class="control-label">{lang key='goods::category.label_is_show'}</label>
-								<div class="controls chk_radio">
-									<input type="radio" name="is_show" id="" value="1" {if $cat_info.is_show neq 0}checked="checked"{/if}  /><span>{lang key='system::system.yes'}</span>
-									<input type="radio" name="is_show" id="" value="0" {if $cat_info.is_show eq 0}checked="checked"{/if}  /><span>{lang key='system::system.no'}</span>
-								</div>
-							</div>
-							<div class="control-group control-group-small">
-								<label class="control-label">{lang key='goods::category.label_recommend_index'}</label>
-								<div class="controls chk_radio">
-									<input type="checkbox" name="cat_recommend[]" value="1"  {if $cat_recommend[1] eq 1}checked="checked"{/if}  /><span>{lang key='goods::category.index_best'}</span>
-									<input type="checkbox" name="cat_recommend[]" value="2"  {if $cat_recommend[2] eq 1}checked="checked"{/if}  /><span>{lang key='goods::category.index_new'}</span>
-									<input type="checkbox" name="cat_recommend[]" value="3"  {if $cat_recommend[3] eq 1}checked="checked"{/if}  /><span>{lang key='goods::category.index_hot'}</span>
-									<span class="help-block">{lang key='goods::category.show_in_index'}</span>
-								</div>
-							</div>
-							<!-- {if $cat_info.cat_id} -->
-							<input type="hidden" name="old_cat_name" value="{$cat_info.cat_name}" />
-							<input type="hidden" name="cat_id" value="{$cat_info.cat_id}" />
-							<button class="btn btn-gebo" type="submit">{lang key='goods::category.update'}</button>
-							<!-- {else} -->
-							<button class="btn btn-gebo" type="submit">{lang key='system::system.button_submit'}</button>
-							<!-- {/if} -->
+						    <div class="comment-thumb">
+        						{if $avatar_img}
+        		                	<img src="{RC_Upload::upload_url()}/{$avatar_img}" >
+        		                {else}
+        		                	<img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">
+        		                {/if}
+        					</div>
+        					<div class="comment-store-info">
+        						{if $comment_info.is_anonymous eq 1 }{'匿名发表'}{else}{$comment_info.user_name}{/if}
+        					</div>
+            					<div class="comment-goods">
+            					   <div class="goods_type">
+	    					  	       <label class="control-label store-attr">综合评分：</label>
+	    					  	       {section name=loop loop=$comment_info.comment_rank}<i class="fontello-icon-star" style="color:#FF9933;"></i>{/section}
+            					   </div>
+            					   <p>全部评论： </p>
+            					   <p>好评率： </p>
+            					</div>
+							<button class="btn btn-gebo" type="submit">{'进入店铺评价'}</button>
 						</div>
 					</div>
 				</div>
