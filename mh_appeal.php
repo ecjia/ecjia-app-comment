@@ -59,7 +59,8 @@ class mh_appeal extends ecjia_merchant {
 		
 		RC_Script::enqueue_script('mh_appeal', RC_App::apps_url('statics/js/mh_appeal.js', __FILE__));
 		RC_Style::enqueue_style('mh_appeal', RC_App::apps_url('statics/css/mh_appeal.css', __FILE__), array());
-		
+		RC_Style::enqueue_style('bootstrap-fileupload', RC_App::apps_url('statics/bootstrap-fileupload/bootstrap-fileupload.css', __FILE__), array());
+		RC_Script::enqueue_script('bootstrap-fileupload', RC_App::apps_url('statics/bootstrap-fileupload/bootstrap-fileupload.js', __FILE__), array(), false, true);
 		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('申诉管理', RC_Uri::url('comment/mh_appeal/init')));
 		ecjia_merchant_screen::get_current_screen()->set_parentage('comment', 'comment/mh_appeal.php');
 	}
@@ -133,6 +134,36 @@ class mh_appeal extends ecjia_merchant {
 			'appeal_time'	=> $appeal_time,
 		);
 		$appeal_id = RC_DB::table('comment_appeal')->insertGetId($data);
+		
+		$time = RC_Time::local_date('Ymd');
+		if (isset($_FILES['apple_img']['error']) && $_FILES['apple_img']['error'] == 0 || ! isset($_FILES['apple_img']['error']) && isset($_FILES['apple_img']['tmp_name']) && $_FILES['apple_img']['tmp_name'] != 'none') {
+			$upload = RC_Upload::uploader('image', array('save_path' => 'merchant/' . $_SESSION['store_id'] . '/data/appeal/'.$time, 'auto_sub_dirs' => true));
+			$image_info = $upload->upload($_FILES['apple_img']);
+			if (!empty($image_info)) {
+				$src = $upload->get_position($image_info);
+				$data = array(
+					'attach_label' => $_FILES['apple_img']['name'],
+					'attach_description' => '申诉图片',
+					'object_app'		 => 'ecjia.comment',
+					'object_group'		 => 'appeal',
+					'object_id'		 	 => $appeal_id,
+					'file_name'			 => $image_info['name'],
+					'file_path'			 => $src,
+					'file_size'			 => $image_info['size']/1000,
+					'file_mime'     	 => $image_info['type'],
+					'file_ext'     	 	 => $image_info['ext'],
+					'file_hash'     	 => $image_info['sha1'],
+					'user_id'			 => $_SESSION['staff_id'],
+					'user_type'			 => 'staff',
+					'add_ip'			 => RC_Ip::client_ip(),
+					'add_time'			 => RC_Time::gmtime(),
+					'is_image'			 => 1,
+				);
+				RC_DB::table('term_attachment')->insertGetId($data);
+			} else {
+				return $this->showmessage($upload->error(), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			}
+		}
 		return $this->showmessage('申诉提交成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('comment/mh_appeal/detail', array('check_status' => 1,'appeal_sn'=>$appeal_sn))));
 	}
 	
@@ -141,7 +172,6 @@ class mh_appeal extends ecjia_merchant {
 	 */
 	public function detail() {
 		$this->admin_priv('mh_appeal_manage');
-		 
 		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('申诉详情'));
 		$this->assign('ur_here', '申诉详情');
 		
@@ -151,16 +181,18 @@ class mh_appeal extends ecjia_merchant {
 		$appeal['appeal_time'] = RC_Time::local_date(ecjia::config('time_format'), $appeal['appeal_time']);
 		
 		$comment_pic_list = RC_DB::TABLE('term_attachment')->where('object_id',  $appeal['comment_id'])->select('file_path')->get();
-		
+	
 		$comment_info = RC_DB::table('comment')->where('comment_id', $appeal['comment_id'])->first();
 		$comment_info['add_time'] = RC_Time::local_date(ecjia::config('time_format'), $comment_info['add_time']);
 		$avatar_img = RC_DB::TABLE('users')->where('user_id', $comment_info['user_id'])->pluck('avatar_img');
+		$apple_img_list = RC_DB::TABLE('term_attachment')->where('object_id', $appeal['id'])->select('file_path')->get();
 		
 		$this->assign('check_status', $check_status);
 		$this->assign('appeal', $appeal);
 		$this->assign('comment_pic_list', $comment_pic_list);
 		$this->assign('comment_info', $comment_info);
 		$this->assign('avatar_img', $avatar_img);
+		$this->assign('apple_img_list', $apple_img_list);
 
 		$this->display('mh_appeal_detail.dwt');
 	}

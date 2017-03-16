@@ -53,9 +53,13 @@
 					<form class="form-horizontal" action='{$form_action}' method="post" name="theForm">
 						<textarea class="form-control" id="appeal_content" name="appeal_content" placeholder="请输入申诉理由" ></textarea>
 						<br>
+						
 						<div class="appeal-goods">
-			                <img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">
+						
 						</div>
+                        <div class="">
+                            <input type="file" class="default" name="apple_img" id="apple_img"/>
+                        </div>
 						<br>
 						<input type="hidden" name="comment_id" value="{$comment_info.comment_id}" />
 						<button class="btn btn-info" type="submit">提交申诉</button>

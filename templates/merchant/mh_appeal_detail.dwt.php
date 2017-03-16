@@ -53,7 +53,9 @@
 					<div class="panel-body">
 						<div class="appeal-content">
 			                <p>{$appeal.appeal_content}</p>
-			                <img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">
+			               	 <!-- {foreach from=$apple_img_list item=list} -->
+			                	<img src="{RC_Upload::upload_url()}/{$list.file_path}">
+			                 <!-- {/foreach} -->
 			                <p>{$appeal.appeal_time}</p>
 						</div>
 		            </div>    
