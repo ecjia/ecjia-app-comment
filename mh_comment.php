@@ -137,12 +137,16 @@ class mh_comment extends ecjia_merchant {
 		$order_add_time = RC_Time::local_date(ecjia::config('time_format'), $order_time);
 	
 		$other_comment = RC_DB::TABLE('comment')->where('store_id', $_SESSION['store_id'])->where('id_value', $comment_info['id_value'])->where('comment_id', '!=', $comment_info['comment_id'])->select('user_name', 'content', 'comment_rank', 'comment_id','id_value')->take(4)->get();
+		
+		$comment_pic_list = RC_DB::TABLE('term_attachment')->where('object_id', $comment_info['comment_id'])->select('file_path')->get();
+		
 		$this->assign('comment_info', $comment_info);
 		$this->assign('avatar_img', $avatar_img);
 		$this->assign('replay_admin_list', $replay_admin_list);
 		$this->assign('goods_info', $goods_info);
 		$this->assign('order_add_time', $order_add_time);
 		$this->assign('other_comment', $other_comment);
+		$this->assign('comment_pic_list', $comment_pic_list);
 		
 		$this->assign('from_action',RC_Uri::url('comment/mh_comment/comment_detail_reply'));
 		
