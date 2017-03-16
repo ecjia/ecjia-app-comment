@@ -1,14 +1,15 @@
 /*∑¢∆…ÍÀﬂ≤Ω÷Ë*/
+i.fa-star {
+	color: #FF9933;
+}
 .appeal-time-base {
 	text-algin: center;
 }
-
 .appeal-time-base ul {
 	margin: 0px auto;
 	overflow: hidden;
 	padding: 0;
 }
-
 .appeal-time-base ul li {
 	list-style: none;
 	margin-left: 0 !important;
@@ -16,7 +17,6 @@
 	width: 24.11111%;
 	float: left;
 }
-
 .appeal-time-base .step-no {
 	margin-top: 10px;
 	color: #fff;
@@ -25,27 +25,21 @@
 	line-height: 34px;
 	background: url("../images/order-time-base.png") no-repeat scroll 50% -102px;
 }
-
 .appeal-time-base .step-first .step-done .step-no {
 	background-position: 50% -204px;
 }
-
 .appeal-time-base .step-first .step-cur .step-no {
 	background-position: 50% -34px;
 }
-
 .appeal-time-base .step-done .step-no {
 	background-position: 50% -170px;
 }
-
 .appeal-time-base .step-cur .step-no {
 	background-position: 50% 0;
 }
-
 .appeal-time-base .step-last .step-no {
 	background-position: 50% -136px;
 }
-
 .appeal-time-base .step-last .step-cur .step-no {
 	background-position: 50% -68px;
 }
@@ -88,12 +82,10 @@
 .appeal-thumb-details span{
    margin-left: 50px;
 }
-
 .appeal-goods img {
 	width: 50px;
 	height: 50px;
 }
-
 .appeal_bottom h4{
 	margin-top: 25px;
 	margin-bottom: 25px;
