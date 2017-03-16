@@ -43,7 +43,6 @@
 			</thead>
 			<tbody>
 				<!-- {foreach from=$comment_list.item item=comment} -->
-			    {if $comment.status eq 3}
 				<tr>
 					<td><input class="checkbox" type="checkbox" name="checkboxes[]" value="{$comment.comment_id}"></td>
 					<td>
@@ -82,7 +81,6 @@
 						{/section}
 					</td>
 				</tr>
-				{/if}
 				<!-- {foreachelse} -->
 				<tr>
 					<td class="no-records" colspan="5">{lang key='system::system.no_records'}</td>
