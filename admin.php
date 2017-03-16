@@ -34,10 +34,6 @@ class admin extends ecjia_admin {
 	 */
 	public function init() {
 		$this->admin_priv('comment_manage');
-
-		if(isset($_GET['status']) && $_GET['status'] > 1) {
-			$this->admin_priv('comment_delete');
-		}
 		
 		ecjia_screen::get_current_screen()->remove_last_nav_here();
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('comment::comment_manage.goods_comment_list')));
@@ -56,14 +52,12 @@ class admin extends ecjia_admin {
 			'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:商品评论" target="_blank">'.RC_Lang::get('comment::comment_manage.about_goods_comment_list').'</a>') . '</p>'
 		);
 		
-		
 		$list = $this->get_comment_list();
 		$this->assign('comment_list', $list);
 		
 		$this->assign('form_action', RC_Uri::url('comment/admin/batch'));
 		$this->assign('form_search', RC_Uri::url('comment/admin/init'));
-// 		$this->assign('dropback_comment', $this->admin_priv('dropback_comment', '', false));
-		
+		//$this->assign('dropback_comment', $this->admin_priv('dropback_comment', '', false));
 		$this->display('comment_list.dwt');		
 	}
 	
@@ -456,7 +450,6 @@ class admin extends ecjia_admin {
 				'status'     => '1'
 			);
 			$db_comment->where('comment_id', $id)->update($data);
-			
 			$message = RC_Lang::get('comment::comment_manage.show_success');
 		} elseif ($allow == 'forbid') {
 			/*禁止评论显示 */
@@ -495,17 +488,11 @@ class admin extends ecjia_admin {
 		$this->admin_priv('comment_delete', ecjia::MSGTYPE_JSON);
 		$action = isset($_GET['sel_action']) ? trim($_GET['sel_action']) : 'deny';
 		
-		if (isset($_POST['checkboxes'])) {
-		    $where = array('comment_id' => $_POST['checkboxes']);
+		$comment_ids = explode(',', $_POST['checkboxes']);
+		$db_comment = RC_DB::table('comment'); 
+		
+		if (!empty($comment_ids)) {
 			switch ($action) {
-				case 'remove':
-					$this->admin_priv('dropback_comment', ecjia::MSGTYPE_JSON);
-					
-					$this->db_comment->comment_delete(array('comment_id' => $_POST['checkboxes']), true);
-					$this->db_comment->comment_delete(array('parent_id' => $_POST['checkboxes']), true);
-					
-				break;
-
 				case 'allow' :
 					$data = array(
 						'status' => '1'
@@ -518,12 +505,6 @@ class admin extends ecjia_admin {
 					);
 				break;
 				
-				case 'trash_comment' :
-					$data = array(
-						'status' => '2'
-					);
-				break;
-				
 				case 'trashed_comment' :
 					$data = array(
 						'status' => '3'
@@ -533,21 +514,18 @@ class admin extends ecjia_admin {
 				default :
 				break;
 			}
-			if ($action != 'remove') {
-			    $this->db_comment->comment_batch_update($where, $data);
-			}
-			$action = ($action == 'remove') ? 'remove' : 'edit';
-			$page = empty($_GET['page']) ? '' : '&page='.$_GET['page'];
+			$db_comment->whereIn('comment_id', $comment_ids)->update($data);
+			
+			$page = empty($_GET['page']) ? '' : $_GET['page'];
 			$status = $_GET['status'];
 			
-			if ($status === '') {
-				$pjaxurl = RC_Uri::url('comment/admin/init', 'type='.$_GET['type'].$page);
+			if ($status === 'null') {
+				$pjaxurl = RC_Uri::url('comment/admin/init', array('page' => $page, 'list' => 1));
 			} else {
-				$pjaxurl = RC_Uri::url('comment/admin/init', 'type='.$_GET['type'].'&status='.$_GET['status'].$page);
+				$pjaxurl = RC_Uri::url('comment/admin/init', array('status' => $status, 'page' => $page, 'list' => 1));
 			}
-			
-			ecjia_admin::admin_log('', $action, 'users_comment');
-			return $this->showmessage(sprintf(RC_Lang::get('comment::comment_manage.operation_success'), count($_POST['checkboxes'])), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => $pjaxurl));
+			//ecjia_admin::admin_log('', $action, 'users_comment');
+			return $this->showmessage(sprintf(RC_Lang::get('comment::comment_manage.operation_success'), count($comment_ids)), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => $pjaxurl));
 		} else {
 			/* 错误信息  */
 			return $this->showmessage(RC_Lang::get('system::system.no_select_message'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
@@ -570,14 +548,13 @@ class admin extends ecjia_admin {
 			$db_comment->where(RC_DB::raw('c.status'), '=','3');
 		}
 		
-		
 		if (!empty($filter['keywords'])) {
 			$db_comment->where(RC_DB::raw('c.content'), 'like', '%'.mysql_like_quote($filter['keywords']).'%');
 		}
 		
-
 		if (isset($_GET['status']) && (!empty($_GET['status']) || $_GET['status'] == '0')) {
 			$db_comment->where(RC_DB::raw('c.status'), '=', $_GET['status']);
+			$filter['status'] = $_GET['status'];
 		}
 		
 		if (isset($_GET['rank'])) {
@@ -593,21 +570,7 @@ class admin extends ecjia_admin {
 			$db_comment->where(RC_DB::raw('c.has_image'), '=', $_GET['has_img']);
 		}
 		
-// 		if (!empty($_GET['close_select'])) {
-// 			if ($_GET['close_select'] == '1') {
-// 				$db_comment->where(RC_DB::raw('c.status'), '<>', $status);
-// 			}
-// 			if ($_GET['close_select'] == '2') {
-// 				$db_comment->where(RC_DB::raw('c.comment_rank'), '<>', $rank);
-// 			}
-// 			if ($_GET['close_select'] == '3') {
-// 				$db_comment->where(RC_DB::raw('c.has_image'), '<>', $has_img);
-// 			}
-// 		}
-	
 		$count = $db_comment->count();
-		
-		
 		$page = new ecjia_page($count, 10, 5);
 		$data = $db_comment
 		->leftJoin('store_franchisee as sf', RC_DB::raw('c.store_id'), '=', RC_DB::raw('sf.store_id'))
