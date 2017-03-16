@@ -286,10 +286,9 @@ class admin extends ecjia_admin {
 		$id_value     	= array();
 		$where 			= array();
 		
-		$where['comment_id'] = !empty($_GET['id']) ? $_GET['id'] : 0;
+		$where['comment_id'] = !empty($_GET['comment_id']) ? $_GET['comment_id'] : 0;
 		$where['status'] = array('lt' => 2);
 		$comment_info = $this->db_comment->comment_info($where);
-		
 		if (empty($comment_info)) {
 			return $this->showmessage(RC_Lang::get('comment::comment_manage.no_comment_info'), ecjia::MSGTYPE_HTML | ecjia::MSGSTAT_ERROR );
 		}
@@ -341,7 +340,7 @@ class admin extends ecjia_admin {
 			$here = RC_Lang::get('comment::comment_manage.article_comment');
 			$url = RC_Uri::url('comment/admin/init', array('type' => 2));
 			$comment_info['type'] = '2';
-			$this->assign('id_value', $id_value['title']); //评论的对象
+// 			$this->assign('id_value', $id_value['title']); //评论的对象
 		}
 		
 		/* 获取管理员的用户名和Email地址 */
@@ -576,6 +575,7 @@ class admin extends ecjia_admin {
 			$db_comment->where(RC_DB::raw('c.content'), 'like', '%'.mysql_like_quote($filter['keywords']).'%');
 		}
 		
+
 		if (isset($_GET['status']) && (!empty($_GET['status']) || $_GET['status'] == '0')) {
 			$db_comment->where(RC_DB::raw('c.status'), '=', $_GET['status']);
 		}
@@ -734,6 +734,7 @@ class admin extends ecjia_admin {
 	public function trash() {
 	    $this->admin_priv('comment_manage');
 	    
+	    $_GET['status'] = 3;
 	    $this->assign('action_link', array('href'=> RC_Uri::url('comment/admin/init')));
 	    ecjia_screen::get_current_screen()->remove_last_nav_here();
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('回收站'));
