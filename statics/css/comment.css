@@ -71,3 +71,35 @@
 .comment-config .goods_type {
 	margin-bottom: 14px;
 }
+.comment_info .comment_top .comment-thumb {
+    width: 90px;
+    float: left;
+}
+.comment_info .comment_top .comment-thumb-details h1{
+    color: #000000;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+    font-weight: 400;
+}
+.comment_info .comment_top .comment-thumb-details span{
+	margin-left: 50px;
+}
+
+.comment_info .comment_top  .comment-thumb img {
+    width: 80px;
+    height: 80px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
