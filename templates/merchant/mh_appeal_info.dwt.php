@@ -37,7 +37,7 @@
 						</a>
 						<div class="appeal-thumb-details">
 							<h1>{$comment_info.user_name}</h1>
-							<p>{$comment_info.add_time}<span>{$comment_info.ip_address}</span></p><br>
+							<p>{$comment_info.add_time}<span>IP：{$comment_info.ip_address}</span></p><br>
 						</div>
 						<div class="appeal-goods">
 						  	<p>商品评分：{section name=loop loop=$comment_info.comment_rank}<i class="fa fa-star"></i>{/section}</p>
