@@ -75,7 +75,8 @@ class admin extends ecjia_admin {
 	 */
 	public function quick_reply() {
 		$this->admin_priv('comment_manage');
-		 
+		
+		$list 			  = !empty($_GET['list']) ? $_GET['list'] : 1;
 		$comment_id 	  = $_GET['comment_id'];
 		$reply_content    = $_GET['reply_content'];
 		$status			  = $_GET['status'];
@@ -92,9 +93,17 @@ class admin extends ecjia_admin {
 		);
 		$db_comment_reply->insertGetId($data);
 		if (isset($_GET['status']) && (!empty($_GET['status']) || $_GET['status'] == '0')) {
-			$pjaxurl = RC_Uri::url('comment/admin/init', array('status' => $_GET['status']));
+			if ($list == 3) {
+				$pjaxurl = RC_Uri::url('comment/admin/store_goods_comment_list', array('status' => $_GET['status']));
+			} else {
+				$pjaxurl = RC_Uri::url('comment/admin/init', array('status' => $_GET['status']));
+			}
 		} else {
-			$pjaxurl = RC_Uri::url('comment/admin/init');
+			if ($list == 3) {
+				$pjaxurl = RC_Uri::url('comment/admin/store_goods_comment_list');
+			} else {
+				$pjaxurl = RC_Uri::url('comment/admin/init');
+			}
 		}
 		return $this->showmessage('回复成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, $pjaxurl);
 	}
@@ -292,6 +301,7 @@ class admin extends ecjia_admin {
 		$where['comment_id'] = !empty($_GET['comment_id']) ? $_GET['comment_id'] : 0;
 		$where['status'] = array('lt' => 2);
 		$comment_info = $this->db_comment->comment_info($where);
+		
 		if (empty($comment_info)) {
 			return $this->showmessage(RC_Lang::get('comment::comment_manage.no_comment_info'), ecjia::MSGTYPE_HTML | ecjia::MSGSTAT_ERROR );
 		}
@@ -458,16 +468,25 @@ class admin extends ecjia_admin {
 	 */
 	public function check() {
 		$this->admin_priv('comment_update', ecjia::MSGTYPE_JSON);
-
+		
+		$list		= !empty($_GET['list']) ? $_GET['list'] : 3;
 		$id		 	= !empty($_GET['comment_id']) 		? intval($_GET['comment_id'])		: 0;
 		$page		= !empty($_GET['page']) 		? intval($_GET['page'])		: 1;
 		$allow 		= !empty($_POST['check']) 	? $_POST['check']			: '';
 		$status		= $_POST['status'];
 		
 		if ($status === '') {
-			$pjaxurl = RC_Uri::url('comment/admin/init', array('page' => $page));
+			if ($list == 3) {
+				$pjaxurl = RC_Uri::url('comment/admin/store_goods_comment_list', array('page' => $page));
+			} else {
+				$pjaxurl = RC_Uri::url('comment/admin/init', array('page' => $page));
+			}
 		} else {
-			$pjaxurl = RC_Uri::url('comment/admin/init', array('status' => intval($status), 'page' => $page));
+			if ($list == 3) {
+				$pjaxurl = RC_Uri::url('comment/admin/store_goods_comment_list', array('page' => $page));
+			} else {
+				$pjaxurl = RC_Uri::url('comment/admin/init', array('status' => intval($status), 'page' => $page));
+			}
 		}
 		
 		$db_comment = RC_DB::table('comment');
@@ -516,6 +535,7 @@ class admin extends ecjia_admin {
 		$this->admin_priv('comment_delete', ecjia::MSGTYPE_JSON);
 		$action = isset($_GET['sel_action']) ? trim($_GET['sel_action']) : 'deny';
 		
+		$list = !empty($_GET['list']) ? $_GET['list'] : 1;
 		$comment_ids = explode(',', $_POST['checkboxes']);
 		$db_comment = RC_DB::table('comment'); 
 		
@@ -548,9 +568,17 @@ class admin extends ecjia_admin {
 			$status = $_GET['status'];
 			
 			if ($status === 'null') {
-				$pjaxurl = RC_Uri::url('comment/admin/init', array('page' => $page, 'list' => 1));
+				if ($list == 3) {
+					$pjaxurl = RC_Uri::url('comment/admin/store_goods_comment_list', array('page' => $page));
+				} else {
+					$pjaxurl = RC_Uri::url('comment/admin/init', array('page' => $page, 'list' => 1));
+				}
 			} else {
-				$pjaxurl = RC_Uri::url('comment/admin/init', array('status' => $status, 'page' => $page, 'list' => 1));
+				if ($list == 3) {
+					$pjaxurl = RC_Uri::url('comment/admin/store_goods_comment_list', array('status' => $status, 'page' => $page));
+				} else {
+					$pjaxurl = RC_Uri::url('comment/admin/init', array('status' => $status, 'page' => $page, 'list' => 1));
+				}
 			}
 			//ecjia_admin::admin_log('', $action, 'users_comment');
 			return $this->showmessage(sprintf(RC_Lang::get('comment::comment_manage.operation_success'), count($comment_ids)), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => $pjaxurl));
@@ -560,160 +588,6 @@ class admin extends ecjia_admin {
 		}
 	}
 
-	/**
-	 * 获取商品评论列表
-	 * @access  public
-	 * @return  array
-	 */
-	private function get_comment_list() {
-		/* 查询条件 */
-		$filter['keywords'] = empty($_GET['keywords']) ? '' : stripslashes(trim($_GET['keywords']));
-
-		$db_comment = RC_DB::table('comment as c');
-		if ($_GET['list'] == '1') {
-			$db_comment->where(RC_DB::raw('c.status'), '<>','3');
-		} elseif ($_GET['list'] == 2) {
-			$db_comment->where(RC_DB::raw('c.status'), '=','3');
-		}
-		
-		if (!empty($filter['keywords'])) {
-			$db_comment->where(RC_DB::raw('c.content'), 'like', '%'.mysql_like_quote($filter['keywords']).'%');
-		}
-		
-		if (isset($_GET['status']) && (!empty($_GET['status']) || $_GET['status'] == '0')) {
-			$db_comment->where(RC_DB::raw('c.status'), '=', $_GET['status']);
-			$filter['status'] = $_GET['status'];
-		}
-		
-		if (isset($_GET['rank'])) {
-			if ($_GET['rank'] == '1') {
-				$db_comment->where(RC_DB::raw('c.comment_rank'), '=', '5');
-			} elseif ($_GET['rank'] == '2') {
-				$db_comment->whereIn(RC_DB::raw('c.comment_rank'), array('3','4'));
-			} elseif ($_GET['rank'] == '3') {
-				$db_comment->where(RC_DB::raw('c.comment_rank'), '<=', '2');
-			}
-		}
-		if (isset($_GET['has_img']) && (!empty($_GET['has_img']) || $_GET['has_img'] == '0')) {
-			$db_comment->where(RC_DB::raw('c.has_image'), '=', $_GET['has_img']);
-		}
-		
-		$count = $db_comment->count();
-		$page = new ecjia_page($count, 10, 5);
-		$data = $db_comment
-		->leftJoin('store_franchisee as sf', RC_DB::raw('c.store_id'), '=', RC_DB::raw('sf.store_id'))
-		->leftJoin('goods as g', RC_DB::raw('c.id_value'), '=', RC_DB::raw('g.goods_id'))
-		->selectRaw('c.comment_id,c.user_name,c.content,c.add_time,c.id_value,c.comment_rank,c.status,c.has_image,sf.merchants_name,g.goods_name')
-		->orderby(RC_DB::raw('c.add_time'), 'asc')
-		->take(10)
-		->skip($page->start_id-1)
-		->get();
-				
-		$list = array();
-		if (!empty($data)) {
-			foreach ($data as $row) {
-				$row['add_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['add_time']);
-				if ($row['has_image'] == '1') {
-					$row['imgs'] = RC_DB::table('term_attachment')
-										->where(RC_DB::raw('object_id'), '=', $row['comment_id'])
-										->where(RC_DB::raw('object_group'), '=', 'comment')
-										->where(RC_DB::raw('object_app'), '=', 'ecjia.comment')
-										->select('file_path')->orderby(RC_DB::raw('add_time'), 'asc')->limit(5)->get();
-					if (!empty($row['imgs'])) {
-						foreach ($row['imgs'] as $key => $val) {
-							$row['imgs'][$key]['file_path'] =  RC_Upload::upload_url().'/'.$val['file_path'];
-						}
-					}
-				}
-				$list[] = $row;
-			}
-		}
-		return array('item' => $list, 'filter' => $filter, 'page' => $page->show(2), 'desc' => $page->page_desc());
-	}
-
-	/**
-	 * 获取评论列表
-	 * @access  public
-	 * @return  array
-	 */
-	private function get_comment_list_bak() {
-		$db_comment 		= RC_Loader::load_app_model('comment_model');
-		$db_comment_view 	= RC_Loader::load_app_model('comment_viewmodel');
-	
-		/* 查询条件 */
-		$filter['keywords'] = empty($_GET['keywords']) ? 0 : stripslashes(trim($_GET['keywords']));
-		$filter['type'] 	= in_array($_GET['type'], array('1', '2')) ? $_GET['type'] : '1';
-	
-		$where = array();
-		if (isset($_GET['status'])) {
-			$filter['status'] = $where['status'] = $_GET['status'];
-		} else {
-			$where['status'] = array('lt' => '2');
-		}
-	
-		if ($_GET['type'] == '2') {
-			$where['comment_type'] = 1;
-			$com_where['comment_type'] = 1;
-	
-			$fields = 'c.*, a.title as comment_name';
-			$view = 'article';
-		} else {
-			$where['comment_type'] = 0;
-			$com_where['comment_type'] = 0;
-	
-			$fields = 'c.*, g.goods_name as comment_name';
-			$view = 'goods';
-		}
-	
-		$where['parent_id'] = $com_where['parent_id'] = 0;
-		if (!empty($filter['keywords'])) {
-			$where[] = "c.content LIKE '%" . mysql_like_quote($filter['keywords']) . "%' ";
-		}
-	
-		$field = "SUM(IF(status < 2, 1, 0)) AS count, SUM(IF(status = 0, 1, 0)) AS waitcheck, SUM(IF(status = 1, 1, 0)) AS checked, SUM(IF(status = 2, 1, 0)) AS trash_msg, SUM(IF(status = 3, 1, 0)) as trashed_msg";
-		$com_count = $db_comment->comment_info($com_where, $field);
-		//未记录时，设置默认总数0
-		$com_count = array(
-				'count'			=> empty($com_count['count']) 		? 0 : $com_count['count'],
-				'waitcheck'		=> empty($com_count['waitcheck']) 	? 0 : $com_count['waitcheck'],
-				'checked'		=> empty($com_count['checked']) 	? 0 : $com_count['checked'],
-				'trash_msg'		=> empty($com_count['trash_msg']) 	? 0 : $com_count['trash_msg'],
-				'trashed_msg' 	=> empty($com_count['trashed_msg']) ? 0 : $com_count['trashed_msg'],
-		);
-	
-		$option = array(
-				'table'	=> $view,
-				'where'	=> $where
-		);
-		$count = $db_comment_view->comment_count($option);
-		$page = new ecjia_page($count, 10, 5);
-		/* 获取评论数据 */
-		$options = array(
-				'table'	=> $view,
-				'field'	=> $fields,
-				'where'	=> $where,
-				'order'	=> array('comment_id' => 'desc'),
-				'limit'	=> $page->limit(),
-		);
-		$data = $db_comment_view->comment_select($options);
-	
-		$arr = array();
-		if (!empty($data)) {
-			foreach ($data as $key => $row) {
-				/* 标记是否回复过 */
-				$row['add_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['add_time']);
-				$row['ip_area'] = RC_Ip::area($row['ip_address']);
-				if ($_GET['type'] == '2') {
-					$row['url'] = RC_Uri::url('article/admin/preview', array('id' => $row['id_value']));
-				} else {
-					$row['url'] = RC_Uri::url('goods/admin/preview', array('id' => $row['id_value']));
-				}
-				$arr[] = $row;
-			}
-		}
-		return array('item' => $arr, 'filter' => $filter, 'page' => $page->show(5), 'desc' => $page->page_desc(), 'com_count' => $com_count);
-	}
-	
 	/**
 	 * 评论设置
 	 */
@@ -803,6 +677,242 @@ class admin extends ecjia_admin {
 	    $this->display('comment_trash.dwt');
 	}
 	
+	/**
+	 * 获取某一店铺所有商品评论列表
+	 */
+	public function store_goods_comment_list() {
+		$this->admin_priv('comment_manage');
+	
+		ecjia_screen::get_current_screen()->remove_last_nav_here();
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('comment::comment_manage.store_goods_comment_list')));
+		$this->assign('ur_here', RC_Lang::get('comment::comment_manage.store_goods_comment'));
+	
+		$this->assign('action_link', array('text' => RC_Lang::get('comment::comment_manage.comment_list'), 'href'=> RC_Uri::url('comment/admin/init', array('list' => 1))));
+	
+		ecjia_screen::get_current_screen()->add_help_tab(array(
+		'id'		=> 'overview',
+		'title'		=> RC_Lang::get('comment::comment_manage.overview'),
+		'content'	=> '<p>' . RC_Lang::get('comment::comment_manage.goods_comment_list_help') . '</p>'
+				));
+		ecjia_screen::get_current_screen()->set_help_sidebar(
+		'<p><strong>' . RC_Lang::get('comment::comment_manage.more_info') . '</strong></p>' .
+		'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:商品评论" target="_blank">'.RC_Lang::get('comment::comment_manage.about_goods_comment_list').'</a>') . '</p>'
+				);
+		$_GET['list'] = !empty($_GET['list']) ? $_GET['list'] : 3;		
+		$store_id = isset($_GET['store_id']) ? $_GET['store_id'] : 0;		
+		$list_storeinfo = array();
+		$list_storeinfo['comment_number'] = RC_DB::table('comment')
+		->select(RC_DB::raw('count(*) as "all"'),
+				RC_DB::raw('SUM(IF(comment_rank > 3, 1, 0)) as "good"'))
+				->where('status', '<>', 3)
+				->where('parent_id', 0)
+				->where('comment_type', 0)
+				->where('store_id', $store_id)
+				->first();
+				
+		if ($list_storeinfo['comment_number']['all'] != 0) {
+			if ($list_storeinfo['comment_number']['good'] == 0) {
+				$list_storeinfo['comment_percent'] = 100;
+			} else {
+				$list_storeinfo['comment_percent'] = round(($list_storeinfo['comment_number']['good'] / $list_storeinfo['comment_number']['all']) * 100);
+			}
+		} else {
+			$list_storeinfo['comment_percent'] = 100;
+		}
+		
+		if ($list_storeinfo['comment_percent'] === '100') {
+			$comment = array('comment_rank' => 5);
+		} elseif (($list_storeinfo['comment_percent'] >= 95) && ($list_storeinfo['comment_percent'] < 100)) {
+			$comment = array('comment_rank' => 4);
+		} else {
+			$comment = array('comment_rank' => 3);
+		}
+		
+		$merchants_name = RC_DB::table('store_franchisee')->where(RC_DB::raw('store_id'), '=', $store_id)->pluck('merchants_name');
+		$total_count = $list_storeinfo['comment_number']['all'];
+		$comment_percent = $list_storeinfo['comment_percent'];
+		
+		$list = $this->get_comment_list($store_id);
+		$this->assign('comment_list', $list);
+		
+		$this->assign('comment_percent', $comment_percent);
+		$this->assign('comment', $comment);
+		$this->assign('total_count', $total_count);
+		$this->assign('merchants_name', $merchants_name);
+		
+		$this->assign('select_status', $_GET['select_status']);
+		$this->assign('select_rank', $_GET['select_rank']);
+		$this->assign('select_img', $_GET['select_img']);
+	
+		$this->assign('form_action', RC_Uri::url('comment/admin/batch', array('list' => 3)));
+		$this->assign('form_search', RC_Uri::url('comment/admin/store_goods_comment_list', array('list' => 3)));
+		//$this->assign('dropback_comment', $this->admin_priv('dropback_comment', '', false));
+		$this->display('store_goods_comment_list.dwt');
+	}
+	
+	/**
+	 * 获取商品评论列表
+	 * @access  public
+	 * @return  array
+	 */
+	private function get_comment_list($store_id) {
+		/* 查询条件 */
+		$filter['keywords'] = empty($_GET['keywords']) ? '' : stripslashes(trim($_GET['keywords']));
+	
+		$db_comment = RC_DB::table('comment as c');
+		
+		if (!empty($store_id)) {
+			$db_comment->where(RC_DB::raw('c.store_id'), '=', $store_id);
+		}
+		
+		if ($_GET['list'] == '1' || $_GET['list'] == '3') {
+			$db_comment->where(RC_DB::raw('c.status'), '<>','3');
+		} elseif ($_GET['list'] == 2) {
+			$db_comment->where(RC_DB::raw('c.status'), '=','3');
+		}
+	
+		if (!empty($filter['keywords'])) {
+			$db_comment->where(RC_DB::raw('c.content'), 'like', '%'.mysql_like_quote($filter['keywords']).'%');
+		}
+	
+		if (isset($_GET['status']) && (!empty($_GET['status']) || $_GET['status'] == '0')) {
+			$db_comment->where(RC_DB::raw('c.status'), '=', $_GET['status']);
+			$filter['status'] = $_GET['status'];
+		}
+	
+		if (isset($_GET['rank'])) {
+			if ($_GET['rank'] == '1') {
+				$db_comment->where(RC_DB::raw('c.comment_rank'), '=', '5');
+			} elseif ($_GET['rank'] == '2') {
+				$db_comment->whereIn(RC_DB::raw('c.comment_rank'), array('3','4'));
+			} elseif ($_GET['rank'] == '3') {
+				$db_comment->where(RC_DB::raw('c.comment_rank'), '<=', '2');
+			}
+		}
+		if (isset($_GET['has_img']) && (!empty($_GET['has_img']) || $_GET['has_img'] == '0')) {
+			$db_comment->where(RC_DB::raw('c.has_image'), '=', $_GET['has_img']);
+			$filter['has_img'] = $_GET['has_img'];
+		}
+	
+		$count = $db_comment->count();
+		$filter['current_count'] = $count;
+		
+		$page = new ecjia_page($count, 10, 5);
+		$data = $db_comment
+		->leftJoin('store_franchisee as sf', RC_DB::raw('c.store_id'), '=', RC_DB::raw('sf.store_id'))
+		->leftJoin('goods as g', RC_DB::raw('c.id_value'), '=', RC_DB::raw('g.goods_id'))
+		->selectRaw('c.comment_id,c.user_name,c.content,c.add_time,c.id_value,c.comment_rank,c.status,c.has_image,sf.merchants_name,g.goods_name')
+		->orderby(RC_DB::raw('c.add_time'), 'asc')
+		->take(10)
+		->skip($page->start_id-1)
+		->get();
+		
+		$list = array();
+		if (!empty($data)) {
+			foreach ($data as $row) {
+				$row['add_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['add_time']);
+				if ($row['has_image'] == '1') {
+					$row['imgs'] = RC_DB::table('term_attachment')
+					->where(RC_DB::raw('object_id'), '=', $row['comment_id'])
+					->where(RC_DB::raw('object_group'), '=', 'comment')
+					->where(RC_DB::raw('object_app'), '=', 'ecjia.comment')
+					->select('file_path')->orderby(RC_DB::raw('add_time'), 'asc')->limit(5)->get();
+					if (!empty($row['imgs'])) {
+						foreach ($row['imgs'] as $key => $val) {
+							$row['imgs'][$key]['file_path'] =  RC_Upload::upload_url().'/'.$val['file_path'];
+						}
+					}
+				}
+				$list[] = $row;
+			}
+		}
+		return array('item' => $list, 'filter' => $filter, 'page' => $page->show(2), 'desc' => $page->page_desc());
+	}
+	
+	
+
+	/**
+	 * 获取评论列表
+	 * @access  public
+	 * @return  array
+	 */
+	private function get_comment_list_bak() {
+		$db_comment 		= RC_Loader::load_app_model('comment_model');
+		$db_comment_view 	= RC_Loader::load_app_model('comment_viewmodel');
+	
+		/* 查询条件 */
+		$filter['keywords'] = empty($_GET['keywords']) ? 0 : stripslashes(trim($_GET['keywords']));
+		$filter['type'] 	= in_array($_GET['type'], array('1', '2')) ? $_GET['type'] : '1';
+	
+		$where = array();
+		if (isset($_GET['status'])) {
+			$filter['status'] = $where['status'] = $_GET['status'];
+		} else {
+			$where['status'] = array('lt' => '2');
+		}
+	
+		if ($_GET['type'] == '2') {
+			$where['comment_type'] = 1;
+			$com_where['comment_type'] = 1;
+	
+			$fields = 'c.*, a.title as comment_name';
+			$view = 'article';
+		} else {
+			$where['comment_type'] = 0;
+			$com_where['comment_type'] = 0;
+	
+			$fields = 'c.*, g.goods_name as comment_name';
+			$view = 'goods';
+		}
+	
+		$where['parent_id'] = $com_where['parent_id'] = 0;
+		if (!empty($filter['keywords'])) {
+			$where[] = "c.content LIKE '%" . mysql_like_quote($filter['keywords']) . "%' ";
+		}
+	
+		$field = "SUM(IF(status < 2, 1, 0)) AS count, SUM(IF(status = 0, 1, 0)) AS waitcheck, SUM(IF(status = 1, 1, 0)) AS checked, SUM(IF(status = 2, 1, 0)) AS trash_msg, SUM(IF(status = 3, 1, 0)) as trashed_msg";
+		$com_count = $db_comment->comment_info($com_where, $field);
+		//未记录时，设置默认总数0
+		$com_count = array(
+				'count'			=> empty($com_count['count']) 		? 0 : $com_count['count'],
+				'waitcheck'		=> empty($com_count['waitcheck']) 	? 0 : $com_count['waitcheck'],
+				'checked'		=> empty($com_count['checked']) 	? 0 : $com_count['checked'],
+				'trash_msg'		=> empty($com_count['trash_msg']) 	? 0 : $com_count['trash_msg'],
+				'trashed_msg' 	=> empty($com_count['trashed_msg']) ? 0 : $com_count['trashed_msg'],
+		);
+	
+		$option = array(
+				'table'	=> $view,
+				'where'	=> $where
+		);
+		$count = $db_comment_view->comment_count($option);
+		$page = new ecjia_page($count, 10, 5);
+		/* 获取评论数据 */
+		$options = array(
+				'table'	=> $view,
+				'field'	=> $fields,
+				'where'	=> $where,
+				'order'	=> array('comment_id' => 'desc'),
+				'limit'	=> $page->limit(),
+		);
+		$data = $db_comment_view->comment_select($options);
+	
+		$arr = array();
+		if (!empty($data)) {
+			foreach ($data as $key => $row) {
+				/* 标记是否回复过 */
+				$row['add_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['add_time']);
+				$row['ip_area'] = RC_Ip::area($row['ip_address']);
+				if ($_GET['type'] == '2') {
+					$row['url'] = RC_Uri::url('article/admin/preview', array('id' => $row['id_value']));
+				} else {
+					$row['url'] = RC_Uri::url('goods/admin/preview', array('id' => $row['id_value']));
+				}
+				$arr[] = $row;
+			}
+		}
+		return array('item' => $arr, 'filter' => $filter, 'page' => $page->show(5), 'desc' => $page->page_desc(), 'com_count' => $com_count);
+	}
 }
 
 // end

@@ -67,9 +67,11 @@
                 var url 	   = $(this).attr('data-url');
                 var comment_id = $(this).attr('data-id');
                 var status	   = $(this).attr('data-status');
+                var list	   = $(this).attr('data-list');
                 var data = {
                 	reply_content: $("input[name='reply_content']").val(),
-                	comment_id: comment_id
+                	comment_id: comment_id,
+                	list	  : list
                 };
                 $.get(url, data, function (data) {
                 	ecjia.admin.showmessage(data);

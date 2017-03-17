@@ -91,6 +91,8 @@ return array(
 	'reply_success'			=> '评论回复成功',
 	'admin_goods_comment'	=> '平台-商品评论',
 	'check_trash_comment'	=> '查看回收站',
+	'store_goods_comment_list'	=> '店铺商品评论列表',
+	'store_goods_comment'	=> '店铺商品评论',
 	
 	'show_success'			=> '批准成功',
 	'valid_success'			=> '已成功设置为有效评论',

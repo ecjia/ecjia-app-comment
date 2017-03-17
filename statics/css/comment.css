@@ -51,6 +51,47 @@
 .img-style{
 	height:80px;
 }
+.store-total-comments{
+	float:right;
+	height:45px;
+	line-height:45px;
+	font-size:15px;
+	color:#666;
+}
+.store-goods_comment-storeinfo{
+	border:1px solid #ddd;
+	border-radius:4px;
+	height:130px;
+}
+.store-goods_comment-storeinfo .storeinfo{
+	height:110px;
+	margin:10px 0;
+}
+.store-goods_comment-storeinfo .store-logo{
+	margin-left:10px;
+	float:left;
+	clear:both;
+}
+.store-goods_comment-storeinfo .store-logo img {
+	width:100px;
+	height:100px;
+	margin-top:5px;
+}
+.comment-rank-info{
+	float:left;
+	margin-top:5px;
+	margin-left:20px;
+}
+.store-goods_comment-storeinfo .storeinfo .comment-rank-info .store-name{
+	font-size:17px;
+	font-weight:bold;
+}
+.common-p{
+	color:#666;
+}
+.rank-rate{
+	margin-left:12px;
+}
 .comment-config .control-group {
 	padding-left: 10%;
 }
