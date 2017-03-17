@@ -14,6 +14,7 @@ class comment_admin_menu_api extends Component_Event_Api {
         	ecjia_admin::make_admin_menu('03_article_comment', RC_Lang::get('comment::comment_manage.article_comment'), RC_Uri::url('comment/admin/init', 'type=2'), 2)->add_purview('comment_manage'),
         	ecjia_admin::make_admin_menu('02_comment_config', __('评论设置'), RC_Uri::url('comment/admin/config'), 3)->add_purview('comment_manage'),
             ecjia_admin::make_admin_menu('04_comment_trash', __('评论回收站'), RC_Uri::url('comment/admin/trash', array('list' => 2)), 4)->add_purview('comment_manage'),
+        	ecjia_admin::make_admin_menu('04_comment_trash', __('申诉列表'), RC_Uri::url('comment/appeal/init'), 5)->add_purview('appeal_manage'),
         );
         $menus->add_submenu($submenus);
         return $menus;
