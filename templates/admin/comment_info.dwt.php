@@ -25,7 +25,7 @@
     				<div class="panel-body">
     					<div class="comment-thumb">
     						{if $avatar_img}
-    		                	<img src="{RC_Upload::upload_url()}/{$avatar_img}" >
+    		                	<img src="{$avatar_img}" >
     		                {else}
     		                	<img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">
     		                {/if}
@@ -90,8 +90,8 @@
 			    <div class="reply-title">回复： </div>
     			<textarea class="span12 form-control" name="cat_desc" rows="6" cols="48" placeholder="回复内容"></textarea>
     			<div class="text-right" style="margin: 10px 0">
-					<input type="checkbox" name="is_show" id="" value="1" /><span>{'邮件通知'}</span>
-    			    <input type="text" style="margin-left: 20px;" name="zipcode" placeholder="电子邮箱" />
+					<input type="checkbox" name="is_ok" id="is_ok" value="1" /><span>{'邮件通知'}</span>
+    			    <input type="text" style="margin-left: 20px;" name="reply_email" value="{$comment_info.email}" placeholder="电子邮箱" />
     			</div>
 			</div>
 			<div class="control-group control-group-small">
@@ -111,7 +111,7 @@
 						<div class="accordion-inner">
 						    <div class="comment-thumb">
         						{if $shop_info.logo}
-        		                	<img src="{RC_Upload::upload_url()}/{$shop_logo}" >
+        		                	<img src="{$shop_info.logo_img}" >
         		                {else}
         		                	<img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">
         		                {/if}
