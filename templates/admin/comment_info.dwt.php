@@ -41,10 +41,8 @@
     		                	<img src="{RC_Upload::upload_url()}/{$list.file_path}">
     		                 <!-- {/foreach} -->
     					</div>
+    					{if $comment_info.status neq 3}
     					<div class="edit-list">
-							<a class="data-pjax" href='{url path="comment/admin/reply" args="comment_id={$comment.comment_id}"}'>
-								{t}回复{/t}
-							</a>&nbsp;|&nbsp;
 							<a class="data-pjax" href='{url path="comment/admin/reply" args="comment_id={$comment.comment_id}"}'>
 								{t}待审核{/t}
 							</a>&nbsp;|&nbsp;
@@ -52,8 +50,8 @@
 								{t}驳回{/t}
 							</a>&nbsp;|&nbsp;
 							<a class="ecjiafc-red toggle_view" href='{url path="comment/admin/check" args="comment_id={$comment.comment_id}{if $smarty.get.page}&page={$smarty.get.page}{/if}"}' data-msg="{t}您确定要将该用户[{$comment.user_name|default:{lang key='comment::comment_manage.anonymous'}}]的评论移至回收站吗？{/t}" data-status="{$smarty.get.status}" data-val="trashed_comment" >{t}移至回收站{/t}</a>
-							
 						</div>
+						{/if}
     	            </div>    
     			</div><br>
 			
@@ -135,7 +133,9 @@
         					       <span class="store-grade">100%</span>
         					   </div>
         					</div>
-						    <button class="btn btn-gebo" type="submit">{'进入店铺评价'}</button>
+        					{if $admin_info neq 0}
+						          <a href="{$store_url}" class="btn btn-gebo" type="submit">{'进入店铺评价'}</a>
+						    {/if}
 						</div>
 					</div>
 				</div>

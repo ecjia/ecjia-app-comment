@@ -393,7 +393,7 @@ class admin extends ecjia_admin {
             		->where('status', 0)
             		->take(4)
             		->get();
-		
+
 		/* 模板赋值 */
 		$this->assign('comment_info', $comment_info); 		//评论信息
 		$this->assign('replay_admin_list', $replay_admin_list); 		//管理员回复信息
@@ -413,6 +413,7 @@ class admin extends ecjia_admin {
 		$this->assign('ur_here', RC_Lang::get('comment::comment_manage.comment_info'));
 		$this->assign('action_link', array('text' => $here, 'href' => $url));
 		$this->assign('form_action', RC_Uri::url('comment/admin/action'));
+		$this->assign('store_url', RC_Uri::url('comment/admin/store_goods_comment_list', array('store_id' => $comment_info['store_id'], 'list' => 3)));
 		
 		$this->display('comment_info.dwt');
 	}
