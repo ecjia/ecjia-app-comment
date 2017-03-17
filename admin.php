@@ -378,12 +378,12 @@ class admin extends ecjia_admin {
 		$comment_pic_list = RC_DB::TABLE('term_attachment')->where('object_id', $comment_info['comment_id'])->select('file_path')->get();
 
 		$shop_info['logo'] = RC_DB::TABLE('merchants_config')
-                		->where('store_id', $staff_info['store_id'])
+                		->where('store_id', $comment_info['store_id'])
                 		->where('code', 'shop_logo')
                 		->pluck('value');
 
 		$shop_info['name'] = RC_DB::TABLE('store_franchisee')
-                		->where('store_id', $staff_info['store_id'])
+                		->where('store_id', $comment_info['store_id'])
                 		->pluck('merchants_name');
 
 		$shop_info['amount'] = RC_DB::TABLE('comment')->where('store_id', $comment_info['store_id'])->count();
@@ -402,6 +402,34 @@ class admin extends ecjia_admin {
             		->take(4)
             		->get();
 
+		//计算好评率、综合评分
+		$shop_info['comment_number'] = RC_DB::table('comment')
+                		      ->select(RC_DB::raw('count(*) as "all"'), RC_DB::raw('SUM(IF(comment_rank > 3, 1, 0)) as "good"'))
+                		      ->where('status', '<>', 3)
+                		      ->where('parent_id', 0)
+                		      ->where('comment_type', 0)
+                		      ->where('store_id', $comment_info['store_id'])
+                		      ->first();
+		
+		if ($shop_info['comment_number']['all'] != 0) {
+		    if ($shop_info['comment_number']['good'] == 0) {
+		        $shop_info['comment_percent'] = 100;
+		    } else {
+		        $shop_info['comment_percent'] = round(($shop_info['comment_number']['good'] / $shop_info['comment_number']['all']) * 100);
+		    }
+		} else {
+		    $shop_info['comment_percent'] = 100;
+		}
+		
+		if ($shop_info['comment_percent'] == '100') {
+		    $shop_info['composite'] = 5;
+		} elseif (($shop_info['comment_percent'] >= 95) && ($shop_info['comment_percent'] < 100)) {
+		    $shop_info['composite'] = 4;
+		} else {
+		    $shop_info['composite'] = 3;
+		}
+
+		
 		/* 模板赋值 */
 		$this->assign('comment_info', $comment_info); 		//评论信息
 		$this->assign('replay_admin_list', $replay_admin_list); 		//管理员回复信息
@@ -413,7 +441,6 @@ class admin extends ecjia_admin {
 		$this->assign('shop_info', $shop_info);     //店铺信息
 		$this->assign('nochecked', $nochecked);     
 		$this->assign('other_comment', $other_comment);
-		
 		
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here($here, $url));
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('comment::comment_manage.comment_info')));

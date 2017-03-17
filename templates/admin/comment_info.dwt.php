@@ -122,7 +122,7 @@
         					<div class="comment-goods" style="font-size: 17px;">
         					   <div class="goods_type">
     					  	       <label class="control-label store-attr">综合评分：</label>
-    					  	       <span class="store-grade">{section name=loop loop=$comment_info.comment_rank}<i class="fontello-icon-star" style="color:#FF9933;"></i>{/section}</span>
+    					  	       <span class="store-grade">{section name=loop loop=$shop_info.composite}<i class="fontello-icon-star" style="color:#FF9933;"></i>{/section}</span>
         					   </div>
         					   <div class="goods_type">
         					       <label class="control-label store-attr">全部评论： </label>
@@ -130,10 +130,10 @@
         					   </div>
         					   <div class="goods_type">
         					       <label class="control-label store-attr">好评率： </label>
-        					       <span class="store-grade">100%</span>
+        					       <span class="store-grade">{$shop_info.comment_percent}%</span>
         					   </div>
         					</div>
-        					{if $admin_info neq 0}
+        					{if $comment_info.store_id neq 0}
 						          <a href="{$store_url}" class="btn btn-gebo" type="submit">{'进入店铺评价'}</a>
 						    {/if}
 						</div>
@@ -146,7 +146,7 @@
 					<div class="accordion-heading">
 						<a class="accordion-toggle collapsed move-mod-head" data-toggle="collapse" data-target="#goods_info_area_tvimg">
 							<strong>
-							{'该用户其他待审核评价'}
+							{'该商户其他待审核评价'}
 						    <span class="badge badge-info">{$nochecked}</span>
 							</strong>
 						</a>
@@ -157,7 +157,7 @@
     						          <div class="formSep">
                     		          <p>{$list.user_name}
                     		              <span style="float: right">
-                    		                  <a href='{url path="comment/mh_comment/comment_detail" args="comment_id={$list.comment_id}"}'>查看及回复</a>
+                    		                  <a href='{url path="comment/admin/reply" args="comment_id={$list.comment_id}"}'>查看及回复</a>
                     		              </span>
                     		          </p>
                     		          <p>{$list.content}</p>
@@ -169,7 +169,7 @@
                 		          </div>
                 	          <!-- {/foreach} -->
                 	          {if $other_comment|@count neq 0}
-                	           	  <p class="text-right"><a href='{url path="comment/mh_comment/goods_comment_list" args="goods_id={$comment_info.id_value}"}'>查看更多</a></p>
+                	           	  <p class="text-right"><a href='{url path="comment/admin/reply" args="comment_id={$list.comment_id}"}'>查看更多</a></p>
                 			  {/if} 
 						</div>
 					</div>
