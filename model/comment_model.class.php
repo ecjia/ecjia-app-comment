@@ -30,14 +30,9 @@ class comment_model extends Component_Model_Model {
 	    if (is_array($where)) {
     	    foreach ($where as $key => $val) {
     	        $this->where($key, $val);
-    	        if (is_array($val)) {
-    	            foreach ($val as $k => $v) {
-    	                $this->where($key, $k, $v);
-    	            }
-    	        }
     	    }
         }
-	    return $this->field($field)->find();
+	    return $this->find();
 	}
 	
 	public function comment_delete($where, $in=false) {
