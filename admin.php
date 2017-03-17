@@ -757,7 +757,14 @@ class admin extends ecjia_admin {
 		'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:商品评论" target="_blank">'.RC_Lang::get('comment::comment_manage.about_goods_comment_list').'</a>') . '</p>'
 				);
 		$_GET['list'] = !empty($_GET['list']) ? $_GET['list'] : 3;		
-		$store_id = isset($_GET['store_id']) ? $_GET['store_id'] : 0;		
+		$store_id = isset($_GET['store_id']) ? $_GET['store_id'] : 0;	
+
+		$shop_logo = RC_DB::table('merchants_config')->where(RC_DB::raw('store_id'), $store_id)->where(RC_DB::raw('code'), 'shop_logo')->pluck('value');
+		if (!empty($shop_logo)) {
+			$shop_logo = RC_Upload::upload_url().'/'.$shop_logo;
+		} else {
+			$shop_logo = RC_Uri::admin_url('statics/images/nopic.png');
+		}
 		$list_storeinfo = array();
 		$list_storeinfo['comment_number'] = RC_DB::table('comment')
 		->select(RC_DB::raw('count(*) as "all"'),
@@ -797,6 +804,7 @@ class admin extends ecjia_admin {
 		$this->assign('comment', $comment);
 		$this->assign('total_count', $total_count);
 		$this->assign('merchants_name', $merchants_name);
+		$this->assign('shop_logo', $shop_logo);
 		
 		$this->assign('select_status', $_GET['select_status']);
 		$this->assign('select_rank', $_GET['select_rank']);
@@ -886,8 +894,6 @@ class admin extends ecjia_admin {
 		}
 		return array('item' => $list, 'filter' => $filter, 'page' => $page->show(2), 'desc' => $page->page_desc());
 	}
-	
-	
 
 	/**
 	 * 获取评论列表

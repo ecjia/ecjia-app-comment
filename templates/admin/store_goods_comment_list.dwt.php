@@ -20,7 +20,7 @@
 <div class="store-goods_comment-storeinfo">
 	<div class="storeinfo">
 		<div class="store-logo">
-	    	<a href="javascript:;"><img src="http://10.10.10.47/o2o/content/uploads/images/201703/thumb_img/1175_G_1489698575612.png" width="" height=""></a>
+	    	<a href="javascript:;"><img src="{$shop_logo}" width="" height=""></a>
 	    </div>
 	    <div class="comment-rank-info">
 	    	<p class="store-name">{$merchants_name}</p>
