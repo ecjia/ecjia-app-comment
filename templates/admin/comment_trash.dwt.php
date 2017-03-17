@@ -60,11 +60,9 @@
 						<div>{lang key='comment::comment_manage.comment_on'}&nbsp;&nbsp;{$comment.add_time}</div>
 						{$comment.content|truncate:100|escape:html}
 						{if $comment.has_image eq 1}
-    						<div class="img-style">
-    						    <img class="thumbnail" style="float:left;width:78px;height:78px;margin-right:8px;" alt="" src="http://10.10.10.47/o2o/content/system/statics/images/nopic.png">
-    							<img class="thumbnail" style="float:left;width:78px;height:78px;margin-right:8px;" alt="" src="http://10.10.10.47/o2o/content/system/statics/images/nopic.png">
-    							<img class="thumbnail" style="float:left;width:78px;height:78px;margin-right:8px;" alt="" src="http://10.10.10.47/o2o/content/system/statics/images/nopic.png">
-    						</div>
+						    <!-- {foreach from=$comment.imgs item=imgs} -->
+							     <img class="thumbnail" style="float:left;width:78px;height:78px;margin-right:8px;" alt="" src="">
+						    <!-- {/foreach} -->
 						{/if}
 						<div class="edit-list">
 								<a class="data-pjax" href='{url path="comment/admin/reply" args="comment_id={$comment.comment_id}"}'>
