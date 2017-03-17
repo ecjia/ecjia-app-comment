@@ -1,4 +1,5 @@
 <?php
+use Royalcms\Component\FormBuilder\Fields\RepeatedType;
 /**
  * ECJIA 用户评论管理程序
 */
@@ -290,24 +291,27 @@ class admin extends ecjia_admin {
 		$where 			= array();
 		
 		$where['comment_id'] = !empty($_GET['comment_id']) ? $_GET['comment_id'] : 0;
-		$where['status'] = array('lt' => 2);
-		$comment_info = $this->db_comment->comment_info($where);
+
+		$comment_info = RC_DB::TABLE('comment')->where('comment_id', $where['comment_id'])->first();
+
 		if (empty($comment_info)) {
 			return $this->showmessage(RC_Lang::get('comment::comment_manage.no_comment_info'), ecjia::MSGTYPE_HTML | ecjia::MSGSTAT_ERROR );
 		}
-		
 		/* 获取评论详细信息并进行字符处理 */
 		$comment_info['content']  = str_replace('\r\n', '<br />', htmlspecialchars($comment_info['content']));
 		$comment_info['content']  = nl2br(str_replace('\n', '<br />', $comment_info['content']));
 		$comment_info['add_time'] = RC_Time::local_date(ecjia::config('time_format'), $comment_info['add_time']);
-		
+
 		/* 获得评论回复内容 */
-		$reply_info = $this->db_comment->comment_info(array('parent_id' => $_GET['id']));
+		$reply_info = RC_DB::TABLE('comment_reply')->where('comment_id', $where['comment_id'])
+            		->select('content', 'add_time', 'user_id')
+            		->get();
+
+		
 		if (!empty($reply_info)) {
 			$reply_info['content']  = nl2br(htmlspecialchars($reply_info['content']));
 			$reply_info['add_time'] = RC_Time::local_date(ecjia::config('time_format'), $reply_info['add_time']);
 		}
-		
 		/* 取得评论的对象(文章或者商品) */
 		if ($comment_info['comment_type'] == '0') {
 			ecjia_screen::get_current_screen()->add_help_tab(array(
@@ -346,34 +350,62 @@ class admin extends ecjia_admin {
 // 			$this->assign('id_value', $id_value['title']); //评论的对象
 		}
 
-		/* 获取管理员的用户名和Email地址 */
-        $admin_email = is_numeric($_SESSION['email']) ? '' : $_SESSION['email'];
-		$admin_info = array('user_name' => $_SESSION['admin_name'], 'email' => $admin_email);
-		
 		/*获取用户头像*/
 		$avatar_img = RC_DB::TABLE('users')->where('user_id', $comment_info['user_id'])->pluck('avatar_img');
 
 		/* 管理员回复内容*/
 		$replay_admin_list = RC_DB::TABLE('comment_reply')
                 		->where('comment_id', $comment_info['comment_id'])
-                		->where('user_id', $comment_info['user_id'])
                 		->select('content', 'add_time', 'user_id')
                 		->get();
+		
 		foreach ($replay_admin_list as $key => $val) {
-		    $replay_admin_list[$key]['add_time_new'] = RC_Time::local_date(ecjia::config('time_format'), $val['add_time']);
-		    $staff_info = RC_DB::TABLE('staff_user')->where('user_id', $val['user_id'])->select('name', 'avatar')->first();
-		    $replay_admin_list[$key]['staff_name'] = $staff_info['name'];
+		    $replay_admin_list[$key]['add_time_new'] = RC_Time::local_date(ecjia::config('time_format'), $val['add_time']);   
+		    $staff_info = RC_DB::TABLE('staff_user')->where('user_id', $val['user_id'])->select('name', 'avatar', 'store_id')->first(); //管理员信息
+		    $replay_admin_list[$key]['staff_name'] = $staff_info['name'];       
 		    $replay_admin_list[$key]['staff_img']  =  RC_Upload::upload_url($staff_info['avatar']);
 		};
 
+		//获取评论图片
+		$comment_pic_list = RC_DB::TABLE('term_attachment')->where('object_id', $comment_info['comment_id'])->select('file_path')->get();
+
+		$shop_info['logo'] = RC_DB::TABLE('merchants_config')
+                		->where('store_id', $staff_info['store_id'])
+                		->where('code', 'shop_logo')
+                		->pluck('value');
+
+		$shop_info['name'] = RC_DB::TABLE('store_franchisee')
+                		->where('store_id', $staff_info['store_id'])
+                		->pluck('merchants_name');
+
+		$shop_info['amount'] = RC_DB::TABLE('comment')->where('store_id', $comment_info['store_id'])->count();
+
+		//统计该用户其他待审核评论
+		$nochecked = RC_DB::TABLE('comment')
+		              ->where('store_id', $comment_info['store_id'])
+		              ->where('comment_id', '!=', $comment_info['comment_id'])
+		              ->where('status', 0)
+		              ->count();
+
+		$other_comment = RC_DB::TABLE('comment')
+            		->where('store_id', $comment_info['store_id'])
+            		->where('comment_id', '!=', $comment_info['comment_id'])
+            		->where('status', 0)
+            		->take(4)
+            		->get();
+		
 		/* 模板赋值 */
 		$this->assign('comment_info', $comment_info); 		//评论信息
 		$this->assign('replay_admin_list', $replay_admin_list); 		//管理员回复信息
 		$this->assign('avatar_img', $avatar_img);     //用户头像
-		$this->assign('admin_info', $admin_info);   //管理员信息
+		$this->assign('admin_info', $staff_info);   //管理员信息
 		$this->assign('reply_info', $reply_info);   //回复的内容
 		$this->assign('admin_ip', $admin_ip);		//当前管理员IP获取
-
+		$this->assign('comment_pic_list', $comment_pic_list);     //评论图片
+		$this->assign('shop_info', $shop_info);     //店铺信息
+		$this->assign('nochecked', $nochecked);     
+		$this->assign('other_comment', $other_comment);
+		
 		
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here($here, $url));
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('comment::comment_manage.comment_info')));

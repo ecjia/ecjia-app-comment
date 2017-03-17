@@ -38,7 +38,7 @@
     					  	<p>商品评分：{section name=loop loop=$comment_info.comment_rank}<i class="fontello-icon-star" style="color:#FF9933;"></i>{/section}</p>
     		                <p>{$comment_info.content}</p>
     		                 <!-- {foreach from=$comment_pic_list item=list} -->
-    		                	<img src="">
+    		                	<img src="{RC_Upload::upload_url()}/{$list.file_path}">
     		                 <!-- {/foreach} -->
     					</div>
     					<div class="edit-list">
@@ -112,14 +112,14 @@
 					<div class="accordion-body in in_visable collapse" id="goods_info_area_brand">
 						<div class="accordion-inner">
 						    <div class="comment-thumb">
-        						{if $avatar_img}
-        		                	<img src="{RC_Upload::upload_url()}/{$avatar_img}" >
+        						{if $shop_info.logo}
+        		                	<img src="{RC_Upload::upload_url()}/{$shop_logo}" >
         		                {else}
         		                	<img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">
         		                {/if}
         					</div>
         					<div class="comment-store-info">
-        						{if $comment_info.is_anonymous eq 1 }{'匿名发表'}{else}{$comment_info.user_name}{/if}
+        						{$shop_info.name}
         					</div>
         					<div class="comment-goods" style="font-size: 17px;">
         					   <div class="goods_type">
@@ -128,7 +128,7 @@
         					   </div>
         					   <div class="goods_type">
         					       <label class="control-label store-attr">全部评论： </label>
-        					       <span class="store-grade all-comment">100</span>
+        					       <span class="store-grade all-comment">{$shop_info.amount}</span>
         					   </div>
         					   <div class="goods_type">
         					       <label class="control-label store-attr">好评率： </label>
@@ -145,23 +145,32 @@
 				<div class="accordion-group">
 					<div class="accordion-heading">
 						<a class="accordion-toggle collapsed move-mod-head" data-toggle="collapse" data-target="#goods_info_area_tvimg">
-							<strong>{'该用户其他待审核评价'}</strong>
+							<strong>
+							{'该用户其他待审核评价'}
+						    <span class="badge badge-info">{$nochecked}</span>
+							</strong>
 						</a>
 					</div>
 					<div class="accordion-body in collapse" id="goods_info_area_tvimg">
 						<div class="accordion-inner">
-						      <div class="formSep">
-                		         <p>用户名
-                		              <span style="float: right">
-                		                  <a href='{url path="comment/mh_comment/comment_detail" args="comment_id={$list.comment_id}"}'>查看及回复</a>
-                		              </span>
-                		          </p>
-                		          <p>这是评论内容</p>
-                		          <p class="text-right"><i class="fontello-icon-star" style="color:#FF9933;"></i></p>
-                    	          {if $other_comment|@count neq 0}
-                    	           	  <p class="text-right"><a href='{url path="comment/mh_comment/goods_comment_list" args="goods_id={$comment_info.id_value}"}'>查看更多</a></p>
-                    			  {/if} 
-                			 </div>
+						      <!-- {foreach from=$other_comment item=list} -->
+    						          <div class="formSep">
+                    		          <p>{$list.user_name}
+                    		              <span style="float: right">
+                    		                  <a href='{url path="comment/mh_comment/comment_detail" args="comment_id={$list.comment_id}"}'>查看及回复</a>
+                    		              </span>
+                    		          </p>
+                    		          <p>{$list.content}</p>
+                    		          <p class="text-right">{section name=loop loop=$list.comment_rank}<i class="fontello-icon-star" style="color:#FF9933;"></i>{/section}</p>
+                    		          </div>
+            		          <!-- {foreachelse} -->
+                		          <div class="text-center">
+                		          		暂无其他相关评论
+                		          </div>
+                	          <!-- {/foreach} -->
+                	          {if $other_comment|@count neq 0}
+                	           	  <p class="text-right"><a href='{url path="comment/mh_comment/goods_comment_list" args="goods_id={$comment_info.id_value}"}'>查看更多</a></p>
+                			  {/if} 
 						</div>
 					</div>
 				</div>
