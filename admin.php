@@ -359,7 +359,7 @@ class admin extends ecjia_admin {
 		}
 
 		/*获取用户头像*/
-		$avatar_img = RC_DB::TABLE('users')->where('user_id', $comment_info['user_id'])->pluck('avatar_img');
+		$avatar_img = RC_Upload::upload_url().'/'.RC_DB::TABLE('users')->where('user_id', $comment_info['user_id'])->pluck('avatar_img');
 
 		/* 管理员回复内容*/
 		$replay_admin_list = RC_DB::TABLE('comment_reply')
@@ -388,6 +388,7 @@ class admin extends ecjia_admin {
 
 		$shop_info['amount'] = RC_DB::TABLE('comment')->where('store_id', $comment_info['store_id'])->count();
 
+		$shop_info['logo_img']  = RC_Upload::upload_url().'/'.$shop_info['logo'];
 		//统计该用户其他待审核评论
 		$nochecked = RC_DB::TABLE('comment')
 		              ->where('store_id', $comment_info['store_id'])
@@ -429,7 +430,6 @@ class admin extends ecjia_admin {
 		    $shop_info['composite'] = 3;
 		}
 
-		
 		/* 模板赋值 */
 		$this->assign('comment_info', $comment_info); 		//评论信息
 		$this->assign('replay_admin_list', $replay_admin_list); 		//管理员回复信息
