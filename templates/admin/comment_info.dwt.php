@@ -3,6 +3,7 @@
 
 <!-- {block name="footer"} -->
 <script type="text/javascript">
+    ecjia.admin.comment_manage.init();
 </script>
 <!-- {/block} -->
 
@@ -49,7 +50,8 @@
 							<a class="data-pjax" href='{url path="comment/admin/reply" args="comment_id={$comment.comment_id}"}'>
 								{t}驳回{/t}
 							</a>&nbsp;|&nbsp;
-							<a class="ecjiafc-red toggle_view" href='{url path="comment/admin/check" args="comment_id={$comment.comment_id}{if $smarty.get.page}&page={$smarty.get.page}{/if}"}' data-msg="{t}您确定要将该用户[{$comment.user_name|default:{lang key='comment::comment_manage.anonymous'}}]的评论移至回收站吗？{/t}" data-status="{$smarty.get.status}" data-val="trashed_comment" >{t}移至回收站{/t}</a>
+							<a class="ecjiafc-red toggle_view" href='{url path="comment/admin/check" args="comment_id={$comment_info.comment_id}{if $smarty.get.page}&page={$smarty.get.page}{/if}"}' data-msg="{t}您确定要将该用户[{$comment_info.user_name|default:{lang key='comment::comment_manage.anonymous'}}]的评论移至回收站吗？{/t}" data-status="{$smarty.get.status}" data-val="trashed_comment" >{t}移至回收站{/t}</a>
+							
 						</div>
 						{/if}
     	            </div>    
