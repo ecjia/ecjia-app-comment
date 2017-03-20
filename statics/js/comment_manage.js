@@ -6,6 +6,7 @@
             app.comment_manage.toggle_view();
             app.comment_manage.quick_reply();
             app.comment_manage.set_comment_config();
+            app.comment_manage.check_pending();
         },
  
         list_search: function () {
@@ -30,6 +31,39 @@
         
         toggle_view: function (option) {
             $('.toggle_view').on('click', function (e) {
+                e.preventDefault();
+                var $this = $(this);
+                var url = $this.attr('href');
+                var val = $this.attr('data-val') || 'allow';
+                var status = $this.attr('data-status') || '';
+                var data = {
+                    check: val,
+                    status: status
+                }
+                var msg = $this.attr("data-msg");
+                if (msg) {
+                    smoke.confirm(msg, function (e) {
+                        if (e) {
+                            $.post(url, data, function (data) {
+                            	console.log(data);
+                            	ecjia.admin.showmessage(data);
+                            }, 'json');
+                        }
+                    }, {
+                        ok: js_lang.ok,
+                        cancel: js_lang.cancel
+                    });
+                } else {
+                    $.post(url, data, function (data) {
+                    	console.log(data);
+                    	ecjia.admin.showmessage(data);
+                    }, 'json');
+                }
+            });
+        },
+        
+        check_pending: function (option) {
+            $('.check_pending').on('click', function (e) {
                 e.preventDefault();
                 var $this = $(this);
                 var url = $this.attr('href');

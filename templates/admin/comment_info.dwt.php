@@ -44,7 +44,7 @@
     					</div>
     					{if $comment_info.status neq 3}
     					<div class="edit-list">
-							<a class="data-pjax" href='{url path="comment/admin/reply" args="comment_id={$comment.comment_id}"}'>
+							<a class="check_pending" href='{url path="comment/admin/check" args="comment_id={$comment_info.comment_id}{if $smarty.get.page}&page={$smarty.get.page}{/if}"}' data-msg="{t}您确定要将该用户[{$comment_info.user_name|default:{lang key='comment::comment_manage.anonymous'}}]的评论设为待审核吗？{/t}" data-status="{$smarty.get.status}" data-val="forbid" >
 								{t}待审核{/t}
 							</a>&nbsp;|&nbsp;
 							<a class="data-pjax" href='{url path="comment/admin/reply" args="comment_id={$comment.comment_id}"}'>
