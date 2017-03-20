@@ -63,6 +63,12 @@ class mh_appeal extends ecjia_merchant {
 		RC_Script::enqueue_script('bootstrap-fileupload', RC_App::apps_url('statics/bootstrap-fileupload/bootstrap-fileupload.js', __FILE__), array(), false, true);
 		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('申诉管理', RC_Uri::url('comment/mh_appeal/init')));
 		ecjia_merchant_screen::get_current_screen()->set_parentage('comment', 'comment/mh_appeal.php');
+		
+		RC_Script::enqueue_script('diyUpload', RC_App::apps_url('statics/js/diyUpload.js', __FILE__));
+		RC_Script::enqueue_script('webuploader.html5only.min', RC_App::apps_url('statics/js/webuploader.html5only.min.js', __FILE__));
+		RC_Style::enqueue_style('diyUpload', RC_App::apps_url('statics/css/diyUpload.css', __FILE__));
+		RC_Style::enqueue_style('webuploader', RC_App::apps_url('statics/css/webuploader.css', __FILE__));
+		
 	}
 
 	/**
