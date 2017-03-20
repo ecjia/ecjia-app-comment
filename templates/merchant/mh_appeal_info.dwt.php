@@ -4,7 +4,24 @@
 <!-- {block name="footer"} -->
 <script type="text/javascript">
 	ecjia.merchant.appeal_info.init();
+	
+	/*
+	* 服务器地址,成功返回,失败返回参数格式依照jquery.ajax习惯;
+	* 其他参数同WebUploader
+	*/
+	$('#test').diyUpload({
+		url:'server/fileupload.php',
+		success:function(data) {
+			console.info(data);
+		},
+		error:function(err) {
+			console.info(err);	
+		}
+	});
+	
 </script>
+<style>
+</style>
 <!-- {/block} -->
 <!-- {block name="home-content"} -->
 
@@ -54,13 +71,10 @@
 						<textarea class="form-control" id="appeal_content" name="appeal_content" placeholder="请输入申诉理由" ></textarea>
 						<br>
 						
-						<div class="appeal-goods">
-						
+				         <div id="box">
+							<div id="test" ></div>
 						</div>
-                        <div class="">
-                            <input type="file" class="default" name="apple_img" id="apple_img"/>
-                        </div>
-						<br>
+                        
 						<input type="hidden" name="comment_id" value="{$comment_info.comment_id}" />
 						<button class="btn btn-info" type="submit">提交申诉</button>
 					</form>
@@ -69,4 +83,5 @@
 		</div>
 	</div>
 </div>
+
 <!-- {/block} -->
