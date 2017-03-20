@@ -40,6 +40,10 @@ class appeal extends ecjia_admin {
 	public function init() {
 		$this->admin_priv('appeal_manage');
 		
+		ecjia_screen::get_current_screen()->remove_last_nav_here();
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('申诉列表'));
+		$this->assign('ur_here', '申诉列表');
+		
 		$this->display('appeal_list.dwt');		
 	}
 }
