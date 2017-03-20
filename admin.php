@@ -809,6 +809,7 @@ class admin extends ecjia_admin {
 		$this->assign('select_status', $_GET['select_status']);
 		$this->assign('select_rank', $_GET['select_rank']);
 		$this->assign('select_img', $_GET['select_img']);
+		$this->assign('store_id', $store_id);
 	
 		$this->assign('form_action', RC_Uri::url('comment/admin/batch', array('list' => 3)));
 		$this->assign('form_search', RC_Uri::url('comment/admin/store_goods_comment_list', array('list' => 3)));
@@ -859,10 +860,10 @@ class admin extends ecjia_admin {
 			$db_comment->where(RC_DB::raw('c.has_image'), '=', $_GET['has_img']);
 			$filter['has_img'] = $_GET['has_img'];
 		}
-	
+		
 		$count = $db_comment->count();
 		$filter['current_count'] = $count;
-		
+				
 		$page = new ecjia_page($count, 10, 5);
 		$data = $db_comment
 		->leftJoin('store_franchisee as sf', RC_DB::raw('c.store_id'), '=', RC_DB::raw('sf.store_id'))
