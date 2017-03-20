@@ -36,21 +36,21 @@
 		<li><span>全部</span></li>
 		<!-- {if ($select_status)} -->
 		<li class="hide-status"><span>></span></li>
-		<li class="hide-status"><a class="data-pjax btn no-show-status" href='{url path="comment/admin/store_goods_comment_list" args="{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $select_rank}&select_rank={$select_rank}{/if} {if $select_img}&select_img={$select_img}{/if}"}' style="padding:3px 5px;">
+		<li class="hide-status"><a class="data-pjax btn no-show-status" href='{url path="comment/admin/store_goods_comment_list" args="store_id={$store_id}{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $select_rank}&select_rank={$select_rank}{/if}{if $select_img}&select_img={$select_img}{/if}"}' style="padding:3px 5px;">
 			{if $smarty.get.status eq 0}待审核{else}已批准{/if}
 			<i class=" close-status fontello-icon-cancel cursor_pointer"></i></a>
 		</li>
 		<!-- {/if} -->
 		<!-- {if $select_rank} -->
 		<li class="hide-rank"><span>></span></li>
-		<li class="hide-rank"><a class="data-pjax btn no-show-rank" href='{url path="comment/admin/store_goods_comment_list" args="{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $select_status}&select_status={$select_status}{/if}{if $select_img}&select_img={$select_img}{/if}"}' style="padding:3px 5px;">
+		<li class="hide-rank"><a class="data-pjax btn no-show-rank" href='{url path="comment/admin/store_goods_comment_list" args="store_id={$store_id}{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $select_status}&select_status={$select_status}{/if}{if $select_img}&select_img={$select_img}{/if}"}' style="padding:3px 5px;">
 			{if $smarty.get.rank eq 1} 好评 {elseif $smarty.get.rank eq 2} 中评 {elseif $smarty.get.rank eq 3}差评{/if}
 			<i class=" close-status fontello-icon-cancel cursor_pointer"></i></a>
 		</li>
 		<!-- {/if} -->
 		<!-- {if $select_img} -->
 		<li class="hide-img"><span>></span></li>
-		<li class="hide-img"><a class="data-pjax btn no-show-img" href='{url path="comment/admin/store_goods_comment_list" args="{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $select_rank}&select_rank={$select_rank}{/if}{if $select_status}&select_status={$select_status}{/if}"}' style="padding:3px 5px;">{if $smarty.get.has_img eq 1}有图 {else}无图{/if}
+		<li class="hide-img"><a class="data-pjax btn no-show-img" href='{url path="comment/admin/store_goods_comment_list" args="store_id={$store_id}{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $select_rank}&select_rank={$select_rank}{/if}{if $select_status}&select_status={$select_status}{/if}"}' style="padding:3px 5px;">{if $smarty.get.has_img eq 1}有图 {else}无图{/if}
 			<i class=" close-status fontello-icon-cancel cursor_pointer"></i></a>
 		</li>
 		<!-- {/if} -->
@@ -62,23 +62,23 @@
 		<tr>
 			<td class="status-td" style="text-align:right; width:9%;">审核状态：</td>
 			<td>
-				<div class="status-distance"><a class="data-pjax" href='{url path="comment/admin/store_goods_comment_list" args="status=0&select_status=1{if $smarty.get.select_rank}&select_rank={$smarty.get.select_rank}{/if}{if $smarty.get.select_img}&select_img={$smarty.get.select_img}{/if}{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}"}'>待审核</a></div>
-				<div class="status-distance"><a class="data-pjax" href='{url path="comment/admin/store_goods_comment_list" args="status=1&select_status=1{if $smarty.get.select_rank}&select_rank={$smarty.get.select_rank}{/if}{if $smarty.get.select_img}&select_img={$smarty.get.select_img}{/if}{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}"}'>已批准</a></div>
+				<div class="status-distance"><a class="data-pjax" href='{url path="comment/admin/store_goods_comment_list" args="store_id={$store_id}&status=0&select_status=1{if $smarty.get.select_rank}&select_rank={$smarty.get.select_rank}{/if}{if $smarty.get.select_img}&select_img={$smarty.get.select_img}{/if}{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}"}'>待审核</a></div>
+				<div class="status-distance"><a class="data-pjax" href='{url path="comment/admin/store_goods_comment_list" args="store_id={$store_id}&status=1&select_status=1{if $smarty.get.select_rank}&select_rank={$smarty.get.select_rank}{/if}{if $smarty.get.select_img}&select_img={$smarty.get.select_img}{/if}{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}"}'>已批准</a></div>
 			</td>
 		</tr>
 		<tr>
 			<td class="status-td" style="text-align:right; width:9%;">评分级别：</td>
 			<td>
-				<div class="status-distance"><a class="data-pjax" href='{url path="comment/admin/store_goods_comment_list" args="rank=1&select_rank=2{if $smarty.get.select_status}&select_status={$smarty.get.select_status}{/if}{if $smarty.get.select_img}&select_img={$smarty.get.select_img}{/if}{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}"}'>好评</a></div>
-				<div class="status-distance"><a class="data-pjax" href='{url path="comment/admin/store_goods_comment_list" args="rank=2&select_rank=2{if $smarty.get.select_status}&select_status={$smarty.get.select_status}{/if}{if $smarty.get.select_img}&select_img={$smarty.get.select_img}{/if}{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}"}'>中评</a></div>
-				<div class="status-distance"><a class="data-pjax" href='{url path="comment/admin/store_goods_comment_list" args="rank=3&select_rank=2{if $smarty.get.select_status}&select_status={$smarty.get.select_status}{/if}{if $smarty.get.select_img}&select_img={$smarty.get.select_img}{/if}{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}"}'>差评</a></div>
+				<div class="status-distance"><a class="data-pjax" href='{url path="comment/admin/store_goods_comment_list" args="store_id={$store_id}&rank=1&select_rank=2{if $smarty.get.select_status}&select_status={$smarty.get.select_status}{/if}{if $smarty.get.select_img}&select_img={$smarty.get.select_img}{/if}{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}"}'>好评</a></div>
+				<div class="status-distance"><a class="data-pjax" href='{url path="comment/admin/store_goods_comment_list" args="store_id={$store_id}&rank=2&select_rank=2{if $smarty.get.select_status}&select_status={$smarty.get.select_status}{/if}{if $smarty.get.select_img}&select_img={$smarty.get.select_img}{/if}{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}"}'>中评</a></div>
+				<div class="status-distance"><a class="data-pjax" href='{url path="comment/admin/store_goods_comment_list" args="store_id={$store_id}&rank=3&select_rank=2{if $smarty.get.select_status}&select_status={$smarty.get.select_status}{/if}{if $smarty.get.select_img}&select_img={$smarty.get.select_img}{/if}{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}"}'>差评</a></div>
 			</td>
 		</tr>
 		<tr>
 			<td class="status-td" style="text-align:right; width:9%;">有无晒图：</td>
 			<td>
-				<div class="status-distance"><a class="data-pjax" href='{url path="comment/admin/store_goods_comment_list" args="has_img=1&select_img=3{if $smarty.get.select_status}&select_status={$smarty.get.select_status}{/if}{if $smarty.get.select_rank}&select_rank={$smarty.get.select_rank}{/if}{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}"}'>有</a></div>
-				<div class="status-distance"><a class="data-pjax" href='{url path="comment/admin/store_goods_comment_list" args="has_img=0&select_img=3{if $smarty.get.select_status}&select_status={$smarty.get.select_status}{/if}{if $smarty.get.select_rank}&select_rank={$smarty.get.select_rank}{/if}{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}"}'>无</a></div>
+				<div class="status-distance"><a class="data-pjax" href='{url path="comment/admin/store_goods_comment_list" args="store_id={$store_id}&has_img=1&select_img=3{if $smarty.get.select_status}&select_status={$smarty.get.select_status}{/if}{if $smarty.get.select_rank}&select_rank={$smarty.get.select_rank}{/if}{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}"}'>有</a></div>
+				<div class="status-distance"><a class="data-pjax" href='{url path="comment/admin/store_goods_comment_list" args="store_id={$store_id}&has_img=0&select_img=3{if $smarty.get.select_status}&select_status={$smarty.get.select_status}{/if}{if $smarty.get.select_rank}&select_rank={$smarty.get.select_rank}{/if}{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}"}'>无</a></div>
 			</td>
 		</tr>
 	</table>
@@ -100,7 +100,7 @@
 		</ul>
 	</div>
 	<div class="choose_list f_r" >
-		<form class="f_r form-inline" action="{RC_Uri::url('comment/admin/store_goods_comment_list')}{if $comment_list.filter.status neq null}&status={$comment_list.filter.status}{/if}{if $comment_list.filter.has_img neq null}&has_img={$comment_list.filter.has_img}{/if}{if $smarty.get.rank}&rank={$smarty.get.rank}{/if}{if $select_status}&select_status={$select_status}{/if}{if $select_rank}&select_rank={$select_rank}{/if}{if $select_img}&select_img={$select_img}{/if}"  method="post" name="searchForm">
+		<form class="f_r form-inline" action="{RC_Uri::url('comment/admin/store_goods_comment_list')}&store_id={$store_id}{if $comment_list.filter.status neq null}&status={$comment_list.filter.status}{/if}{if $comment_list.filter.has_img neq null}&has_img={$comment_list.filter.has_img}{/if}{if $smarty.get.rank}&rank={$smarty.get.rank}{/if}{if $select_status}&select_status={$select_status}{/if}{if $select_rank}&select_rank={$select_rank}{/if}{if $select_img}&select_img={$select_img}{/if}"  method="post" name="searchForm">
 			<input type="text" name="keyword" value="{$smarty.get.keywords}" placeholder="{lang key='comment::comment_manage.search_comment'}" size="15" />
 			<button class="btn search_comment" type="button">{lang key='system::system.button_search'}</button>
 		</form>
