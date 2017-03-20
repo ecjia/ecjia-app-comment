@@ -315,7 +315,6 @@ class admin extends ecjia_admin {
             		->select('content', 'add_time', 'user_id')
             		->get();
 
-		
 		if (!empty($reply_info)) {
 			$reply_info['content']  = nl2br(htmlspecialchars($reply_info['content']));
 			$reply_info['add_time'] = RC_Time::local_date(ecjia::config('time_format'), $reply_info['add_time']);
@@ -366,14 +365,12 @@ class admin extends ecjia_admin {
                 		->where('comment_id', $comment_info['comment_id'])
                 		->select('content', 'add_time', 'user_id')
                 		->get();
-		
 		foreach ($replay_admin_list as $key => $val) {
 		    $replay_admin_list[$key]['add_time_new'] = RC_Time::local_date(ecjia::config('time_format'), $val['add_time']);   
-		    $staff_info = RC_DB::TABLE('staff_user')->where('user_id', $val['user_id'])->select('name', 'avatar', 'store_id')->first(); //管理员信息
-		    $replay_admin_list[$key]['staff_name'] = $staff_info['name'];       
+		    $staff_info = RC_DB::TABLE('admin_user')->where('user_id', $val['user_id'])->first(); //管理员信息
+		    $replay_admin_list[$key]['user_name'] = $staff_info['user_name'];       
 		    $replay_admin_list[$key]['staff_img']  =  RC_Upload::upload_url($staff_info['avatar']);
 		};
-
 		//获取评论图片
 		$comment_pic_list = RC_DB::TABLE('term_attachment')->where('object_id', $comment_info['comment_id'])->select('file_path')->get();
 
@@ -458,67 +455,50 @@ class admin extends ecjia_admin {
 	 */
 	public function action() {		
 		$this->admin_priv('comment_update', ecjia::MSGTYPE_JSON);
-		
-		$ip = RC_Ip::client_ip();
-		/* 获得评论是否有回复 */
-		$reply_info = $this->db_comment->comment_info(array('parent_id' => $_POST['comment_id']), 'comment_id, content, parent_id');
-		
-		$email 		= !empty($_POST['email']) 		? $_POST['email'] 		: '';
-		$content 	= !empty($_POST['content']) 	? $_POST['content'] 	: '';
-		$comment_id	= !empty($_POST['comment_id']) 	? $_POST['comment_id'] 	: 0;
-		
-		if (!empty($reply_info['content'])) {
-			/* 更新回复的内容 */
-			$data = array(
-			    'comment_id'    => $reply_info['comment_id'],
-				'email'         => $email,
-				'user_name' 	=> !empty($_POST['user_name']) ? $_POST['user_name'] : '',
-				'content' 		=> $content,
-				'add_time' 		=> RC_Time::gmtime(),
-				'ip_address' 	=> $ip,
-				'status' 		=> 1,
-			);
-		} else {
-			/* 插入回复的评论内容 */
-			$data = array(
-				'comment_type' 	=> !empty($_POST['comment_type']) ? $_POST['comment_type'] : '',
-				'id_value' 		=> !empty($_POST['id_value']) ? $_POST['id_value'] : '',
-				'email' 		=> $email,
-				'user_name' 	=> $_SESSION['admin_name'],
-				'content' 		=> $content,
-				'add_time' 		=> RC_Time::gmtime(),
-				'ip_address' 	=> $ip,
-				'status' 		=> 1,
-				'parent_id'		=> $comment_id,
-			);
-		}
-		$this->db_comment->comment_manage($data);
 
-		/* 邮件通知处理流程 */
-		if (!empty($_POST['send_email_notice']) || isset($_POST['remail'])) {
-			//获取邮件中的必要内容
-			$comment_info = $this->db_comment->comment_info(array('comment_id' => $_POST['comment_id']), 'user_name, email, content');
-			/* 设置留言回复模板所需要的内容信息 */
-			$tpl_name = 'recomment';
-			$template = RC_Api::api('mail', 'mail_template', $tpl_name);
-			
-			$this->assign('user_name', $comment_info['user_name']);
-			$this->assign('comment', $comment_info['content']);
-			$this->assign('recomment', $content);
-			$this->assign('shop_name', "<a href='".SITE_URL."'>" . ecjia::config('shop_name') . '</a>');
-			$this->assign('send_date', date('Y-m-d'));
-			$content = $this->fetch_string($template['template_content']);
-			
-			/* 发送邮件 */
-			if (RC_Mail::send_mail($comment_info['user_name'], $comment_info['email'], $template['template_subject'], $content, $template['is_html'])) {
-			    return $this->showmessage(RC_Lang::get('comment::comment_manage.mail_notice_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('comment/admin/reply', array('id' => $comment_id))));
-			} else {
-				return $this->showmessage(RC_Lang::get('comment::comment_manage.mail_send_fail'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR );
-			}
+		$ip = RC_Ip::client_ip();
+		$comment_id 	= $_POST['comment_id'];
+		$reply_content  = $_POST['reply_content'];
+
+		if(empty($reply_content)){
+			 return $this->showmessage('请输入回复内容', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
-		
-		ecjia_admin::admin_log(addslashes(RC_Lang::get('comment::comment_manage.reply')), 'edit', 'users_comment');
-		return $this->showmessage(RC_Lang::get('comment::comment_manage.reply_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS);
+
+		$data = array(
+			'comment_id' 	=> $comment_id,
+			'content' 		=> $reply_content,
+			'user_type'		=> 'admin',
+			'user_id'		=> $_SESSION['admin_id'],
+			'add_time'		=> RC_Time::gmtime(),
+		);
+		$email_status = $_POST['is_ok'];
+		if($email_status){
+			$reply_email = $_POST['reply_email'];
+			$comment_info = RC_DB::TABLE('comment')->where('comment_id', $comment_id)->select('user_name', 'content')->first();
+			$user_name 			= $comment_info['user_name'];
+			$message_content 	= $comment_info['content'];
+			$message_note 		= $reply_content;
+			
+			if(!empty($reply_email)){
+				RC_DB::table('comment_reply')->insertGetId($data);
+				
+				$tpl_name = 'user_message';
+				$template   = RC_Api::api('mail', 'mail_template', $tpl_name);
+				if (!empty($template)) {
+					$this->assign('user_name', 	$user_name);
+					$this->assign('message_content', $message_content);
+					$this->assign('message_note',   $message_note);
+					$this->assign('shop_name',   ecjia::config('shop_name'));
+					$this->assign('send_date',   RC_Time::local_date(ecjia::config('date_format')));
+					RC_Mail::send_mail('', $reply_email, $template['template_subject'], $this->fetch_string($template['template_content']), $template['is_html']);
+				}
+			}else{
+				return $this->showmessage('请输入邮件地址', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+			}
+		}else{
+			RC_DB::table('comment_reply')->insertGetId($data);
+		}
+	    return $this->showmessage('回复成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('comment/admin/reply', array('comment_id' => $comment_id))));
 	}
 	
 	/**

@@ -44,14 +44,16 @@
     					</div>
     					{if $comment_info.status neq 3}
     					<div class="edit-list">
-							<a class="check_pending" href='{url path="comment/admin/check" args="comment_id={$comment_info.comment_id}{if $smarty.get.page}&page={$smarty.get.page}{/if}"}' data-msg="{t}您确定要将该用户[{$comment_info.user_name|default:{lang key='comment::comment_manage.anonymous'}}]的评论设为待审核吗？{/t}" data-status="{$smarty.get.status}" data-val="forbid" >
-								{t}待审核{/t}
-							</a>&nbsp;|&nbsp;
-							<a class="data-pjax" href='{url path="comment/admin/reply" args="comment_id={$comment.comment_id}"}'>
-								{t}驳回{/t}
-							</a>&nbsp;|&nbsp;
+    					   {if $comment_info.status eq 0}
+    							<a class="approve" href='{url path="comment/admin/check" args="comment_id={$comment_info.comment_id}{if $smarty.get.page}&page={$smarty.get.page}{/if}"}' data-msg="{t}您确定要更改此评论的状态吗？{/t}" data-status="{$smarty.get.status}" data-val="allow" >
+    								{t}批准{/t}
+    							</a>&nbsp;|&nbsp;
+    						{elseif $comment_info.status eq 1}
+    							<a class="approve" href='{url path="comment/admin/check" args="comment_id={$comment_info.comment_id}{if $smarty.get.page}&page={$smarty.get.page}{/if}"}' data-msg="{t}您确定要更改此评论的状态吗？{/t}" data-status="{$smarty.get.status}" data-val="forbid" >
+    								{t}驳回{/t}
+    							</a>&nbsp;|&nbsp;
+    						{/if}
 							<a class="ecjiafc-red toggle_view" href='{url path="comment/admin/check" args="comment_id={$comment_info.comment_id}{if $smarty.get.page}&page={$smarty.get.page}{/if}"}' data-msg="{t}您确定要将该用户[{$comment_info.user_name|default:{lang key='comment::comment_manage.anonymous'}}]的评论移至回收站吗？{/t}" data-status="{$smarty.get.status}" data-val="trashed_comment" >{t}移至回收站{/t}</a>
-							
 						</div>
 						{/if}
     	            </div>    
@@ -75,7 +77,7 @@
 									       <img src="{$list.staff_img}" >
 								        </div>
         					  			 <div class="comment-thumb-details">
-        									<h1>{$list.staff_name}</h1>
+        									<h1>{$list.user_name}</h1>
         									<p>{$list.add_time_new}</p><br>
         								 </div>
         								 <p>{$list.content}</p>
@@ -90,12 +92,13 @@
 			</div>
 			<div class="control-group">
 			    <div class="reply-title">回复： </div>
-    			<textarea class="span12 form-control" name="cat_desc" rows="6" cols="48" placeholder="回复内容"></textarea>
+    			<textarea class="span12 form-control" name="reply_content" rows="6" cols="48" placeholder="回复内容"></textarea>
     			<div class="text-right" style="margin: 10px 0">
 					<input type="checkbox" name="is_ok" id="is_ok" value="1" /><span>{'邮件通知'}</span>
     			    <input type="text" style="margin-left: 20px;" name="reply_email" value="{$comment_info.email}" placeholder="电子邮箱" />
     			</div>
 			</div>
+			<input type="hidden" name="comment_id" value="{$comment_info.comment_id}" />
 			<div class="control-group control-group-small">
 				<button class="btn btn-gebo" type="submit">回复</button>
 			</div>

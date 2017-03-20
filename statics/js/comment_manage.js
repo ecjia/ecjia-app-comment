@@ -6,7 +6,7 @@
             app.comment_manage.toggle_view();
             app.comment_manage.quick_reply();
             app.comment_manage.set_comment_config();
-            app.comment_manage.check_pending();
+            app.comment_manage.approve();
         },
  
         list_search: function () {
@@ -62,13 +62,13 @@
             });
         },
         
-        check_pending: function (option) {
-            $('.check_pending').on('click', function (e) {
+        approve: function (option) {
+            $('.approve').on('click', function (e) {
                 e.preventDefault();
                 var $this = $(this);
                 var url = $this.attr('href');
-                var val = $this.attr('data-val') || 'allow';
-                var status = $this.attr('data-status') || '';
+                var val = $this.attr('data-val');
+                var status = $this.attr('data-status');
                 var data = {
                     check: val,
                     status: status
