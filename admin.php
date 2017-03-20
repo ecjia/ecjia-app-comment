@@ -29,7 +29,7 @@ class admin extends ecjia_admin {
 		
 		RC_Script::enqueue_script('comment_manage', RC_App::apps_url('statics/js/comment_manage.js', __FILE__), array(), false, false);
 		RC_Style::enqueue_style('comment', RC_App::apps_url('statics/css/comment.css', __FILE__));
-		RC_Style::enqueue_style('start', RC_App::apps_url('statics/css/start.css', __FILE__));
+		//RC_Style::enqueue_style('start', RC_App::apps_url('statics/css/start.css', __FILE__));
 		
 		RC_Script::localize_script('comment_manage', 'js_lang', RC_Lang::get('comment::comment_manage.js_lang'));
 	}

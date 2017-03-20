@@ -13,9 +13,6 @@ class appeal extends ecjia_admin {
 	public function __construct() {
 		parent::__construct();
 		
-		$this->db_comment = RC_Loader::load_app_model('comment_model');
-		$this->db_goods	  =	RC_Loader::load_app_model('comment_goods_model');
-		
 		RC_Script::enqueue_script('jquery-validate');
 		RC_Script::enqueue_script('jquery-form');
 		RC_Script::enqueue_script('smoke');
@@ -23,15 +20,13 @@ class appeal extends ecjia_admin {
 		RC_Style::enqueue_style('uniform-aristo');
 		RC_Script::enqueue_script('jquery-chosen');
 		RC_Style::enqueue_style('chosen');
-		
-		RC_Script::enqueue_script('jquery.toggle.buttons', RC_Uri::admin_url('statics/lib/toggle_buttons/jquery.toggle.buttons.js'));
-		RC_Style::enqueue_style('bootstrap-toggle-buttons', RC_Uri::admin_url('statics/lib/toggle_buttons/bootstrap-toggle-buttons.css'));
-		
-		RC_Script::enqueue_script('comment_manage', RC_App::apps_url('statics/js/comment_manage.js', __FILE__), array(), false, false);
+				
+		RC_Script::enqueue_script('appeal', RC_App::apps_url('statics/js/appeal.js', __FILE__), array(), false, false);
 		RC_Style::enqueue_style('comment', RC_App::apps_url('statics/css/comment.css', __FILE__));
-		RC_Style::enqueue_style('start', RC_App::apps_url('statics/css/start.css', __FILE__));
-		
-		RC_Script::localize_script('comment_manage', 'js_lang', RC_Lang::get('comment::comment_manage.js_lang'));
+		RC_Style::enqueue_style('datepicker', RC_Uri::admin_url('statics/lib/datepicker/datepicker.css'));
+		RC_Script::enqueue_script('bootstrap-datepicker', RC_Uri::admin_url('statics/lib/datepicker/bootstrap-datepicker.min.js'));
+		//RC_Style::enqueue_style('start', RC_App::apps_url('statics/css/start.css', __FILE__));
+		//RC_Script::localize_script('comment_manage', 'js_lang', RC_Lang::get('comment::comment_manage.js_lang'));
 	}
 	
 	/**
@@ -44,8 +39,97 @@ class appeal extends ecjia_admin {
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('申诉列表'));
 		$this->assign('ur_here', '申诉列表');
 		
+		$appeal_list = $this->get_appeal_list();
+		$this->assign('appeal_list', $appeal_list);
+		$this->assign('form_search', RC_Uri::url('comment/appeal/init'));
+		
 		$this->display('appeal_list.dwt');		
 	}
+	
+	/**
+	 * 申诉-列表信息
+	 */
+	private function get_appeal_list() {
+		$db_comment_appeal = RC_DB::table('comment_appeal as ca')
+							->leftJoin('store_franchisee as sf', RC_DB::raw('ca.store_id'), '=', RC_DB::raw('sf.store_id'))
+							->leftJoin('comment as c', RC_DB::raw('c.comment_id'), '=', RC_DB::raw('ca.comment_id'));
+		
+		$filter['type'] = empty($_GET['type']) ? 0 : $_GET['type'];
+		$filter['keywords'] = empty($_GET['keywords']) ? '' : trim($_GET['keywords']);
+		
+		$start_date = empty($_GET['start_date']) ? '' : RC_Time::local_strtotime($_GET['start_date']);
+		$end_date   = empty($_GET['end_date']) ? '' : RC_Time::local_strtotime($_GET['end_date']);
+		
+		if ($filter['keywords']) {
+			$db_comment_appeal->where(RC_DB::Raw('ca.appeal_sn'), 'like', '%' . mysql_like_quote($filter['keywords']) . '%')
+			->orWhere(RC_DB::Raw('sf.merchants_name'), 'like', '%' . mysql_like_quote($filter['keywords']) . '%');
+		}
+		
+		if ($start_date) {
+			$db_comment_appeal->where(RC_DB::Raw('ca.appeal_time'), '>=', $start_date);
+			$filter['start_date'] = $_GET['start_date'];
+		}
+		
+		if ($end_date) {
+			$db_comment_appeal->where(RC_DB::Raw('ca.appeal_time'), '<=', $end_date);
+			$filter['end_date'] = $_GET['end_date'];
+		}
+		
+		$current_count = $db_comment_appeal->select(RC_DB::raw('count(*) as count'),
+				RC_DB::raw('SUM(IF(check_status = 1,1,0)) as waithandle'),
+				RC_DB::raw('SUM(IF(check_status != 1,1,0)) as handled'),
+				RC_DB::raw('ca.appeal_sn'), RC_DB::raw('sf.merchants_name'))->first();
+	
+		if ($filter['type'] == '1') {
+			$db_comment_appeal->where('check_status', '=', 1);
+		}
+	
+		if ($filter['type'] == '2') {
+			$db_comment_appeal->where('check_status', '<>', 1);
+		}
+	
+		$count = $db_comment_appeal->count();
+		$page = new ecjia_page($count, 10, 5);
+		$data = $db_comment_appeal
+		->selectRaw('ca.appeal_sn, ca.comment_id, ca.appeal_content, ca.check_status, ca.appeal_time, ca.process_time, sf.merchants_name, c.has_image')
+		->orderby(RC_DB::Raw('ca.appeal_time'), 'asc')
+		->take(10)
+		->skip($page->start_id-1)
+		->get();
+	
+		$list = array();
+		if (!empty($data)) {
+			foreach ($data as $row) {
+				$row['appeal_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['appeal_time']);
+				if($row['check_status'] == 1){
+					$row['label_check_status'] = '待处理';
+				}elseif ($row['check_status'] == 2){
+					$row['label_check_status'] = '通过';
+				}elseif ($row['check_status'] == 3){
+					$row['label_check_status'] = '驳回';
+				}elseif($row['check_status'] == 4){
+					$row['label_check_status'] = '撤销';
+				}
+				if ($row['has_image'] == '1') {
+					$row['imgs'] = RC_DB::table('term_attachment')
+					->where(RC_DB::raw('object_id'), '=', $row['comment_id'])
+					->where(RC_DB::raw('object_group'), '=', 'comment')
+					->where(RC_DB::raw('object_app'), '=', 'ecjia.comment')
+					->select('file_path')->orderby(RC_DB::raw('add_time'), 'asc')->limit(5)->get();
+					if (!empty($row['imgs'])) {
+						foreach ($row['imgs'] as $key => $val) {
+							$row['imgs'][$key]['file_path'] =  RC_Upload::upload_url().'/'.$val['file_path'];
+						}
+					}
+				}
+				$list[] = $row;
+			}
+		}
+
+		return array('item' => $list, 'filter' => $filter, 'page' => $page->show(2), 'desc' => $page->page_desc(), 'current_count' => $current_count);
+	}
+	
+	
 }
 
 // end

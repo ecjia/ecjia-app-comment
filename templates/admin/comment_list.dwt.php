@@ -121,7 +121,7 @@
 						{$comment.merchants_name}
 					</td>
 					<td class="hide-edit-area">
-						<div><a href='{url path="goods/admin/edit" args="goods_id={$comment.id_value}"}'' target="_blank">{$comment.goods_name}</a></div>
+						<div><a href='{url path="goods/admin/edit" args="goods_id={$comment.id_value}"}' target="_blank">{$comment.goods_name}</a></div>
 						<div>{lang key='comment::comment_manage.comment_on'}&nbsp;&nbsp;{$comment.add_time}</div>
 						<div>{$comment.content|truncate:100|escape:html}</div>
 						{if $comment.has_image eq 1}
