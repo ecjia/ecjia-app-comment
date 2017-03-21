@@ -74,7 +74,7 @@
 						          <!-- {foreach from=$replay_admin_list item=list} -->
                                     <div class="text-right">
                                         <div class="comment-all-right-thumb">
-									       <img src="{$list.staff_img}" >
+									       <img src="{$ecjia_main_static_url}img/crop_avatar.jpg" >
 								        </div>
         					  			 <div class="comment-thumb-details">
         									<h1>{$list.user_name}</h1>

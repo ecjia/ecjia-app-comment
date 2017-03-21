@@ -60,8 +60,8 @@
 						<div>{lang key='comment::comment_manage.comment_on'}&nbsp;&nbsp;{$comment.add_time}</div>
 						{$comment.content|truncate:100|escape:html}
 						{if $comment.has_image eq 1}
-						    <!-- {foreach from=$comment.imgs item=imgs} -->
-							     <img class="thumbnail" style="float:left;width:78px;height:78px;margin-right:8px;" alt="" src="">
+						    <!-- {foreach from=$comment.imgs item=img_list} -->
+							     <img class="thumbnail" style="float:left;width:78px;height:78px;margin-right:8px;" src="{$img_list.file_path}">
 						    <!-- {/foreach} -->
 						{/if}
 						<div class="edit-list">

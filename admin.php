@@ -369,7 +369,7 @@ class admin extends ecjia_admin {
 		    $replay_admin_list[$key]['add_time_new'] = RC_Time::local_date(ecjia::config('time_format'), $val['add_time']);   
 		    $staff_info = RC_DB::TABLE('admin_user')->where('user_id', $val['user_id'])->first(); //管理员信息
 		    $replay_admin_list[$key]['user_name'] = $staff_info['user_name'];       
-		    $replay_admin_list[$key]['staff_img']  =  RC_Upload::upload_url($staff_info['avatar']);
+		    $replay_admin_list[$key]['staff_img']  =  '';
 		};
 		//获取评论图片
 		$comment_pic_list = RC_DB::TABLE('term_attachment')->where('object_id', $comment_info['comment_id'])->select('file_path')->get();
@@ -708,10 +708,10 @@ class admin extends ecjia_admin {
 	    ecjia_screen::get_current_screen()->remove_last_nav_here();
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('评论回收站'));
 	    $this->assign('ur_here', '评论回收站');
-	    
+	     
 	    $list = $this->get_comment_list();
-	    $this->assign('comment_list', $list);
 	    
+	    $this->assign('comment_list', $list);
 	    $this->display('comment_trash.dwt');
 	}
 	
