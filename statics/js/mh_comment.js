@@ -1,6 +1,23 @@
 // JavaScript Document
 ;(function (app, $) {
 	app.mh_comment = {
+		list_search: function () {
+        	  $(".no-show-rank").on('click', function (e) {
+                  $('.hide-rank').hide();
+              });
+        	  $(".no-show-img").on('click', function (e) {
+                  $('.hide-img').hide();
+              }); 
+            $(".search_comment").on('click', function (e) {
+                var url = $("form[name='searchForm']").attr('action');
+                var keywords = $("input[name='keyword']").val();
+                if (keywords != '') {
+                    url += '&keywords=' + keywords;
+                }
+                ecjia.pjax(url);
+            });
+        },
+			
 		comment_list: function () {
 	    	$(".edit-hidden").mouseover(function(){
 	    		$(this).children().find(".edit-list").css('visibility', 'visible');
