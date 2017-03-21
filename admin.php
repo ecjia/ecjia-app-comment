@@ -43,7 +43,7 @@ class admin extends ecjia_admin {
 		$_GET['list'] = !empty($_GET['list']) ?  $_GET['list'] : 1;
 		ecjia_screen::get_current_screen()->remove_last_nav_here();
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('comment::comment_manage.goods_comment_list')));
-		$this->assign('ur_here', RC_Lang::get('comment::comment_manage.admin_goods_comment'));
+		$this->assign('ur_here', RC_Lang::get('comment::comment_manage.goods_comment'));
 		
 		$this->assign('action_link', array('text' => RC_Lang::get('comment::comment_manage.check_trash_comment'), 'href'=> RC_Uri::url('comment/admin/trash', array('list' => 2))));
 		
@@ -626,77 +626,6 @@ class admin extends ecjia_admin {
 		}
 	}
 
-	/**
-	 * 评论设置
-	 */
-	public function config() {
-	    $this->admin_priv('comment_update');
-	
-	    ecjia_screen::get_current_screen()->remove_last_nav_here();
-		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('评论设置'));
-	    $this->assign('ur_here', '评论设置');
-		
-	    $this->assign('close_comment', ecjia::config('close_comment'));
-	    $this->assign('comment_check', ecjia::config('comment_check'));
-	    $this->assign('comment_award_open', ecjia::config('comment_award_open'));  
-	    $this->assign('comment_factor', ecjia::config('comment_factor'));
-	    
-	    /* 评论送积分*/
-	    $user_rank_list = array();
-	    $db_user_rank = RC_DB::table('user_rank');
-	    $data = $db_user_rank->selectRaw('rank_id, rank_name')->get();
-	    if (!empty($data)) {
-	    	$comment_award_rules = unserialize(ecjia::config('comment_award_rules'));
-	    		
-	    	foreach ($data as $row) {
-	    		if (!empty($comment_award_rules[$row['rank_id']])) {
-	    			$row['comment_award'] = $comment_award_rules[$row['rank_id']];
-	    		}
-	    		$user_rank_list[] = $row;
-	    	}
-	    }
-	    $this->assign('user_rank_list', $user_rank_list);
-	    $this->assign('comment_award_open', ecjia::config('comment_award_open'));
-	    $this->assign('comment_award', ecjia::config('comment_award'));
-	    $this->assign('form_action', RC_Uri::url('comment/admin/update_config'));
-	    
-	    $this->display('comment_config.dwt');
-	}
-	
-	
-	/**
-	 * 评论设置处理
-	 */
-	public function update_config() {
-		$this->admin_priv('comment_update', ecjia::MSGTYPE_JSON);
-		/*评论送积分*/
-		$comment_award_open = isset($_POST['comment_award_open']) ? intval($_POST['comment_award_open']) : 0;
-		$comment_award 		= isset($_POST['comment_award']) ? intval($_POST['comment_award']) : 0;
-		$close_comment		= isset($_POST['close_comment']) ? intval($_POST['close_comment']) : 0;
-		$comment_check		= isset($_POST['comment_check']) ? intval($_POST['comment_check']) : 0;
-		$comment_factor		= isset($_POST['comment_factor']) ? intval($_POST['comment_factor']) : 0;
-				
-		ecjia_config::instance()->write_config('comment_award_open', $comment_award_open);
-		ecjia_config::instance()->write_config('comment_award', $comment_award);
-		ecjia_config::instance()->write_config('close_comment', $close_comment);
-		ecjia_config::instance()->write_config('comment_check', $comment_check);
-		ecjia_config::instance()->write_config('comment_factor', $comment_factor);
-		
-		$comment_award_rules = '';
-		if (isset($_POST['comment_award_rules'])) {
-			foreach ($_POST['comment_award_rules'] as $key => $val) {
-				if (empty($val)) {
-					continue;
-				}
-				$comment_award_rules[$key] = intval($val);
-			}
-			if (!empty($comment_award_rules)) {
-				$comment_award_rules = serialize($comment_award_rules);
-			}
-		}
-		ecjia_config::instance()->write_config('comment_award_rules', $comment_award_rules);
-		return $this->showmessage('评论设置更新成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('comment/admin/config')));
-	}
 	/**
 	 * 商品评论回收站
 	 */
