@@ -141,7 +141,7 @@ class mh_comment extends ecjia_merchant {
 	
 		$other_comment = RC_DB::TABLE('comment')->where('store_id', $_SESSION['store_id'])->where('id_value', $comment_info['id_value'])->where('comment_id', '!=', $comment_info['comment_id'])->select('user_name', 'content', 'comment_rank', 'comment_id','id_value')->take(4)->get();
 		
-		$comment_pic_list = RC_DB::TABLE('term_attachment')->where('object_id', $comment_info['comment_id'])->select('file_path')->get();
+		$comment_pic_list = RC_DB::TABLE('term_attachment')->where('object_id', $comment_info['comment_id'])->where('object_app', 'ecjia.comment')->where('object_group','comment')->select('file_path')->get();
 		
 		$this->assign('comment_info', $comment_info);
 		$this->assign('avatar_img', $avatar_img);
@@ -252,7 +252,7 @@ class mh_comment extends ecjia_merchant {
 		$page = new ecjia_merchant_page($count, 10, 5);
 		$data = $db_comment
 		->selectRaw('comment_id,user_name,content,add_time,id_value,comment_rank,id_value')
-		->orderby('add_time', 'asc')
+		->orderby('add_time', 'desc')
 		->take(10)
 		->skip($page->start_id-1)
 		->get();
@@ -262,7 +262,7 @@ class mh_comment extends ecjia_merchant {
 			foreach ($data as $row) {
 				$row['add_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['add_time']);
 				$row['goods_name'] = RC_DB::TABLE('goods')->where('goods_id', $row['id_value'])->pluck('goods_name');
-				$row['comment_pic_list'] = RC_DB::TABLE('term_attachment')->where('object_id',  $row['comment_id'])->select('file_path')->get();
+				$row['comment_pic_list'] = RC_DB::TABLE('term_attachment')->where('object_id',  $row['comment_id'])->where('object_app', 'ecjia.comment')->where('object_group','comment')->select('file_path')->get();
 				$list[] = $row;
 			}
 		}
