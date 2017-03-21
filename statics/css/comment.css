@@ -110,6 +110,7 @@
     float: left;
 }
 .comment_info .comment-all-right-thumb {
+	margin-top: 5px;
 	width: 90px;
 	float: right;
 }
@@ -136,9 +137,10 @@
     border-radius: 100%;
     -webkit-border-radius: 100%	
 }
-.comment_info .comment_top .comment-goods img{
-	width: 50px;
-	height: 50px;
+.comment_info .comment_top .comment-goods img {
+	width: 78px;
+	height: 78px;
+	margin-right: 8px;
 }
 .comment_info .foldable-list .panel-body {
 	padding: 15px 0 15px 0;
@@ -168,5 +170,14 @@
 	background-color: #006d8d;
 }
 .comment_info .comment-thumb-details {
-	margin-bottom: 12px;
+	padding-top: 12px;
+}
+.comment_info .edit-list {
+	margin-top: 1em;
+}
+.comment_info .admin-reply:first-child {
+	border-top: 1px solid #FFF;
+}
+.comment_info .admin-reply {
+	border-top: 1px solid #ddd;
 }

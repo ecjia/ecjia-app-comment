@@ -149,6 +149,9 @@
 						{section name=loop loop=$comment.comment_rank}   
 							<i class="fontello-icon-star" style="color:#FF9933;"></i>
 						{/section}
+						{section name=loop loop=5-$comment.comment_rank}   
+							<i class="fontello-icon-star" style="color:#bbb;"></i>
+						{/section}
 					</td>
 				</tr>
 				<tr style="border-top:none;">
