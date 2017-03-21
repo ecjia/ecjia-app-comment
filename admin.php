@@ -369,7 +369,7 @@ class admin extends ecjia_admin {
 		    $replay_admin_list[$key]['add_time_new'] = RC_Time::local_date(ecjia::config('time_format'), $val['add_time']);   
 		    $staff_info = RC_DB::TABLE('admin_user')->where('user_id', $val['user_id'])->first(); //管理员信息
 		    $replay_admin_list[$key]['user_name'] = $staff_info['user_name'];       
-		    $replay_admin_list[$key]['staff_img']  =  '';
+		    $replay_admin_list[$key]['staff_img']  =  RC_App::apps_url('statics/images/ecjia_avatar.jpg', __FILE__);
 		};
 		//获取评论图片
 		$comment_pic_list = RC_DB::TABLE('term_attachment')->where('object_id', $comment_info['comment_id'])->select('file_path')->get();
@@ -512,16 +512,25 @@ class admin extends ecjia_admin {
 		$page		= !empty($_GET['page']) 		? intval($_GET['page'])		: 1;
 		$allow 		= !empty($_POST['check']) 	? $_POST['check']			: '';
 		$status		= $_POST['status'];
+		$last       = !empty($_GET['last']) ? $_GET['last'] : '';
 		
 		if ($status === '') {
 			if ($list == 3) {
-				$pjaxurl = RC_Uri::url('comment/admin/store_goods_comment_list', array('page' => $page));
+			    if ($last == 'reply') {
+				    $pjaxurl = RC_Uri::url('comment/admin/reply', array('comment_id' => $id));
+			    } else {
+				    $pjaxurl = RC_Uri::url('comment/admin/init', array('list' => 1));
+			    }
 			} else {
 				$pjaxurl = RC_Uri::url('comment/admin/init', array('page' => $page));
 			}
 		} else {
 			if ($list == 3) {
-				$pjaxurl = RC_Uri::url('comment/admin/store_goods_comment_list', array('page' => $page));
+			    if ($last == 'reply') {
+				    $pjaxurl = RC_Uri::url('comment/admin/reply', array('comment_id' => $id));
+			    } else {
+				    $pjaxurl = RC_Uri::url('comment/admin/init', array('list' => 1));
+			    }
 			} else {
 				$pjaxurl = RC_Uri::url('comment/admin/init', array('status' => intval($status), 'page' => $page));
 			}

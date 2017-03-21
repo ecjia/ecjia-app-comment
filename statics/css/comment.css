@@ -110,6 +110,7 @@
     float: left;
 }
 .comment_info .comment-all-right-thumb {
+	margin-top: 5px;
 	width: 90px;
 	float: right;
 }
