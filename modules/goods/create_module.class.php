@@ -122,6 +122,20 @@ class create_module extends api_front implements api_interface {
 // 		        $data['has_image'] = 1;
 // 		    }
 		    $comment_id = RC_Model::model('comment/comment_model')->insert($data);
+		    
+		    //评价送积分
+		    $message = '';
+		    $comment_award = 0;
+		    if (ecjia::config('comment_award_open')) {
+		        $comment_award_rules = ecjia::config('comment_award_rules');
+		        $comment_award_rules = unserialize($comment_award_rules);
+		        $comment_award = isset($comment_award_rules[$_SESSION['user_rank']]) ? $comment_award_rules[$_SESSION['user_rank']] : ecjia::config('comment_award');
+		        	
+		        RC_Api::api('user', 'account_change_log', array('user_id' => $_SESSION['user_id'], 'pay_points' => $comment_award, 'change_desc' => '评论送积分'));
+		        $message = '评论成功！并获得'.$comment_award.ecjia::config('integral_name').'！';
+		    }
+		    
+		    return array('data' => array('comment_award' => $comment_award, 'label_comment_award' => $message, 'label_award' => ecjia::config('integral_name')));
 		}
 
 		//补充图片 或 第一次评价
