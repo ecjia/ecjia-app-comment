@@ -72,7 +72,7 @@
 						<div class="accordion-inner">
 						      <div class="panel-body">
 						          <!-- {foreach from=$replay_admin_list item=list} -->
-                                    <div class="text-right">
+                                    <div class="text-right admin-reply">
                                         <div class="comment-all-right-thumb">
 									       <img src="{$ecjia_main_static_url}img/crop_avatar.jpg" >
 								        </div>
