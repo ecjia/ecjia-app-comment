@@ -442,7 +442,7 @@ class admin extends ecjia_admin {
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here($here, $url));
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('comment::comment_manage.comment_info')));
 		
-		$this->assign('ur_here', RC_Lang::get('comment::comment_manage.comment_info'));
+		$this->assign('ur_here', '评论详情');
 		$this->assign('action_link', array('text' => $here, 'href' => $url));
 		$this->assign('form_action', RC_Uri::url('comment/admin/action'));
 		$this->assign('store_url', RC_Uri::url('comment/admin/store_goods_comment_list', array('store_id' => $comment_info['store_id'], 'list' => 3)));
@@ -706,8 +706,8 @@ class admin extends ecjia_admin {
 	    
 	    $this->assign('action_link', array('href'=> RC_Uri::url('comment/admin/init',  array('list' => 1))));
 	    ecjia_screen::get_current_screen()->remove_last_nav_here();
-		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('回收站'));
-	    $this->assign('ur_here', '回收站');
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('评论回收站'));
+	    $this->assign('ur_here', '评论回收站');
 	    
 	    $list = $this->get_comment_list();
 	    $this->assign('comment_list', $list);
