@@ -28,6 +28,7 @@ class admin extends ecjia_admin {
 		RC_Style::enqueue_style('bootstrap-toggle-buttons', RC_Uri::admin_url('statics/lib/toggle_buttons/bootstrap-toggle-buttons.css'));
 		
 		RC_Script::enqueue_script('comment_manage', RC_App::apps_url('statics/js/comment_manage.js', __FILE__), array(), false, false);
+		RC_Script::enqueue_script('appeal', RC_App::apps_url('statics/js/appeal.js', __FILE__), array(), false, false);
 		RC_Style::enqueue_style('comment', RC_App::apps_url('statics/css/comment.css', __FILE__));
 		//RC_Style::enqueue_style('start', RC_App::apps_url('statics/css/start.css', __FILE__));
 		
@@ -513,16 +514,22 @@ class admin extends ecjia_admin {
 		$allow 		= !empty($_POST['check']) 	? $_POST['check']			: '';
 		$status		= $_POST['status'];
 		
+		$appeal_id = $_GET['id'];
+
 		if ($status === '') {
 			if ($list == 3) {
 				$pjaxurl = RC_Uri::url('comment/admin/store_goods_comment_list', array('page' => $page));
-			} else {
-				$pjaxurl = RC_Uri::url('comment/admin/init', array('page' => $page));
+			} elseif ($list == 4) {
+				$pjaxurl = RC_Uri::url('comment/appeal/detail', array('id' => $page));
+			}else{
+				$pjaxurl = RC_Uri::url('comment/admin/init', array('page' => $appeal_id, 'comment_id' => $id));
 			}
 		} else {
 			if ($list == 3) {
 				$pjaxurl = RC_Uri::url('comment/admin/store_goods_comment_list', array('page' => $page));
-			} else {
+			} elseif ($list == 4) {
+				$pjaxurl = RC_Uri::url('comment/admin/init', array('page' => $appeal_id, 'comment_id' => $id));
+			}else {
 				$pjaxurl = RC_Uri::url('comment/admin/init', array('status' => intval($status), 'page' => $page));
 			}
 		}
