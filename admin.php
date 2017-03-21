@@ -519,7 +519,11 @@ class admin extends ecjia_admin {
 
 		if ($status === '') {
 			if ($list == 3) {
-				$pjaxurl = RC_Uri::url('comment/admin/store_goods_comment_list', array('page' => $page));
+			 if ($last == 'reply') {
+			        $pjaxurl = RC_Uri::url('comment/admin/reply', array('comment_id' => $id));
+			    } else {
+			        $pjaxurl = RC_Uri::url('comment/admin/init', array('list' => 1));
+			    }			
 			} elseif ($list == 4) {
 				$pjaxurl = RC_Uri::url('comment/appeal/detail', array('id' => $appeal_id, 'comment_id' => $id));
 			}else{
@@ -527,11 +531,15 @@ class admin extends ecjia_admin {
 			}
 		} else {
 			if ($list == 3) {
-				$pjaxurl = RC_Uri::url('comment/admin/store_goods_comment_list', array('status' => $status, 'page' => $page));
+			    if ($last == 'reply') {
+			        $pjaxurl = RC_Uri::url('comment/admin/reply', array('comment_id' => $id));
+			    } else {
+			        $pjaxurl = RC_Uri::url('comment/admin/init', array('list' => 1));
+			    }
 			} elseif ($list == 4) {
 				$pjaxurl = RC_Uri::url('comment/admin/init', array('id' => $appeal_id, 'comment_id' => $id));
 			}else {
-			   $pjaxurl = RC_Uri::url('comment/admin/init', array('status' => $status, 'page' => $page, 'list' => 1));
+			    $pjaxurl = RC_Uri::url('comment/admin/init', array('status' => $status, 'page' => $page, 'list' => 1));
 			} 
 		} 
 		

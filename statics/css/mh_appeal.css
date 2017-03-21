@@ -1,4 +1,4 @@
-/*·¢ÆðÉêËß²½Öè*/
+/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß²ï¿½ï¿½ï¿½*/
 i.fa-star {
 	color: #FF9933;
 }
@@ -45,7 +45,35 @@ i.fa-star {
 }
 
 
-/*·¢ÆðÉêËßÖÐÓÃ»§ÆÀÂÛ*/
+.appeal-time-base .step-failed {
+	margin-top: 10px;
+	color: #fff;
+	font-size: 18px;
+	height: 34px;
+	line-height: 34px;
+	background: url("../images/order-time-base-red.png") no-repeat scroll 50% -102px;
+}
+.appeal-time-base .step-first .step-done .step-failed {
+	background-position: 50% -204px;
+}
+.appeal-time-base .step-first .step-cur .step-failed {
+	background-position: 50% -34px;
+}
+.appeal-time-base .step-done .step-failed {
+	background-position: 50% -170px;
+}
+.appeal-time-base .step-cur .step-failed {
+	background-position: 50% 0;
+}
+.appeal-time-base .step-last .step-failed {
+	background-position: 50% -136px;
+}
+.appeal-time-base .step-last .step-cur .step-failed {
+	background-position: 50% -68px;
+}
+
+
+/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½*/
 .appeal_top{
 	border: 1px solid #CACACA;
 	border-radius:5px;
