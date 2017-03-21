@@ -45,11 +45,11 @@
     					{if $comment_info.status neq 3}
     					<div class="edit-list">
     					   {if $comment_info.status eq 0}
-    							<a class="approve" href='{url path="comment/admin/check" args="comment_id={$comment_info.comment_id}{if $smarty.get.page}&page={$smarty.get.page}{/if}"}' data-msg="{t}您确定要更改此评论的状态吗？{/t}" data-status="{$smarty.get.status}" data-val="allow" >
+    							<a class="approve" href='{url path="comment/admin/check" args="last={"reply"}&comment_id={$comment_info.comment_id}{if $smarty.get.page}&page={$smarty.get.page}{/if}"}' data-msg="{t}您确定要更改此评论的状态吗？{/t}" data-status="{$smarty.get.status}" data-val="allow" >
     								{t}批准{/t}
     							</a>&nbsp;|&nbsp;
     						{elseif $comment_info.status eq 1}
-    							<a class="approve" href='{url path="comment/admin/check" args="comment_id={$comment_info.comment_id}{if $smarty.get.page}&page={$smarty.get.page}{/if}"}' data-msg="{t}您确定要更改此评论的状态吗？{/t}" data-status="{$smarty.get.status}" data-val="forbid" >
+    							<a class="approve" href='{url path="comment/admin/check" args="last={"reply"}&comment_id={$comment_info.comment_id}{if $smarty.get.page}&page={$smarty.get.page}{/if}"}' data-msg="{t}您确定要更改此评论的状态吗？{/t}" data-status="{$smarty.get.status}" data-val="forbid" >
     								{t}驳回{/t}
     							</a>&nbsp;|&nbsp;
     						{/if}
@@ -74,7 +74,7 @@
 						          <!-- {foreach from=$replay_admin_list item=list} -->
                                     <div class="text-right admin-reply">
                                         <div class="comment-all-right-thumb">
-									       <img src="{$ecjia_main_static_url}img/crop_avatar.jpg" >
+									       <img src="{$list.staff_img}" >
 								        </div>
         					  			 <div class="comment-thumb-details">
         									<h1>{$list.user_name}</h1>
