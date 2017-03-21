@@ -36,7 +36,7 @@
     						<p>{$comment_info.add_time}<span>IP: {$comment_info.ip_address}</span></p><br>
     					</div>
     					<div class="comment-goods">
-    					  	<p>商品评分：{section name=loop loop=$comment_info.comment_rank}<i class="fontello-icon-star" style="color:#FF9933;"></i>{/section}</p>
+    					  	<p>商品评分：{section name=loop loop=$comment_info.comment_rank}<i class="fontello-icon-star" style="color:#FF9933;"></i>{/section}{section name=loop loop=5-$comment_info.comment_rank}<i class="fontello-icon-star" style="color:#bbb;"></i>{/section}</p>
     		                <p>{$comment_info.content}</p>
     		                 <!-- {foreach from=$comment_pic_list item=list} -->
     		                	<img src="{RC_Upload::upload_url()}/{$list.file_path}">
@@ -166,7 +166,8 @@
                     		              </span>
                     		          </p>
                     		          <p>{$list.content}</p>
-                    		          <p class="text-right">{section name=loop loop=$list.comment_rank}<i class="fontello-icon-star" style="color:#FF9933;"></i>{/section}</p>
+                    		          <p class="text-right">{section name=loop loop=$list.comment_rank}<i class="fontello-icon-star" style="color:#FF9933;"></i>{/section}{section name=loop loop=5-$list.comment_rank}<i class="fontello-icon-star" style="color:#bbb;"></i>{/section}
+                    		          </p>
                     		          </div>
             		          <!-- {foreachelse} -->
                 		          <div class="text-center">
