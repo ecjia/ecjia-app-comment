@@ -167,4 +167,6 @@
 .comment_info .badge-info {
 	background-color: #006d8d;
 }
-
+.comment_info .comment-thumb-details {
+	margin-bottom: 12px;
+}
