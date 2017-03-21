@@ -36,9 +36,6 @@
 		<table class="table table-striped smpl_tbl table-hide-edit">
 			<thead>
 				<tr>
-					<th class="table_checkbox w50"> 
-						<input class="uni_style" type="checkbox" data-toggle="selectall" data-children=".checkbox"/>
-					</th>
 					<th class="w120">申诉编号</th>
 					<th class='w100'>商家名称</th>
 					<th class="w550">申诉内容</th>
@@ -48,7 +45,6 @@
 			<tbody>
 				<!-- {foreach from=$appeal_list.item item=appeal} -->
 				<tr>
-					<td><input class="checkbox" type="checkbox" name="checkboxes[]" value="{$appeal.id}"></td>
 					<td>{$appeal.appeal_sn}</td>
 					<td>{$appeal.merchants_name}</td>
 					<td class="hide-edit-area">
@@ -71,7 +67,7 @@
 				</tr>
 				<!-- {foreachelse} -->
 				<tr>
-					<td class="no-records" colspan="5">{lang key='system::system.no_records'}</td>
+					<td class="no-records" colspan="4">{lang key='system::system.no_records'}</td>
 				</tr>
 				<!-- {/foreach} -->
 			</tbody>
