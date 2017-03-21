@@ -82,6 +82,9 @@ class mh_comment extends ecjia_merchant {
 	    $data = $this->comment_list();
 	    $this->assign('data', $data);
 	    
+	    $this->assign('select_status', $_GET['select_status']);
+	    $this->assign('select_rank', $_GET['select_rank']);
+	    $this->assign('select_img', $_GET['select_img']);
 	    $this->assign('search_action',RC_Uri::url('comment/mh_comment/init'));
 	   
 	    $this->display('mh_comment_list.dwt');
@@ -222,7 +225,7 @@ class mh_comment extends ecjia_merchant {
 	 * 评论-列表信息
 	 */
 	private function comment_list($goods_id) {
-		$db_comment = RC_DB::table('comment');
+		$db_comment = RC_DB::table('comment as c');
 		$filter['keywords'] = empty($_GET['keywords']) ? '' : trim($_GET['keywords']);
 		if ($filter['keywords']) {
 			$db_comment->where('user_name', 'like', '%'.mysql_like_quote($filter['keywords']).'%');
@@ -232,7 +235,19 @@ class mh_comment extends ecjia_merchant {
 		}else{
 			$db_comment->where(RC_DB::raw('store_id'), $_SESSION['store_id']);
 		}
-		
+		if (isset($_GET['rank'])) {
+		    if ($_GET['rank'] == '1') {
+		        $db_comment->where(RC_DB::raw('c.comment_rank'), '5');
+		    } elseif ($_GET['rank'] == '2') {
+		        $db_comment->whereIn(RC_DB::raw('c.comment_rank'), array('3','4'));
+		    } elseif ($_GET['rank'] == '3') {
+		        $db_comment->where(RC_DB::raw('c.comment_rank'), '<=', '2');
+		    }
+		}
+		if (isset($_GET['has_img']) && (!empty($_GET['has_img']) || $_GET['has_img'] == '0')) {
+		    $db_comment->where(RC_DB::raw('c.has_image'), '=', $_GET['has_img']);
+		    $filter['has_img'] = $_GET['has_img'];
+		}
 		$count = $db_comment->count();
 		$page = new ecjia_merchant_page($count, 10, 5);
 		$data = $db_comment

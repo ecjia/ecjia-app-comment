@@ -1,4 +1,4 @@
-/*ÆÀÂÛÁÐ±í*/
+/*ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½*/
 i.fa-star {
 	color: #FF9933;
 }
@@ -26,7 +26,7 @@ i.fa-star {
 }
 
 
-/*ÆÀÂÛ²é¿´ÏêÇéÐÅÏ¢*/
+/*ï¿½ï¿½ï¿½Û²é¿´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢*/
 .comment_top{
 	border: 1px solid #CACACA;
 	border-radius:5px;
@@ -164,9 +164,36 @@ i.fa-star {
     padding-left: 20px;
 	padding-top: 10px;
 }
+.mh-comment-list .nav-status {
+	float: left;
+	list-style: outside none none;
+	padding: 0;
+}
+.mh-comment-list .nav-status li {
+	float: left;
+    height: 45px;
+    line-height: 45px;
+    margin-left: 9px;
+    font-size: 17px;
+    color: #666;
+}
 
-
-
-
-
+.mh-comment-list .status-distance {
+    float: left;
+	width: 100px;
+	text-align: center;
+}
+.mh-comment-list .nav-heading {
+    height: 3em;
+    position: relative;
+    margin-bottom: 8px;
+}
+.mh-comment-list .nav-status a {
+    color: #08c;
+}
+.mh-comment-list .nav-status .btn-primary {
+    border-color: #FFF;
+    background-color: #FFF;
+    border: 1px solid #999;
+}
 
