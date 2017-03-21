@@ -4,24 +4,53 @@
 <!-- {block name="footer"} -->
 <script type="text/javascript">
 	ecjia.merchant.appeal_info.init();
-	
-	/*
-	* 服务器地址,成功返回,失败返回参数格式依照jquery.ajax习惯;
-	* 其他参数同WebUploader
-	*/
-	$('#test').diyUpload({
-		url:'server/fileupload.php',
-		success:function(data) {
-			console.info(data);
-		},
-		error:function(err) {
-			console.info(err);	
-		}
-	});
+
+    function imgChange(obj1, obj2) {
+        //获取点击的文本框
+        var file = document.getElementById("file");
+        //存放图片的父级元素
+        var imgContainer = document.getElementsByClassName(obj1)[0];
+        //获取的图片文件
+        var fileList = file.files;
+        //文本框的父级元素
+        var input = document.getElementsByClassName(obj2)[0];
+        var imgArr = [];
+        //遍历获取到得图片文件
+        for (var i = 0; i < fileList.length; i++) {
+            var imgUrl = window.URL.createObjectURL(file.files[i]);
+            imgArr.push(imgUrl);
+            var img = document.createElement("img");
+            img.setAttribute("src", imgArr[i]);
+            var imgAdd = document.createElement("div");
+            imgAdd.setAttribute("class", "z_addImg");
+            imgAdd.appendChild(img);
+            imgContainer.appendChild(imgAdd);
+        };
+        imgRemove();
+    };
+
+    function imgRemove() {
+        var imgList = document.getElementsByClassName("z_addImg");
+        var mask = document.getElementsByClassName("z_mask")[0];
+        var cancel = document.getElementsByClassName("z_cancel")[0];
+        var sure = document.getElementsByClassName("z_sure")[0];
+        for (var j = 0; j < imgList.length; j++) {
+            imgList[j].index = j;
+            imgList[j].onclick = function() {
+                var t = this;
+                mask.style.display = "block";
+                cancel.onclick = function() {
+                    mask.style.display = "none";
+                };
+                sure.onclick = function() {
+                    mask.style.display = "none";
+                    t.style.display = "none";
+                };
+            }
+        };
+    };
 	
 </script>
-<style>
-</style>
 <!-- {/block} -->
 <!-- {block name="home-content"} -->
 
@@ -66,15 +95,27 @@
 		            </div>    
 				</div> 
 				<div class="appeal_bottom"> 
-					<h4>申诉内容</h4>               
-					<form class="form-horizontal" action='{$form_action}' method="post" name="theForm">
+					<h4>申诉内容</h4>        
+					<form class="form-horizontal" action='{$form_action}' method="post" name="theForm"  enctype="multipart/form-data">
 						<textarea class="form-control" id="appeal_content" name="appeal_content" placeholder="请输入申诉理由" ></textarea>
 						<br>
 						
-				         <div id="box">
-							<div id="test" ></div>
-						</div>
-                        
+				        <div class="z_photo">
+				            <div class="z_file">
+				                <input type="file" name="picture[]" id="file" value="" multiple="true" onchange="imgChange('z_photo','z_file');" />
+				            </div>
+				        </div>
+				        
+				        <div class="z_mask">
+				            <div class="z_alert">
+				                <p>确定要删除这张图片吗？</p>
+				                <p>
+				                    <span class="z_cancel">取消</span>
+				                    <span class="z_sure">确定</span>
+				                </p>
+				            </div>
+				        </div>
+						
 						<input type="hidden" name="comment_id" value="{$comment_info.comment_id}" />
 						<button class="btn btn-info" type="submit">提交申诉</button>
 					</form>
