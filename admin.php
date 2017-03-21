@@ -543,7 +543,7 @@ class admin extends ecjia_admin {
 			);
 			$db_comment->where('comment_id', $id)->update($data);
 		}
-		 elseif ($allow == "trash_comment") {
+		 elseif ($allow == "trashed_comment") {
 			/* 移到回收站 */
 			$data = array(
 				'status'     => '3'
