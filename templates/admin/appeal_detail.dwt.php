@@ -50,7 +50,7 @@
                                     </div>
                                     <div class="comment-content-info">{$comment_info.content}</div>
 									{if $comment_imgs_list}
-										<div class="img-style appeal-imgs-div" style="height:90px;">
+										<div class="img-style appeal-imgs-div">
 											<!-- {foreach from=$comment_imgs_list item=img_list} -->
 													<img class="thumbnail" style="float:left;width:78px;height:78px;margin-right:8px;" alt="" src="{$img_list.file_path}">
 											<!-- {/foreach} -->
@@ -70,7 +70,7 @@
 			    	<div class="appeal-content-padding">
 					    <div class="appeal-content-info">{$appeal_info.appeal_content}</div>
 					    <!-- {if $appeal_imgs_list}-->
-							<div class="img-style appeal-imgs-div" style="height:100px;">
+							<div class="img-style appeal-imgs-div" style="padding-bottom:20px;">
 								<!-- {foreach from=$appeal_imgs_list item=list} -->
 										<img class="thumbnail" style="float:left;width:78px;height:78px;margin-right:8px;" alt="" src="{$list.file_path}">
 								<!-- {/foreach} -->

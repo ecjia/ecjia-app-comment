@@ -757,7 +757,7 @@ class admin extends ecjia_admin {
 		->leftJoin('store_franchisee as sf', RC_DB::raw('c.store_id'), '=', RC_DB::raw('sf.store_id'))
 		->leftJoin('goods as g', RC_DB::raw('c.id_value'), '=', RC_DB::raw('g.goods_id'))
 		->selectRaw('c.comment_id,c.user_name,c.content,c.add_time,c.id_value,c.comment_rank,c.status,c.has_image,sf.merchants_name,g.goods_name')
-		->orderby(RC_DB::raw('c.add_time'), 'asc')
+		->orderby(RC_DB::raw('c.add_time'), 'desc')
 		->take(10)
 		->skip($page->start_id-1)
 		->get();
@@ -771,7 +771,7 @@ class admin extends ecjia_admin {
 					->where(RC_DB::raw('object_id'), '=', $row['comment_id'])
 					->where(RC_DB::raw('object_group'), '=', 'comment')
 					->where(RC_DB::raw('object_app'), '=', 'ecjia.comment')
-					->select('file_path')->orderby(RC_DB::raw('add_time'), 'asc')->limit(5)->get();
+					->select('file_path')->get();
 					if (!empty($row['imgs'])) {
 						foreach ($row['imgs'] as $key => $val) {
 							$row['imgs'][$key]['file_path'] =  RC_Upload::upload_url().'/'.$val['file_path'];
