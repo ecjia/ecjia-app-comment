@@ -81,7 +81,7 @@
 			</div>
 			<!-- {if $check_comment }-->
 			<div>
-				<!-- {if $appeal_info.check_status eq 1 }--> check_comment
+				<!-- {if $appeal_info.check_status eq 1 }-->
     			<textarea class="span12 form-control ckeck_remark" name="ckeck_remark" rows="6" cols="48" placeholder="请输入内容"></textarea>
     			<!-- {/if}-->
     			<!--{if $appeal_info.check_status eq 1} -->

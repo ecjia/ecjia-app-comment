@@ -13,6 +13,8 @@ class admin extends ecjia_admin {
 	public function __construct() {
 		parent::__construct();
 		
+		RC_Loader::load_app_func('global');
+		assign_adminlog_content();
 		$this->db_comment = RC_Loader::load_app_model('comment_model');
 		$this->db_goods	  =	RC_Loader::load_app_model('comment_goods_model');
 		
@@ -95,7 +97,7 @@ class admin extends ecjia_admin {
 		);
 		$db_comment_reply->insertGetId($data);
 		
-		ecjia_admin::admin_log('', 'quick_reply', 'users_comment');
+		ecjia_admin::admin_log('评论ID：'.$comment_id, 'reply', 'users_comment');
 		if (isset($_GET['status']) && (!empty($_GET['status']) || $_GET['status'] == '0')) {
 			if ($list == 3) {
 				$pjaxurl = RC_Uri::url('comment/admin/store_goods_comment_list', array('status' => $_GET['status']));
@@ -315,7 +317,7 @@ class admin extends ecjia_admin {
 		    $replay_admin_list[$key]['add_time_new'] = RC_Time::local_date(ecjia::config('time_format'), $val['add_time']);   
 		    $staff_info = RC_DB::TABLE('admin_user')->where('user_id', $val['user_id'])->first(); //管理员信息
 		    $replay_admin_list[$key]['user_name'] = $staff_info['user_name'];       
-		    $replay_admin_list[$key]['staff_img']  =  RC_App::apps_url('statics/images/ecjia_avatar.jpg', __FILE__);
+		    $replay_admin_list[$key]['staff_img']  =  RC_App::apps_url('statics/images/admin_pic.jpg', __FILE__);
 		};
 		//获取评论图片
 		$comment_pic_list = RC_DB::TABLE('term_attachment')
@@ -432,7 +434,7 @@ class admin extends ecjia_admin {
 			if(!empty($reply_email)){
 				RC_DB::table('comment_reply')->insertGetId($data);
 				
-				ecjia_admin::admin_log('', 'action', 'users_comment');
+				ecjia_admin::admin_log('评论ID：'.$comment_id, 'reply', 'users_comment');
 				$tpl_name = 'user_message';
 				$template   = RC_Api::api('mail', 'mail_template', $tpl_name);
 				if (!empty($template)) {
@@ -448,7 +450,7 @@ class admin extends ecjia_admin {
 			}
 		}else{
 			RC_DB::table('comment_reply')->insertGetId($data);
-			ecjia_admin::admin_log('', 'action', 'users_comment');
+			ecjia_admin::admin_log('评论ID：'.$comment_id, 'reply', 'users_comment');
 		}
 	    return $this->showmessage('回复成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('comment/admin/reply', array('comment_id' => $comment_id))));
 	}
@@ -515,9 +517,16 @@ class admin extends ecjia_admin {
 			$data = array(
 				'status'     => '3'
 			);
+			
 			$db_comment->where('comment_id', $id)->update($data);
 			$message = RC_Lang::get('comment::comment_manage.trash_success');
 		} 
+        
+		if ($data['status'] == '3') {
+		    ecjia_admin::admin_log('评论ID：'.$id, 'to_trash', 'users_comment');
+		} elseif($data['status'] == '0' || $data['status'] == '1') {
+		    ecjia_admin::admin_log('评论ID：'.$id, 'comment_status', 'users_comment');
+		}
 		return $this->showmessage($message, ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => $pjaxurl));
 	}
 	
@@ -569,6 +578,10 @@ class admin extends ecjia_admin {
 			}
 			$db_comment->whereIn('comment_id', $comment_ids)->update($data);
 			
+			if ($data['status'] == '3') {
+			    ecjia_admin::admin_log('', 'batch_trash', 'users_comment');
+			}
+			
 			$page = empty($_GET['page']) ? '' : $_GET['page'];
 			$status = $_GET['status'];
 			
@@ -585,7 +598,6 @@ class admin extends ecjia_admin {
 					$pjaxurl = RC_Uri::url('comment/admin/init', array('status' => $status, 'page' => $page, 'list' => 1));
 				}
 			}
-			//ecjia_admin::admin_log('', $action, 'users_comment');
 			return $this->showmessage(sprintf(RC_Lang::get('comment::comment_manage.operation_success'), count($comment_ids)), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => $pjaxurl));
 		} else {
 			/* 错误信息  */
