@@ -1,3 +1,4 @@
+/*评价列表*/
 .nav-heading{
 	height:45px;
 	position:relative;
@@ -51,6 +52,8 @@
 .img-style{
 	height:80px;
 }
+
+/*店铺商品评价列表*/
 .store-total-comments{
 	float:right;
 	height:45px;
@@ -92,6 +95,8 @@
 .rank-rate{
 	margin-left:12px;
 }
+
+/*评论设置*/
 .comment-config .control-group {
 	padding-left: 10%;
 }
@@ -105,6 +110,8 @@
 .comment-config .goods_type {
 	margin-bottom: 14px;
 }
+
+/*评论回复详情*/
 .comment_info .comment-thumb {
     width: 90px;
     float: left;

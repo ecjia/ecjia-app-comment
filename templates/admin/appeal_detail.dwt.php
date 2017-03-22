@@ -44,7 +44,10 @@
         									</div>
         								 </div>
                                     </div>
-                                    <div>商品相符：{section name=loop loop=$comment_info.comment_rank}<i class="fontello-icon-star" style="color:#FF9933;"></i>{/section}</div>
+                                    <div>
+                                    	商品相符：{section name=loop loop=$comment_info.comment_rank}<i class="fontello-icon-star" style="color:#FF9933;"></i>{/section}
+                                    		   {section name=loop loop=5-$comment_info.comment_rank}<i class="fontello-icon-star" style="color:#bbb;"></i>{/section}
+                                    </div>
                                     <div class="comment-content-info">{$comment_info.content}</div>
 									{if $comment_imgs_list}
 										<div class="img-style appeal-imgs-div" style="height:90px;">

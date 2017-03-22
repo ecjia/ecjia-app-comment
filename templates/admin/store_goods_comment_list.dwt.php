@@ -24,7 +24,10 @@
 	    </div>
 	    <div class="comment-rank-info">
 	    	<p class="store-name">{$merchants_name}</p>
-	    	<p class="common-p">综合评分：{section name=loop loop=$comment.comment_rank}<i class="fontello-icon-star" style="color:#FF9933;"></i>{/section}</p>
+	    	<p class="common-p">
+	    		综合评分：{section name=loop loop=$comment.comment_rank}<i class="fontello-icon-star" style="color:#FF9933;"></i>{/section}
+	    			   {section name=loop loop=5-$comment.comment_rank}<i class="fontello-icon-star" style="color:#bbb;"></i>{/section}
+	    	</p>
 	    	<p class="common-p">全部评论：<a style="text-decoration:none;" href="javascript:;">{$total_count}</a></p>
 	    	<p class="common-p rank-rate">好评率：{if $comment_percent}{$comment_percent}%{/if}</p>
 	    </div>
