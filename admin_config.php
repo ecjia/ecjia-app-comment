@@ -108,29 +108,6 @@ class admin_config extends ecjia_admin {
 	 * 处理
 	 */
 	public function update() {
-// 		$this->admin_priv('sms_config_update', ecjia::MSGTYPE_JSON);
-		
-// 		$sms_user_name    = $_POST['sms_user_name'];
-// 		$sms_password     = $_POST['sms_password'];
-// 		$sms_mobile       = $_POST['sms_shop_mobile'];
-// 		$order            = intval($_POST['config_order']);
-// 		$money            = intval($_POST['config_money']);
-// 		$shipping         = intval($_POST['config_shipping']);
-// 		$user_sign_in     = $_POST['config_user'];
-// 		$sms_receipt_verification = intval($_POST['sms_receipt_verification']);
-
-// 		ecjia_config::instance()->write_config('sms_user_name',       $sms_user_name);
-// 		ecjia_config::instance()->write_config('sms_password',        $sms_password);
-// 		ecjia_config::instance()->write_config('sms_shop_mobile',     $sms_mobile);
-// 		ecjia_config::instance()->write_config('sms_order_placed',    $order);
-// 		ecjia_config::instance()->write_config('sms_order_payed',     $money);
-// 		ecjia_config::instance()->write_config('sms_order_shipped',   $shipping);
-// 		ecjia_config::instance()->write_config('sms_user_signin',     $user_sign_in);
-// 		ecjia_config::instance()->write_config('sms_receipt_verification', $sms_receipt_verification);
-		
-// 		ecjia_admin::admin_log(RC_Lang::get('sms::sms.set_config'), 'setup', 'sms_config');
-// 		return $this->showmessage(RC_Lang::get('sms::sms.update_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('sms/admin_config/init')));
-
 
 	    $this->admin_priv('comment_config', ecjia::MSGTYPE_JSON);
 	    /*评论送积分*/
