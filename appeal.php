@@ -141,7 +141,7 @@ class appeal extends ecjia_admin {
 				'process_time'	=> RC_Time::gmtime(),
 		);
 		$update = $db_comment_appeal->where(RC_DB::raw('id'), $appeal_id)->update($data);
-		ecjia_admin::admin_log('申诉ID：'.$appeal_id, 'appeal_status', 'users_appeal');
+		ecjia_admin::admin_log('申诉ID：'.$appeal_id, 'appeal_status', 'merchant_appeal');
 		
 		$pjaxurl = RC_Uri::url('comment/appeal/detail', array('id' => $appeal_id, 'comment_id' => $comment_id));
 		if ($update) {
