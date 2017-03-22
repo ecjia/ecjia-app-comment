@@ -76,7 +76,7 @@ class admin extends ecjia_admin {
 	 * 管理员快捷回复评论处理
 	 */
 	public function quick_reply() {
-		$this->admin_priv('comment_manage');
+		$this->admin_priv('comment_update', ecjia::MSGTYPE_JSON);
 		
 		$list 			  = !empty($_GET['list']) ? $_GET['list'] : 1;
 		$comment_id 	  = $_GET['comment_id'];
@@ -94,6 +94,8 @@ class admin extends ecjia_admin {
 				'add_time'		=> RC_Time::gmtime(),
 		);
 		$db_comment_reply->insertGetId($data);
+		
+		ecjia_admin::admin_log('', 'quick_reply', 'users_comment');
 		if (isset($_GET['status']) && (!empty($_GET['status']) || $_GET['status'] == '0')) {
 			if ($list == 3) {
 				$pjaxurl = RC_Uri::url('comment/admin/store_goods_comment_list', array('status' => $_GET['status']));
@@ -430,6 +432,7 @@ class admin extends ecjia_admin {
 			if(!empty($reply_email)){
 				RC_DB::table('comment_reply')->insertGetId($data);
 				
+				ecjia_admin::admin_log('', 'action', 'users_comment');
 				$tpl_name = 'user_message';
 				$template   = RC_Api::api('mail', 'mail_template', $tpl_name);
 				if (!empty($template)) {
@@ -445,6 +448,7 @@ class admin extends ecjia_admin {
 			}
 		}else{
 			RC_DB::table('comment_reply')->insertGetId($data);
+			ecjia_admin::admin_log('', 'action', 'users_comment');
 		}
 	    return $this->showmessage('回复成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('comment/admin/reply', array('comment_id' => $comment_id))));
 	}
