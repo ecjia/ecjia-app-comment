@@ -53,6 +53,8 @@ class mh_appeal extends ecjia_merchant {
 	public function __construct() {
 		parent::__construct();
 		
+		RC_Loader::load_app_func('global');
+		assign_adminlog_content();
 		RC_Script::enqueue_script('jquery-form');
 		RC_Script::enqueue_script('smoke');
 		RC_Style::enqueue_style('uniform-aristo');
@@ -115,7 +117,7 @@ class mh_appeal extends ecjia_merchant {
 	 *发起申诉处理
 	 */
 	public function insert_appeal() {
-		$this->admin_priv('mh_appeal_update');
+		$this->admin_priv('mh_appeal_update', ecjia::MSGTYPE_JSON);
 		
 		$store_id = $_SESSION['store_id'];
 		$comment_id= $_POST['comment_id'];
@@ -136,7 +138,7 @@ class mh_appeal extends ecjia_merchant {
 		);
 		$appeal_id = RC_DB::table('comment_appeal')->insertGetId($data);
 		
-		
+		ecjia_merchant::admin_log('发起申诉处理', 'add', 'users_appeal');
 		
 		//处理图片
 		$save_path = 'merchant/' . $_SESSION['store_id'] . '/data/appeal/'.RC_Time::local_date('Ymd');
@@ -226,10 +228,12 @@ class mh_appeal extends ecjia_merchant {
 	 * 申诉-撤销
 	 */
 	public function revoke() {
-		$this->admin_priv('mh_appeal_remove');
+		$this->admin_priv('mh_appeal_remove', ecjia::MSGTYPE_JSON);
 	
 		$appeal_sn = $_GET['appeal_sn'];
 		RC_DB::table('comment_appeal')->where('appeal_sn', $appeal_sn)->delete();
+		
+		ecjia_merchant::admin_log('撤销序号:'.$appeal_sn, 'revoke', 'users_appeal');
 		return $this->showmessage('申诉撤销成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS,array('pjaxurl' => RC_Uri::url('comment/mh_appeal/init')));
 	}
 	
