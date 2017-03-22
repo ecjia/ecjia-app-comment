@@ -135,6 +135,7 @@ class admin_config extends ecjia_admin {
 	            $comment_award_rules = serialize($comment_award_rules);
 	        }
 	    }
+	    ecjia_admin::admin_log(__('修改评论设置'), 'edit', 'shop_config');
 	    ecjia_config::instance()->write_config('comment_award_rules', $comment_award_rules);
 	    return $this->showmessage('评论设置更新成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('comment/admin_config/init')));
 	    
