@@ -74,7 +74,7 @@ class appeal extends ecjia_admin {
 								->where(RC_DB::raw('object_id'),  $comment_info['comment_id'])
 								->where(RC_DB::raw('object_group'), '=', 'comment')
 								->where(RC_DB::raw('object_app'), '=', 'ecjia.comment')
-								->select('file_path')->limit(5)->get();
+								->select('file_path')->get();
 			if (!empty($comment_imgs_list)) {
 				foreach ($comment_imgs_list as $key => $val) {
 					$comment_imgs_list[$key]['file_path'] = RC_Upload::upload_url().'/'.$val['file_path'];
@@ -91,7 +91,7 @@ class appeal extends ecjia_admin {
 							->where('object_id', $appeal_info['id'])
 							->where(RC_DB::raw('object_group'), '=', 'appeal')
 							->where(RC_DB::raw('object_app'), '=', 'ecjia.comment')
-							->select('file_path')->limit(5)->get();
+							->select('file_path')->get();
 		if (!empty($appeal_imgs_list)) {
 			foreach ($appeal_imgs_list as $key => $val) {
 				$appeal_imgs_list[$key]['file_path'] = RC_Upload::upload_url().'/'.$val['file_path'];
@@ -217,7 +217,7 @@ class appeal extends ecjia_admin {
 				->where(RC_DB::raw('object_id'), '=', $row['id'])
 				->where(RC_DB::raw('object_group'), '=', 'appeal')
 				->where(RC_DB::raw('object_app'), '=', 'ecjia.comment')
-				->select('file_path')->orderby(RC_DB::raw('add_time'), 'asc')->limit(5)->get();
+				->select('file_path')->orderby(RC_DB::raw('add_time'), 'asc')->get();
 				if (!empty($row['imgs'])) {
 					foreach ($row['imgs'] as $key => $val) {
 						$row['imgs'][$key]['file_path'] =  RC_Upload::upload_url().'/'.$val['file_path'];
