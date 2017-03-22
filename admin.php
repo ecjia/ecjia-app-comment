@@ -102,7 +102,7 @@ class admin extends ecjia_admin {
 			if ($list == 3) {
 				$pjaxurl = RC_Uri::url('comment/admin/store_goods_comment_list', array('status' => $_GET['status']));
 			} else {
-				$pjaxurl = RC_Uri::url('comment/admin/init', array('status' => $_GET['status']));
+				$pjaxurl = RC_Uri::url('comment/admin/init', array('status' => $_GET['status']));   
 			}
 		} else {
 			if ($list == 3) {
@@ -519,7 +519,7 @@ class admin extends ecjia_admin {
 			);
 			
 			$db_comment->where('comment_id', $id)->update($data);
-			$message = RC_Lang::get('comment::comment_manage.trash_success');
+			$message = RC_Lang::get('comment::comment_manage.trashed_success');
 		} 
         
 		if ($data['status'] == '3') {

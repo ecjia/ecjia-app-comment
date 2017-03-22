@@ -104,7 +104,7 @@
 					</th>
 					<th class="w100">用户名</th>
 					<th class='w100'>商家名称</th>
-					<th class="w550">商品详情</th>
+					<th>商品详情</th>
 					<th class="w150">星级</th>
 				</tr>
 			</thead>

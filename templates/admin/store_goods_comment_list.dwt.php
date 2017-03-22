@@ -118,7 +118,7 @@
 						<input class="uni_style" type="checkbox" data-toggle="selectall" data-children=".checkbox"/>
 					</th>
 					<th class="w100">用户名</th>
-					<th class="w550">商品详情</th>
+					<th>商品详情</th>
 					<th class="w150">评级</th>
 				</tr>
 			</thead>

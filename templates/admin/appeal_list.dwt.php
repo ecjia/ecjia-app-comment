@@ -38,7 +38,7 @@
 				<tr>
 					<th class="w120">申诉编号</th>
 					<th class='w100'>商家名称</th>
-					<th class="w550">申诉内容</th>
+					<th>申诉内容</th>
 					<th class="w100">审核状态</th>
 				</tr>
 			</thead>
