@@ -55,8 +55,6 @@ class appeal extends ecjia_admin {
 	 */
 	public function detail() {
 		$this->admin_priv('appeal_manage');
-		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('申诉详情'));
-		$this->assign('ur_here', '申诉详情');
 		
 		$id =  $_GET['id'];
 		$appeal_info = RC_DB::table('comment_appeal')->where('id', $id)->first();
@@ -96,6 +94,15 @@ class appeal extends ecjia_admin {
 			foreach ($appeal_imgs_list as $key => $val) {
 				$appeal_imgs_list[$key]['file_path'] = RC_Upload::upload_url().'/'.$val['file_path'];
 			}
+		}
+		
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('申诉详情'));
+		if ($appeal_info['check_status'] <= '1') {
+			$this->assign('ur_here', '申诉详情（审核中）');
+		} elseif ($appeal_info['check_status'] == '2') {
+			$this->assign('ur_here', '申诉详情（申诉成功）');
+		} elseif ($appeal_info['check_status'] == '3') {
+			$this->assign('ur_here', '申诉详情（申诉失败）');
 		}
 		
 		$this->assign('appeal_info', $appeal_info);
