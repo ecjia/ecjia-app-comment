@@ -2,55 +2,81 @@
 <!-- {extends file="ecjia-merchant.dwt.php"} -->
 
 <!-- {block name="footer"} -->
+
 <script type="text/javascript">
-	ecjia.merchant.appeal_info.init();
-
-    function imgChange(obj1, obj2) {
-        //获取点击的文本框
-        var file = document.getElementById("file");
-        //存放图片的父级元素
-        var imgContainer = document.getElementsByClassName(obj1)[0];
-        //获取的图片文件
-        var fileList = file.files;
-        //文本框的父级元素
-        var input = document.getElementsByClassName(obj2)[0];
-        var imgArr = [];
-        //遍历获取到得图片文件
-        for (var i = 0; i < fileList.length; i++) {
-            var imgUrl = window.URL.createObjectURL(file.files[i]);
-            imgArr.push(imgUrl);
-            var img = document.createElement("img");
-            img.setAttribute("src", imgArr[i]);
-            var imgAdd = document.createElement("div");
-            imgAdd.setAttribute("class", "z_addImg");
-            imgAdd.appendChild(img);
-            imgContainer.appendChild(imgAdd);
-        };
-        imgRemove();
-    };
-
-    function imgRemove() {
-        var imgList = document.getElementsByClassName("z_addImg");
-        var mask = document.getElementsByClassName("z_mask")[0];
-        var cancel = document.getElementsByClassName("z_cancel")[0];
-        var sure = document.getElementsByClassName("z_sure")[0];
-        for (var j = 0; j < imgList.length; j++) {
-            imgList[j].index = j;
-            imgList[j].onclick = function() {
-                var t = this;
-                mask.style.display = "block";
-                cancel.onclick = function() {
-                    mask.style.display = "none";
-                };
-                sure.onclick = function() {
-                    mask.style.display = "none";
-                    t.style.display = "none";
-                };
-            }
-        };
-    };
+	function getObjectURL(file) {
+		var url = null;
+		if (window.createObjectURL != undefined) {
+			url = window.createObjectURL(file)
+		} else if (window.URL != undefined) {
+			url = window.URL.createObjectURL(file)
+		} else if (window.webkitURL != undefined) {
+			url = window.webkitURL.createObjectURL(file)
+		}
+		return url
+	}
 	
+    $(function() {
+		$(".filepath").live("change",function() {
+			var srcs = getObjectURL(this.files[0]);//获取路径
+			var htmlImg='<div class="imgbox1">'+
+					  '<div class="imgnum1">'+
+					  '<input type="file" name="file[]" class="filepath" />'+
+					  '<span class="close">2</span>'+
+					  '<img src="{$ecjia_main_static_url}img/appeal_pic.png" class="img11" width="50px" height="50px"/>'+
+					  '<img src="" class="img22" />'+
+					  '</div>'+
+					  '</div>';
+			  
+			$(this).parent().children(".img22").attr('src', srcs);
+			$(this).parent().children(".img11").hide();
+			$(this).parent().parent().after(htmlImg);
+			$(".close").on("click",function() {
+				 $(this).hide();
+				 $(this).nextAll(".img22").hide();
+				 $(this).nextAll(".img11").show(); 
+				 if($('.imgbox1').length>1){
+					$(this).parent().parent().remove();
+				 }
+			})
+		});
+	});
 </script>
+
+<style type="text/css">
+.imgbox1{
+	float: left;
+	margin-right: 5px;	
+	position: relative;
+	width: 50px;
+	height: 50px;
+	overflow: hidden;
+}
+.imgnum{
+	left: 0px;
+	top: 0px;
+	margin: 0px;
+	padding: 0px;
+}
+.imgnum input,.imgnum1 input {
+	position: absolute;
+	width: 182px;
+	height: 142px;
+	opacity: 0;
+}
+.imgnum img,.imgnum1 img {
+	width: 100%;
+	height: 100%;
+}
+.close{
+	color: red;
+	position: absolute;
+	left: 170px;
+	top: 0px;
+	display: none;
+}
+</style>
+
 <!-- {/block} -->
 <!-- {block name="home-content"} -->
 
@@ -99,25 +125,18 @@
 					<form class="form-horizontal" action='{$form_action}' method="post" name="theForm"  enctype="multipart/form-data">
 						<textarea class="form-control" id="appeal_content" name="appeal_content" placeholder="请输入申诉理由" ></textarea>
 						<br>
-						
-				        <div class="z_photo">
-				            <div class="z_file">
-				                <input type="file" name="picture[]" id="file" value="" multiple="true" onchange="imgChange('z_photo','z_file');" />
-				            </div>
-				        </div>
-				        
-				        <div class="z_mask">
-				            <div class="z_alert">
-				                <p>确定要删除这张图片吗？</p>
-				                <p>
-				                    <span class="z_cancel">取消</span>
-				                    <span class="z_sure">确定</span>
-				                </p>
-				            </div>
-				        </div>
-						
+						<div class="imgbox1">
+							<div class="imgnum">
+								<input type="file" name="file[]" class="filepath" />
+								<span class="close">1</span>
+								<img src="{$ecjia_main_static_url}img/appeal_pic.png" width="50px" height="50px" class="img11" />
+								<img src="" class="img22" />
+							</div>
+						</div>
 						<input type="hidden" name="comment_id" value="{$comment_info.comment_id}" />
+						<br>
 						<button class="btn btn-info" type="submit">提交申诉</button>
+						
 					</form>
 				</div>
 			</div>

@@ -60,20 +60,17 @@
 						</div>
 		            </div>    
 				</div> 
-				
+				{if $appeal.check_remark}
 				<h4>平台回复</h4>        
 				<div class="appeal_top">
 					<div class="panel-body">
 						<div class="appeal-content">
-							{if $appeal.check_remark}
-							    <p>{$appeal.check_remark}</p>
-			               		<p>{$appeal.process_time}</p>
-							{else}
-								<p>平台暂无任何回复</p>
-							{/if}
+						    <p>{$appeal.check_remark}</p>
+		               		<p>{$appeal.process_time}</p>
 						</div>
 		            </div>    
 				</div> 
+				{/if}
 			</div>
 		</div>
 	</div>

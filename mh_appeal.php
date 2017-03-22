@@ -137,7 +137,6 @@ class mh_appeal extends ecjia_merchant {
 		$appeal_id = RC_DB::table('comment_appeal')->insertGetId($data);
 		
 		
-		
 		//处理图片
 		$save_path = 'merchant/' . $_SESSION['store_id'] . '/data/appeal/'.RC_Time::local_date('Ymd');
 		$upload = RC_Upload::uploader('image', array('save_path' => $save_path, 'auto_sub_dirs' => true));
