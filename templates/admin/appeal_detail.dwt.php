@@ -80,17 +80,17 @@
 				</div>
 			</div>
 			<!-- {if $check_comment }-->
-			<div>
-				<!-- {if $appeal_info.check_status eq 1 }--> check_comment
-    			<textarea class="span12 form-control ckeck_remark" name="ckeck_remark" rows="6" cols="48" placeholder="请输入内容"></textarea>
-    			<!-- {/if}-->
-    			<!--{if $appeal_info.check_status eq 1} -->
-					<div class="control-group control-group-small button-style">
-						<button class="btn btn-gebo ckeck-comment-appeal" data-url="{url path='comment/appeal/check_appeal'}" data-status="{2}" type="button">通过</button>&nbsp;&nbsp;
-						<button class="btn ckeck-comment-appeal" data-url="{url path='comment/appeal/check_appeal'}" data-status="{3}" type="button">驳回</button>
-					</div>
-				<!--{/if} -->
-			</div>
+				<div>
+					<!-- {if $appeal_info.check_status eq 1 }--> 
+	    			<textarea class="span12 form-control ckeck_remark" name="ckeck_remark" rows="6" cols="48" placeholder="请输入内容"></textarea>
+	    			<!-- {/if}-->
+	    			<!--{if $appeal_info.check_status eq 1} -->
+						<div class="control-group control-group-small button-style">
+							<button class="btn btn-gebo ckeck-comment-appeal" data-url="{url path='comment/appeal/check_appeal'}" data-status="{2}" type="button">通过</button>&nbsp;&nbsp;
+							<button class="btn ckeck-comment-appeal" data-url="{url path='comment/appeal/check_appeal'}" data-status="{3}" type="button">驳回</button>
+						</div>
+					<!--{/if} -->
+				</div>
 			<!--{/if} -->
 			<input type="hidden" name="comment_id" value="{$appeal_info.comment_id}"/>
 			<input type="hidden" name="appeal_id" value="{$appeal_info.id}"/>
