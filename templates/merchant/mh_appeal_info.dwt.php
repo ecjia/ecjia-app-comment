@@ -4,6 +4,10 @@
 <!-- {block name="footer"} -->
 
 <script type="text/javascript">
+	ecjia.merchant.appeal_info.init();
+
+
+
 	function getObjectURL(file) {
 		var url = null;
 		if (window.createObjectURL != undefined) {
@@ -18,24 +22,27 @@
 	
     $(function() {
 		$(".filepath").live("change",function() {
-			var srcs = getObjectURL(this.files[0]);//获取路径
-			var htmlImg='<div class="imgbox1">'+
+			var srcs = getObjectURL(this.files[0]);
+			var htmlImg='<div class="imgbox">'+
 					  '<div class="imgnum1">'+
 					  '<input type="file" name="file[]" class="filepath" />'+
-					  '<span class="close">2</span>'+
-					  '<img src="{$ecjia_main_static_url}img/appeal_pic.png" class="img11" width="50px" height="50px"/>'+
-					  '<img src="" class="img22" />'+
+					  '<img class="pic_close" src="{$ecjia_main_static_url}img/x_alt.png"/>'+
+					  '<img src="{$ecjia_main_static_url}img/appeal_pic.png" class="img11"/>'+
+					  '<img src="" class="img22"/>'+
 					  '</div>'+
 					  '</div>';
-			  
+			$(this).parent().parent().after(htmlImg);
 			$(this).parent().children(".img22").attr('src', srcs);
 			$(this).parent().children(".img11").hide();
-			$(this).parent().parent().after(htmlImg);
-			$(".close").on("click",function() {
+			$(this).parent().children('.pic_close').show(); 
+// 			$(this).attr('disabled', 'disabled');
+			
+			
+			$(".pic_close").on("click",function() {
 				 $(this).hide();
 				 $(this).nextAll(".img22").hide();
 				 $(this).nextAll(".img11").show(); 
-				 if($('.imgbox1').length>1){
+				 if($('.imgbox').length>1){
 					$(this).parent().parent().remove();
 				 }
 			})
@@ -44,42 +51,35 @@
 </script>
 
 <style type="text/css">
-.imgbox1{
-	float: left;
-	margin-right: 5px;	
-	position: relative;
-	width: 50px;
-	height: 50px;
-	overflow: hidden;
-}
-.imgnum{
-	left: 0px;
-	top: 0px;
-	margin: 0px;
-	padding: 0px;
-}
-.imgnum input,.imgnum1 input {
-	position: absolute;
-	width: 182px;
-	height: 142px;
-	opacity: 0;
-}
-.imgnum img,.imgnum1 img {
-	width: 100%;
-	height: 100%;
-}
-.close{
-	color: red;
-	position: absolute;
-	left: 170px;
-	top: 0px;
-	display: none;
-}
+	.imgbox{
+		float: left;
+		margin-right: 5px;	
+		position: relative;
+		width: 50px;
+		height: 50px;
+		overflow: hidden;
+	}
+	.imgnum input,.imgnum1 input {
+		position: absolute;
+		width: 50px;
+		height: 50px;
+		opacity: 0;
+	}
+	.img11,.img22 {
+		width: 50px;
+		height: 50px;
+	}
+	.pic_close{
+		position: absolute; 
+		left: 35px; 
+		top: 0px; 
+		display: none; 
+		z-index:99999;
+	}
 </style>
-
 <!-- {/block} -->
-<!-- {block name="home-content"} -->
 
+<!-- {block name="home-content"} -->
 <!-- #BeginLibraryItem "/library/appeal_step.lbi" --><!-- #EndLibraryItem -->
 
 <div class="page-header">
@@ -125,18 +125,17 @@
 					<form class="form-horizontal" action='{$form_action}' method="post" name="theForm"  enctype="multipart/form-data">
 						<textarea class="form-control" id="appeal_content" name="appeal_content" placeholder="请输入申诉理由" ></textarea>
 						<br>
-						<div class="imgbox1">
+						<div class="imgbox">
 							<div class="imgnum">
 								<input type="file" name="file[]" class="filepath" />
-								<span class="close">1</span>
-								<img src="{$ecjia_main_static_url}img/appeal_pic.png" width="50px" height="50px" class="img11" />
+								<img class="pic_close" src="{$ecjia_main_static_url}img/x_alt.png"/>
+								<img src="{$ecjia_main_static_url}img/appeal_pic.png" class="img11" />
 								<img src="" class="img22" />
 							</div>
 						</div>
+						<br><br><br>
 						<input type="hidden" name="comment_id" value="{$comment_info.comment_id}" />
-						<br>
 						<button class="btn btn-info" type="submit">提交申诉</button>
-						
 					</form>
 				</div>
 			</div>
