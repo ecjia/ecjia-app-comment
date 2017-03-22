@@ -82,6 +82,7 @@ i.fa-star {
 }
 .appeal-imgs-div{
 	padding-top:10px;
+	padding-bottom:5px;
 }
 .appeal-content-info{
 	padding-bottom:5px;
@@ -92,6 +93,21 @@ i.fa-star {
 	height:120px;
 	margin: 10px 5px; 
 }
+.appeal-check-reply-info .admin-remark{
+	padding-top:10px;
+	padding-left:10px;
+}
 .process-time-style{
 	padding-top:8px;
+}
+.button-style{
+	padding-top:10px;
+}
+.appeal-content-style{
+	border:1px solid #ddd;
+	border-radius:4px;
+}
+.appeal-content-style .appeal-content-padding{
+	padding-top:10px;
+	padding-left:12px;
 }

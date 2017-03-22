@@ -69,6 +69,7 @@
 		</tr>
 	</table>
 </div>
+
 <div class="row-fluid batch">
 	<div class="btn-group f_l m_r5 row-batch">
 		<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
@@ -76,12 +77,12 @@
 			<span class="caret"></span>
 		</a>
 		<ul class="dropdown-menu">
-		<!-- {if $comment_list.filter.status neq null && $comment_list.filter.status neq 1} -->
-			<li><a class="batch-sale-btn"  data-toggle="ecjiabatch" data-idClass=".checkbox:checked" data-url="{$form_action}&sel_action=allow&status={$comment_list.filter.status}&page={$smarty.get.page}" data-msg="{lang key='comment::comment_manage.batch_allow_confirm'}" data-noSelectMsg="{lang key='comment::comment_manage.pls_select_comment'}" href="javascript:;"><i class="fontello-icon-eye"></i>{lang key='comment::comment_manage.allow'}</a></li>
-		<!--{/if} -->
-		<!-- {if $comment_list.filter.status eq 1} -->
-			<li><a class="batch-notsale-btn" data-toggle="ecjiabatch" data-idClass=".checkbox:checked" data-url="{$form_action}&sel_action=deny&status={$comment_list.filter.status}&page={$smarty.get.page}" data-msg="{lang key='comment::comment_manage.batch_fobid_confirm'}" data-noSelectMsg="{lang key='comment::comment_manage.pls_select_comment'}"  href="javascript:;"><i class="fontello-icon-eye-off"></i>{lang key='comment::comment_manage.forbid'}</a></li>
-		<!-- {/if} -->
+			<!-- {if $comment_list.filter.status neq null && $comment_list.filter.status neq 1} -->
+				<li><a class="batch-sale-btn"  data-toggle="ecjiabatch" data-idClass=".checkbox:checked" data-url="{$form_action}&sel_action=allow&status={$comment_list.filter.status}&page={$smarty.get.page}" data-msg="{lang key='comment::comment_manage.batch_allow_confirm'}" data-noSelectMsg="{lang key='comment::comment_manage.pls_select_comment'}" href="javascript:;"><i class="fontello-icon-eye"></i>{lang key='comment::comment_manage.allow'}</a></li>
+			<!--{/if} -->
+			<!-- {if $comment_list.filter.status eq 1} -->
+				<li><a class="batch-notsale-btn" data-toggle="ecjiabatch" data-idClass=".checkbox:checked" data-url="{$form_action}&sel_action=deny&status={$comment_list.filter.status}&page={$smarty.get.page}" data-msg="{lang key='comment::comment_manage.batch_fobid_confirm'}" data-noSelectMsg="{lang key='comment::comment_manage.pls_select_comment'}"  href="javascript:;"><i class="fontello-icon-eye-off"></i>{lang key='comment::comment_manage.forbid'}</a></li>
+			<!-- {/if} -->
 			<li><a data-toggle="ecjiabatch" data-idClass=".checkbox:checked" data-url="{$form_action}&sel_action=trashed_comment{if $comment_list.filter.status neq null}&status={$comment_list.filter.status}{/if}&page={$smarty.get.page}" data-msg="{lang key='comment::comment_manage.batch_move_confirm'}" data-noSelectMsg="{lang key='comment::comment_manage.pls_select_comment'}"  href="javascript:;"><i class="fontello-icon-box"></i>{lang key='comment::comment_manage.move_to_recycle'}</a></li>
 		</ul>
 	</div>
@@ -92,6 +93,7 @@
 		</form>
 	</div>
 </div>
+
 <div class="row-fluid list-page">
 	<div class="span12">
 		<table class="table table-striped smpl_tbl table-hide-edit">
@@ -157,7 +159,7 @@
 				<tr style="border-top:none;">
 					<td colspan="5" style="border-top:none;">
 						<div style="border-top: 2px dashed #ddd;">
-							<input class="form-control small span12" style="width:94%;margin-bottom:3px;margin-top:12px;" value="" name="reply_content" type="text" placeholder="感谢您对本店的支持！我们会更加的努力，为您提供更优质的服务。（可在此输入回复内容，也可选择系统自动回复）">
+							<input class="form-control small span12" style="width:93%;margin-bottom:3px;margin-top:12px;" value="" name="reply_content" type="text" placeholder="感谢您对本店的支持！我们会更加的努力，为您提供更优质的服务。（可在此输入回复内容，也可选择系统自动回复）">
 							<input class="btn btn-primary quick_reply" style="height:36px;margin-top:9px;" type="button" data-url="{url path='comment/admin/quick_reply'}" data-id={$comment.comment_id} data-status={$comment.status} value="回复" />
 						</div>
 					</td>
