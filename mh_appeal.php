@@ -231,6 +231,8 @@ class mh_appeal extends ecjia_merchant {
 		$this->admin_priv('mh_appeal_remove', ecjia::MSGTYPE_JSON);
 	
 		$appeal_sn = $_GET['appeal_sn'];
+		$appeal_id = RC_DB::TABLE('comment_appeal')->where('appeal_sn', $appeal_sn)->pluck('id');
+		RC_DB::table('term_attachment')->where('object_id', $appeal_id)->where('object_group', 'appeal')->delete();
 		RC_DB::table('comment_appeal')->where('appeal_sn', $appeal_sn)->delete();
 		
 		ecjia_merchant::admin_log('撤销序号:'.$appeal_sn, 'revoke', 'users_appeal');
