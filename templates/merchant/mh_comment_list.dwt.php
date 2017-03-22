@@ -115,8 +115,8 @@
 						<thead>
 							<tr>
 								<th class="w100">用户名</th>
-								<th class="w400">评论详情</th>
-								<th class="w100">星级</th>
+								<th>评论详情</th>
+								<th class="w150">星级</th>
 							</tr>
 						</thead>
 						<tbody>
