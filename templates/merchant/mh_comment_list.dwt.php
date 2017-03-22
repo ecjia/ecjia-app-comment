@@ -109,7 +109,7 @@
 					<table class="table table-striped table-hover table-hide-edit">
 						<thead>
 							<tr>
-								<th class="w100">用户名</th>
+								<th class="w200">用户名</th>
 								<th>评论详情</th>
 								<th class="w150">星级</th>
 							</tr>
