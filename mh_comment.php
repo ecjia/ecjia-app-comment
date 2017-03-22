@@ -143,6 +143,11 @@ class mh_comment extends ecjia_merchant {
 		
 		$comment_pic_list = RC_DB::TABLE('term_attachment')->where('object_id', $comment_info['comment_id'])->where('object_app', 'ecjia.comment')->where('object_group','comment')->select('file_path')->get();
 		
+		$appeal_count = RC_DB::TABLE('comment_appeal')->where(RC_DB::raw('store_id'), $_SESSION['store_id'])->where(RC_DB::raw('comment_id'), $comment_id)->count();
+		if ($appeal_count > 0) {
+			$this->assign('no_appeal', 'no_appeal');
+		} 
+		
 		$this->assign('comment_info', $comment_info);
 		$this->assign('avatar_img', $avatar_img);
 		$this->assign('replay_admin_list', $replay_admin_list);
