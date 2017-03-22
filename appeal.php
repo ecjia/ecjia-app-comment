@@ -7,8 +7,6 @@ use Royalcms\Component\FormBuilder\Fields\RepeatedType;
 defined('IN_ECJIA') or exit('No permission resources.');
 
 class appeal extends ecjia_admin {
-	private $db_comment;
-	private $db_goods;
 	
 	public function __construct() {
 		parent::__construct();

@@ -78,7 +78,7 @@ return array(
 	
 	//追加
 	'drop_success' 			=> '删除成功',
-	'goods_comment'			=> '商品评论',
+	'goods_comment'			=> '商品评价',
 	'article_comment'		=> '文章评论',
 	'add_goods_comment'		=> '添加商品评论',
 	'add_article_comment'	=> '添加文章评论',
@@ -161,7 +161,7 @@ return array(
 	'published_in'			=> '发表于',
 	'reply_to'				=> '回复于',
 	
-	'comment_manage'	=> '评论管理',
+	'comment_manage'	=> '评价晒单',
 	'comment_add'		=> '添加评论',
 	'comment_update'	=> '评论更新',
 	'comment_delete'	=> '评论删除',
