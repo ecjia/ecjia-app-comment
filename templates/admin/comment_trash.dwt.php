@@ -32,9 +32,6 @@
 		<table class="table table-striped smpl_tbl table-hide-edit">
 			<thead>
 				<tr>
-					<th class="table_checkbox w50"> 
-						<input class="uni_style" type="checkbox" data-toggle="selectall" data-children=".checkbox"/>
-					</th>
 					<th class="w100">用户名</th>
 					<th class='w100'>商家名称</th>
 					<th class="w500">商品详情</th>
@@ -44,7 +41,6 @@
 			<tbody>
 				<!-- {foreach from=$comment_list.item item=comment} -->
 				<tr>
-					<td><input class="checkbox" type="checkbox" name="checkboxes[]" value="{$comment.comment_id}"></td>
 					<td>
 						{if $comment.user_name}
 							{$comment.user_name}
