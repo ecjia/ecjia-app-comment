@@ -51,6 +51,7 @@ defined ( 'IN_ECJIA' ) or exit ( 'No permission resources.' );
 */
 function assign_adminlog_content(){
 	ecjia_admin_log::instance()->add_action('reply', '回复');
+	ecjia_admin_log::instance()->add_action('revoke', '撤销');
 	ecjia_admin_log::instance()->add_action('to_trash', '移至回收站');
 	ecjia_admin_log::instance()->add_action('comment_status', '更新评论状态');
 	ecjia_admin_log::instance()->add_action('appeal_status', '更新申诉状态');
