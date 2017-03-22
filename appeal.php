@@ -11,6 +11,8 @@ class appeal extends ecjia_admin {
 	public function __construct() {
 		parent::__construct();
 		
+		RC_Loader::load_app_func('global');
+		assign_adminlog_content();
 		RC_Script::enqueue_script('jquery-validate');
 		RC_Script::enqueue_script('jquery-form');
 		RC_Script::enqueue_script('smoke');
@@ -139,6 +141,8 @@ class appeal extends ecjia_admin {
 				'process_time'	=> RC_Time::gmtime(),
 		);
 		$update = $db_comment_appeal->where(RC_DB::raw('id'), $appeal_id)->update($data);
+		ecjia_admin::admin_log('申诉ID：'.$appeal_id, 'appeal_status', 'users_appeal');
+		
 		$pjaxurl = RC_Uri::url('comment/appeal/detail', array('id' => $appeal_id, 'comment_id' => $comment_id));
 		if ($update) {
 			return $this->showmessage('审核申诉成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => $pjaxurl));

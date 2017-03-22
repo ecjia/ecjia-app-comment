@@ -15,6 +15,8 @@ class comment_admin_purview_api extends Component_Event_Api {
         	array('action_name' => '评论回收站列表', 	'action_code' => ' comment_trash_list', 	'relevance' => ''),
         	array('action_name' => '评论申诉管理', 	'action_code' => 'appeal_manage', 	'relevance' => ''),
         	array('action_name' => '评论申诉审核', 	'action_code' => 'appeal_update', 	'relevance' => ''),
+            array('action_name' => '评论设置', 	'action_code' => 'comment_config', 	'relevance' => ''),
+            
         );
         
         return $purviews;

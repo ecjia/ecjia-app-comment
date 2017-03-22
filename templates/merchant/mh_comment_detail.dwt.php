@@ -40,7 +40,13 @@
 							<p>{$comment_info.add_time}<span>IP：{$comment_info.ip_address}</span></p><br>
 						</div>
 						<div class="comment-goods">
-						  	<p>商品评分：{section name=loop loop=$comment_info.comment_rank}<i class="fa fa-star"></i>{/section}</p>
+						  	<p>商品评分：
+							{section name=loop loop=$comment_info.comment_rank}   
+								<i class="fa fa-star" style="color:#FF9933;"></i>
+							{/section}
+							{section name=loop loop=5-$comment_info.comment_rank}   
+								<i class="fa fa-star" style="color:#bbb;"></i>
+							{/section}
 			                <p>{$comment_info.content}</p>
 			                 <!-- {foreach from=$comment_pic_list item=list} -->
 			                	<img src="{RC_Upload::upload_url()}/{$list.file_path}">
@@ -126,7 +132,14 @@
 	          <!-- {foreach from=$other_comment item=list} -->
 		          <p>{$list.user_name}<span><a href='{url path="comment/mh_comment/comment_detail" args="comment_id={$list.comment_id}"}'>查看</a></span></p>
 		          <p>{$list.content}</p>
-		          <p class="text-right">{section name=loop loop=$list.comment_rank}<i class="fa fa-star"></i>{/section}</p>
+		          <p class="text-right">
+		            {section name=loop loop=$list.comment_rank}   
+						<i class="fa fa-star" style="color:#FF9933;"></i>
+					{/section}
+					{section name=loop loop=5-$list.comment_rank}   
+						<i class="fa fa-star" style="color:#bbb;"></i>
+					{/section}
+		          </p>
 		          <hr>
 	          <!-- {foreachelse} -->
 		          <div class="text-center">
