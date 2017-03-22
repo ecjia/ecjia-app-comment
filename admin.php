@@ -646,7 +646,7 @@ class admin extends ecjia_admin {
 	 * 商品评论回收站
 	 */
 	public function trash() {
-	    $this->admin_priv('comment_manage');
+	    $this->admin_priv('comment_trash_list');
 	    $_GET['list'] = !empty($_GET['list']) ?  $_GET['list'] : 2;
 	    
 	    $this->assign('action_link', array('href'=> RC_Uri::url('comment/admin/init',  array('list' => 1))));
