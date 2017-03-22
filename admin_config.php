@@ -98,7 +98,7 @@ class admin_config extends ecjia_admin {
 	    $this->assign('user_rank_list', $user_rank_list);
 	    $this->assign('comment_award_open', ecjia::config('comment_award_open'));
 	    $this->assign('comment_award', ecjia::config('comment_award'));
-	    $this->assign('form_action', RC_Uri::url('comment/admin/update_config'));
+	    $this->assign('form_action', RC_Uri::url('comment/admin_config/update'));
 	     
 	    $this->display('comment_config.dwt');
 	    
@@ -135,6 +135,7 @@ class admin_config extends ecjia_admin {
 	            $comment_award_rules = serialize($comment_award_rules);
 	        }
 	    }
+	    ecjia_admin::admin_log(__('修改评论设置'), 'edit', 'shop_config');
 	    ecjia_config::instance()->write_config('comment_award_rules', $comment_award_rules);
 	    return $this->showmessage('评论设置更新成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('comment/admin_config/init')));
 	    

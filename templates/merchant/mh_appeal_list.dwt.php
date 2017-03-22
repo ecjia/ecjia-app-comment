@@ -45,9 +45,9 @@
 					<table class="table table-striped table-hover table-hide-edit">
 						<thead>
 							<tr>
-								<th>申诉编号</th>
+								<th class="w150">申诉编号</th>
 								<th>申诉内容</th>
-								<th>审核状态</th>
+								<th class="w100">审核状态</th>
 							</tr>
 						</thead>
 						<tbody>

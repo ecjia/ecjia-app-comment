@@ -51,7 +51,7 @@
 			                 <!-- {foreach from=$comment_pic_list item=list} -->
 			                	<img src="{RC_Upload::upload_url()}/{$list.file_path}">
 			                 <!-- {/foreach} -->
-						</div><br>
+						</div>
 						<a href='{url path="comment/mh_appeal/add_appeal" args="comment_id={$comment_info.comment_id}"}'><button class="btn btn-info" type="button">申诉</button></a>
 		            </div>    
 				</div><br>

@@ -53,6 +53,8 @@ class mh_comment extends ecjia_merchant {
 	public function __construct() {
 		parent::__construct();
 		
+		RC_Loader::load_app_func('global');
+		assign_adminlog_content();
 		RC_Style::enqueue_style('jquery-placeholder');
 		RC_Style::enqueue_style('uniform-aristo');
 		RC_Script::enqueue_script('smoke');
@@ -94,7 +96,7 @@ class mh_comment extends ecjia_merchant {
 	 * 管理员快捷回复评论处理
 	 */
 	public function comment_reply() {
-	    $this->admin_priv('mh_comment_manage');
+	    $this->admin_priv('mh_comment_manage', ecjia::MSGTYPE_JSON);
 	    
 	    $comment_id 	= $_GET['comment_id'];
 	    $reply_content  = $_GET['reply_content'];
@@ -109,6 +111,8 @@ class mh_comment extends ecjia_merchant {
 	    	'add_time'		=> RC_Time::gmtime(),
 	    );
 	    RC_DB::table('comment_reply')->insertGetId($data);
+	    
+	    ecjia_merchant::admin_log('评论ID:'.$comment_id, 'reply', 'users_comment');
 	   	return $this->showmessage('回复成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('comment/mh_comment/init')));
 	}
 	
@@ -143,6 +147,11 @@ class mh_comment extends ecjia_merchant {
 		
 		$comment_pic_list = RC_DB::TABLE('term_attachment')->where('object_id', $comment_info['comment_id'])->where('object_app', 'ecjia.comment')->where('object_group','comment')->select('file_path')->get();
 		
+		$appeal_count = RC_DB::TABLE('comment_appeal')->where(RC_DB::raw('store_id'), $_SESSION['store_id'])->where(RC_DB::raw('comment_id'), $comment_id)->count();
+		if ($appeal_count > 0) {
+			$this->assign('no_appeal', 'no_appeal');
+		} 
+		
 		$this->assign('comment_info', $comment_info);
 		$this->assign('avatar_img', $avatar_img);
 		$this->assign('replay_admin_list', $replay_admin_list);
@@ -160,7 +169,7 @@ class mh_comment extends ecjia_merchant {
 	 * 管理员详情页面回复处理
 	 */
 	public function comment_detail_reply() {
-		$this->admin_priv('mh_comment_manage');
+		$this->admin_priv('mh_comment_manage', ecjia::MSGTYPE_JSON);
 		 
 		$comment_id 	= $_POST['comment_id'];
 		$reply_content  = $_POST['reply_content'];
@@ -185,6 +194,7 @@ class mh_comment extends ecjia_merchant {
 			if(!empty($reply_email)){
 				RC_DB::table('comment_reply')->insertGetId($data);
 				
+				ecjia_merchant::admin_log('评论ID:'.$comment_id, 'reply', 'users_comment');
 				$tpl_name = 'user_message';
 				$template   = RC_Api::api('mail', 'mail_template', $tpl_name);
 				if (!empty($template)) {
@@ -200,6 +210,7 @@ class mh_comment extends ecjia_merchant {
 			}
 		}else{
 			RC_DB::table('comment_reply')->insertGetId($data);
+			ecjia_merchant::admin_log('评论ID:'.$comment_id, 'reply', 'users_comment');
 		}
 	    return $this->showmessage('回复成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('comment/mh_comment/comment_detail',array('comment_id' => $comment_id))));
 	}
