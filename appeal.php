@@ -111,6 +111,7 @@ class appeal extends ecjia_admin {
 		$this->assign('comment_imgs_list', $comment_imgs_list);
 		$this->assign('appeal_imgs_list', $appeal_imgs_list);
 		$this->assign('action_link', array('text' => '申诉列表', 'href'=> RC_Uri::url('comment/appeal/init')));
+		$this->assign('check_comment', $this->admin_priv('appeal_update', '', false));
 		$this->display('appeal_detail.dwt');
 	}
 	

@@ -31,7 +31,7 @@
 						</a>
 					</div>
 					<div class="accordion-body in collapse" id="goods_info_area_seo">
-						<div class="accordion-inner" style="padding-top:0px;">
+						<div class="accordion-inner" style="padding-top:0px;padding-bottom:0px;">
 						      <div class="panel-body">
                                     <div class="text-right-commentinfo">
                                         <div class="comment-users-img">
@@ -66,8 +66,8 @@
 			</div>
 			<div class="control-group">
 			    <div class="reply-title">申诉内容： </div>
-			    <div style="border:1px solid #ddd;border-radius:4px;">
-			    	<div style="padding-top:10px;padding-left:12px;">
+			    <div class="appeal-content-style">
+			    	<div class="appeal-content-padding">
 					    <div class="appeal-content-info">{$appeal_info.appeal_content}</div>
 					    <!-- {if $appeal_imgs_list}-->
 							<div class="img-style appeal-imgs-div" style="height:100px;">
@@ -78,25 +78,29 @@
 						<!-- {/if}-->
 					</div>
 				</div>
-				<!-- {if $appeal_info.check_status eq 1 }-->
+			</div>
+			<!-- {if $check_comment }-->
+			<div>
+				<!-- {if $appeal_info.check_status eq 1 }--> check_comment
     			<textarea class="span12 form-control ckeck_remark" name="ckeck_remark" rows="6" cols="48" placeholder="请输入内容"></textarea>
     			<!-- {/if}-->
+    			<!--{if $appeal_info.check_status eq 1} -->
+					<div class="control-group control-group-small button-style">
+						<button class="btn btn-gebo ckeck-comment-appeal" data-url="{url path='comment/appeal/check_appeal'}" data-status="{2}" type="button">通过</button>&nbsp;&nbsp;
+						<button class="btn ckeck-comment-appeal" data-url="{url path='comment/appeal/check_appeal'}" data-status="{3}" type="button">驳回</button>
+					</div>
+				<!--{/if} -->
 			</div>
+			<!--{/if} -->
 			<input type="hidden" name="comment_id" value="{$appeal_info.comment_id}"/>
 			<input type="hidden" name="appeal_id" value="{$appeal_info.id}"/>
 			<input type="hidden" name="ckeck_stauts" value="{$appeal_info.ckeck_stauts}"/>
-			<!--{if $appeal_info.check_status eq 1} -->
-				<div class="control-group control-group-small">
-					<button class="btn btn-gebo ckeck-comment-appeal" data-url="{url path='comment/appeal/check_appeal'}" data-status="{2}" type="button">通过</button>&nbsp;&nbsp;
-					<button class="btn ckeck-comment-appeal" data-url="{url path='comment/appeal/check_appeal'}" data-status="{3}" type="button">驳回</button>
-				</div>
-			<!--{/if} -->
 			<!--{if $appeal_info.check_status eq 2} -->
 				<div class="control-group">
 					<div class="reply-title">申诉回复： </div>
 				</div>
 				<div class="appeal-check-reply-info" >
-					<div style="padding-top:10px;padding-left:10px;">
+					<div class="admin-remark">
 						<div>{$appeal_info.check_remark}</div>
 						<div class="process-time-style">{$appeal_info.process_time}</div>
 					</div>
