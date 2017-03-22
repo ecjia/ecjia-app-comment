@@ -81,17 +81,21 @@ class mh_comment extends ecjia_merchant {
 	    
 	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('评论列表'));
 	    $this->assign('ur_here', '评论列表');
-	    $data = $this->comment_list();
-	    $this->assign('data', $data);
 	    
-	    $this->assign('select_status', $_GET['select_status']);
+	    $data = $this->comment_list($_GET['goods_id']);
+	    $this->assign('data', $data);
+	    if(!empty($_GET['goods_id'])){
+	    	$goods_info = RC_DB::TABLE('goods')->where('goods_id', $_GET['goods_id'])->select('goods_name', 'shop_price', 'goods_thumb')->first();
+	    	$this->assign('goods_info', $goods_info);
+	    	$this->assign('goods_id',  $_GET['goods_id']);
+	    }
+
 	    $this->assign('select_rank', $_GET['select_rank']);
-	    $this->assign('select_img', $_GET['select_img']);
-	    $this->assign('search_action',RC_Uri::url('comment/mh_comment/init'));
-	   
+	    $this->assign('select_img',  $_GET['select_img']);
+	    
 	    $this->display('mh_comment_list.dwt');
 	}
-	
+
 	/**
 	 * 管理员快捷回复评论处理
 	 */
@@ -214,51 +218,39 @@ class mh_comment extends ecjia_merchant {
 		}
 	    return $this->showmessage('回复成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('comment/mh_comment/comment_detail',array('comment_id' => $comment_id))));
 	}
-	
-	
-	public function goods_comment_list() {
-		$this->admin_priv('mh_comment_manage');
-		
-		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('商品评论列表'));
-		$this->assign('ur_here', '商品评论列表');
-		
-		$this->assign('goods_comment_list', 'goods_comment_list');
-		$data = $this->comment_list($_GET['goods_id']);
-		$goods_info = RC_DB::TABLE('goods')->where('goods_id', $_GET['goods_id'])->select('goods_name', 'shop_price', 'goods_thumb')->first();
-		$this->assign('data', $data);
-		$this->assign('goods_info', $goods_info);
-		 
-		$this->assign('search_action',RC_Uri::url('comment/mh_comment/init'));
-		$this->display('mh_comment_list.dwt');
-	}
 
 	/**
 	 * 评论-列表信息
 	 */
 	private function comment_list($goods_id) {
-		$db_comment = RC_DB::table('comment as c');
+		$db_comment = RC_DB::table('comment');
+		$db_comment->where(RC_DB::raw('store_id'), $_SESSION['store_id']);
+		if(!empty($goods_id)){
+			$db_comment->where(RC_DB::raw('id_value'), $goods_id);
+		}
+		
 		$filter['keywords'] = empty($_GET['keywords']) ? '' : trim($_GET['keywords']);
 		if ($filter['keywords']) {
 			$db_comment->where('user_name', 'like', '%'.mysql_like_quote($filter['keywords']).'%');
 		}
-		if(!empty($goods_id)){
-			$db_comment->where(RC_DB::raw('store_id'), $_SESSION['store_id'])->where(RC_DB::raw('id_value'), $goods_id);
-		}else{
-			$db_comment->where(RC_DB::raw('store_id'), $_SESSION['store_id']);
-		}
+		
+		//评分级别
 		if (isset($_GET['rank'])) {
 		    if ($_GET['rank'] == '1') {
-		        $db_comment->where(RC_DB::raw('c.comment_rank'), '5');
+		        $db_comment->where(RC_DB::raw('comment_rank'), '5');
 		    } elseif ($_GET['rank'] == '2') {
-		        $db_comment->whereIn(RC_DB::raw('c.comment_rank'), array('3','4'));
+		        $db_comment->whereIn(RC_DB::raw('comment_rank'), array('3','4'));
 		    } elseif ($_GET['rank'] == '3') {
-		        $db_comment->where(RC_DB::raw('c.comment_rank'), '<=', '2');
+		        $db_comment->where(RC_DB::raw('comment_rank'), '<=', '2');
 		    }
 		}
+		
+		//有无晒图
 		if (isset($_GET['has_img']) && (!empty($_GET['has_img']) || $_GET['has_img'] == '0')) {
-		    $db_comment->where(RC_DB::raw('c.has_image'), '=', $_GET['has_img']);
+		    $db_comment->where(RC_DB::raw('has_image'), '=', $_GET['has_img']);
 		    $filter['has_img'] = $_GET['has_img'];
 		}
+		
 		$count = $db_comment->count();
 		$page = new ecjia_merchant_page($count, 10, 5);
 		$data = $db_comment

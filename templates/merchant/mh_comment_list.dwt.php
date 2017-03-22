@@ -22,7 +22,7 @@
 		</h2>
 	</div>
 </div>
-{if $goods_comment_list}
+{if $goods_info}
 <div class="row">
 	<div class="col-lg-12">
 		<div class="panel">
@@ -58,14 +58,17 @@
                 		<li><span>全部</span></li>
                 		<!-- {if $select_rank} -->
                 		<li class="hide-rank"><span>></span></li>
-                		<li class="hide-rank"><a class="data-pjax btn btn-primary no-show-rank" href='{url path="comment/mh_comment/init" args="{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $select_status}&select_status={$select_status}{/if}{if $select_img}&select_img={$select_img}{/if}"}' style="padding:3px 5px;">
+                		<li class="hide-rank">
+                		<a class="data-pjax btn btn-primary no-show-rank" 
+                			href='{url path="comment/mh_comment/init" args="{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $select_img}&select_img={$select_img}{/if}{if $goods_id}&goods_id={$goods_id}{/if}"}' 
+                			style="padding:3px 5px;">
                 			{if $smarty.get.rank eq 1} 好评 {elseif $smarty.get.rank eq 2} 中评 {elseif $smarty.get.rank eq 3}差评{/if}
-                			<i class=" close-status fontello-icon-cancel fa fa-times"></i></a>
+                		<i class=" close-status fontello-icon-cancel fa fa-times"></i></a>
                 		</li>
                 		<!-- {/if} -->
                 		<!-- {if $select_img} -->
                 		<li class="hide-img"><span>></span></li>
-                		<li class="hide-img"><a class="data-pjax btn btn-primary no-show-img" href='{url path="comment/mh_comment/init" args="{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $select_rank}&select_rank={$select_rank}{/if}{if $select_status}&select_status={$select_status}{/if}"}' style="padding:3px 5px;">{if $smarty.get.has_img eq 1}有图 {else}无图{/if}
+                		<li class="hide-img"><a class="data-pjax btn btn-primary no-show-img" href='{url path="comment/mh_comment/init" args="{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $select_rank}&select_rank={$select_rank}{/if}{if $select_status}&select_status={$select_status}{/if}{if $goods_id}&goods_id={$goods_id}{/if}"}' style="padding:3px 5px;">{if $smarty.get.has_img eq 1}有图 {else}无图{/if}
                 			<i class=" close-status fontello-icon-cancel fa fa-times"></i></a>
                 		</li>
                 		<!-- {/if} -->
@@ -76,32 +79,24 @@
                         <tr>
                             <td class="active w150">评分级别：</td>
                             <td>
-								<div class="status-distance"><a class="data-pjax" href='{url path="comment/mh_comment/init" args="rank=1&select_rank=2{if $smarty.get.select_status}&select_status={$smarty.get.select_status}{/if}{if $smarty.get.select_img}&select_img={$smarty.get.select_img}{/if}{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}"}'>好评</a></div>
-                				<div class="status-distance"><a class="data-pjax" href='{url path="comment/mh_comment/init" args="rank=2&select_rank=2{if $smarty.get.select_status}&select_status={$smarty.get.select_status}{/if}{if $smarty.get.select_img}&select_img={$smarty.get.select_img}{/if}{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}"}'>中评</a></div>
-                				<div class="status-distance"><a class="data-pjax" href='{url path="comment/mh_comment/init" args="rank=3&select_rank=2{if $smarty.get.select_status}&select_status={$smarty.get.select_status}{/if}{if $smarty.get.select_img}&select_img={$smarty.get.select_img}{/if}{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}"}'>差评</a></div>
+								<div class="status-distance"><a class="data-pjax" href='{url path="comment/mh_comment/init" args="rank=1&select_rank=2{if $smarty.get.select_img}&select_img={$smarty.get.select_img}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}{if $goods_id}&goods_id={$goods_id}{/if}"}'>好评</a></div>
+                				<div class="status-distance"><a class="data-pjax" href='{url path="comment/mh_comment/init" args="rank=2&select_rank=2{if $smarty.get.select_img}&select_img={$smarty.get.select_img}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}{if $goods_id}&goods_id={$goods_id}{/if}"}'>中评</a></div>
+                				<div class="status-distance"><a class="data-pjax" href='{url path="comment/mh_comment/init" args="rank=3&select_rank=2{if $smarty.get.select_img}&select_img={$smarty.get.select_img}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}{if $goods_id}&goods_id={$goods_id}{/if}"}'>差评</a></div>
 							</td>
                         </tr>
                         <tr>
                             <td class="active">有无晒图：</td>
                             <td>
-								<div class="status-distance"><a class="data-pjax" href='{url path="comment/mh_comment/init" args="has_img=1&select_img=3{if $smarty.get.select_status}&select_status={$smarty.get.select_status}{/if}{if $smarty.get.select_rank}&select_rank={$smarty.get.select_rank}{/if}{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}"}'>有</a></div>
-				                <div class="status-distance"><a class="data-pjax" href='{url path="comment/mh_comment/init" args="has_img=0&select_img=3{if $smarty.get.select_status}&select_status={$smarty.get.select_status}{/if}{if $smarty.get.select_rank}&select_rank={$smarty.get.select_rank}{/if}{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}"}'>无</a></div>
+								<div class="status-distance"><a class="data-pjax" href='{url path="comment/mh_comment/init" args="has_img=1&select_img=3{if $smarty.get.select_rank}&select_rank={$smarty.get.select_rank}{/if}{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}{if $goods_id}&goods_id={$goods_id}{/if}"}'>有</a></div>
+				                <div class="status-distance"><a class="data-pjax" href='{url path="comment/mh_comment/init" args="has_img=0&select_img=3{if $smarty.get.select_rank}&select_rank={$smarty.get.select_rank}{/if}{if $smarty.get.rank neq null}&rank={$smarty.get.rank}{/if}{if $smarty.get.keywords}&keywords={$smarty.get.keywords}{/if}{if $goods_id}&goods_id={$goods_id}{/if}"}'>无</a></div>
 							</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 			<div class="panel-body panel-body-small">
-				<form class="form-inline pull-right" name="searchForm" method="post" action="{$search_action}">
+				<form class="form-inline pull-right" name="searchForm" method="post" action='{url path="comment/mh_comment/init" args="{if $smarty.get.select_rank}&select_rank={$smarty.get.select_rank}{/if}{if $smarty.get.rank}&rank={$smarty.get.rank}{/if}{if $smarty.get.select_img}&select_img={$smarty.get.select_img}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $goods_id}&goods_id={$goods_id}{/if}"}'>
 					<div class="screen f_r">
-						<div class="form-group">
-							<select class="w130" name="intro_type">
-								<option value="0">{lang key='goods::goods.intro_type'}</option>
-								<!-- {foreach from=$intro_list item=list key=key} -->
-								<option value="{$key}" {if $key == $smarty.get.intro_type}selected{/if}>{$list}</option>
-								<!-- {/foreach} -->
-							</select>
-						</div>
 						<div class="form-group">
 							<input type="text" class="form-control" name="keywords" value="{$smarty.get.keywords}" placeholder="输入用户名称">
 						</div>

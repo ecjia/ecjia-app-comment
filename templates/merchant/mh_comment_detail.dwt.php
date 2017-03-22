@@ -147,7 +147,7 @@
 		          </div>
 	          <!-- {/foreach} -->
 	          {if $other_comment|@count neq 0}
-	           	  <p class="text-right"><a href='{url path="comment/mh_comment/goods_comment_list" args="goods_id={$comment_info.id_value}"}'>查看更多</a></p>
+	           	  <p class="text-right"><a href='{url path="comment/mh_comment/init" args="goods_id={$comment_info.id_value}"}'>查看更多</a></p>
 			  {/if} 
 		  </div>
 		</section>
