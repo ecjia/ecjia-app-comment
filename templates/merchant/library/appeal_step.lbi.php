@@ -1,6 +1,6 @@
 <?php defined('IN_ECJIA') or exit('No permission resources.');?> 
 <div class="panel panel-body">
-	<div class="appeal-time-base m_b20">
+	<div class="appeal-time-base">
 		<ul>
 			<li class="step-first">
 				<div class="{if $check_status eq '-1'}step-cur{else}step-done{/if}">
