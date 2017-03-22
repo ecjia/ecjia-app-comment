@@ -3,7 +3,7 @@
 
 <!-- {block name="footer"} -->
 <script type="text/javascript">
-// 	ecjia.admin.comment_manage.init();
+	ecjia.admin.comment_manage.init();
 </script>
 <!-- {/block} -->
 
@@ -21,7 +21,7 @@
 </div>
 <div class="row-fluid batch">
 	<div class="choose_list f_r" >
-		<form class="f_r form-inline" action='{$form_search}'  method="post" name="searchForm">
+		<form class="f_r form-inline" action="{RC_Uri::url('comment/admin/trash')}{if $comment_list.filter.status neq null}&status={$comment_list.filter.status}{/if}{if $comment_list.filter.has_img neq null}&has_img={$comment_list.filter.has_img}{/if}{if $smarty.get.rank}&rank={$smarty.get.rank}{/if}{if $select_status}&select_status={$select_status}{/if}{if $select_rank}&select_rank={$select_rank}{/if}{if $select_img}&select_img={$select_img}{/if}"  method="post" name="searchForm">
 			<input type="text" name="keyword" value="{$smarty.get.keywords}" placeholder="{'输入评价关键字进行搜索'}" size="15" />
 			<button class="btn search_comment" type="button">{lang key='system::system.button_search'}</button>
 		</form>
@@ -58,11 +58,13 @@
 					<td class="hide-edit-area">
 						<div><a href='{url path="goods/admin/edit" args="goods_id={$comment.id_value}"}'' target="_blank">{$comment.goods_name}</a></div>
 						<div>{lang key='comment::comment_manage.comment_on'}&nbsp;&nbsp;{$comment.add_time}</div>
-						{$comment.content|truncate:100|escape:html}
-						{if $comment.has_image eq 1}
+						<div>{$comment.content|truncate:100|escape:html}</div>
+						{if $comment.imgs}
+						<div class="img-style">
 						    <!-- {foreach from=$comment.imgs item=img_list} -->
 							     <img class="thumbnail" style="float:left;width:78px;height:78px;margin-right:8px;" src="{$img_list.file_path}">
 						    <!-- {/foreach} -->
+						</div>
 						{/if}
 						<div class="edit-list">
 								<a class="data-pjax" href='{url path="comment/admin/reply" args="comment_id={$comment.comment_id}"}'>
