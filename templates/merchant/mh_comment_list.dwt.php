@@ -33,14 +33,8 @@
 	        	  </div>
 	        	  <div class="goods-info-comment">
 		        	   <p>{$goods_info.goods_name}</p>     
-		        	   <p>价格：<font color="#FF0000"><strong>¥&nbsp;{$goods_info.shop_price}</strong></font></p>     
-		        	   <p>综合评分： 
-			        	{section name=loop loop=$list.comment_rank}   
-							<i class="fa fa-star" style="color:#FF9933;"></i>
-						{/section}
-						{section name=loop loop=5-$list.comment_rank}   
-							<i class="fa fa-star" style="color:#bbb;"></i>
-						{/section}
+		        	   <p>价格：¥&nbsp;{$goods_info.shop_price}</p>     
+		        	   <p>好评率：<font color="#FF0000"><strong>{$goods_info.goods_rank}%</strong></font></p>
 	        	  </div>
 	    		</div>
 			</div>
