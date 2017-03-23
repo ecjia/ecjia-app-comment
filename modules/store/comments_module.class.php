@@ -141,12 +141,16 @@ function EM_assign_comment($id, $type, $page = 1, $page_size = 15) {
 					}
 				}
 			}
-			$reply = RC_DB::table('comment')->where('parent_id', $row['comment_id'])->first();
-			if (!empty($reply)) {
-				$arr['reply_content']  = nl2br(str_replace('\n', '<br />', htmlspecialchars($reply['content'])));
-				$arr['reply_username'] = $row['user_name'];
-				$arr['reply_add_time'] = RC_Time::local_date(ecjia::config('time_format'), $reply['add_time']);
+			$reply = RC_DB::table('comment_reply')->where('comment_id', $row['comment_id'])->whereIn('user_type', array('admin', 'merchant'))->first();
+			if ($reply['user_type'] == 'admin' && $reply['user_id']) {
+			    $reply_username = '平台回复';
 			}
+			if ($reply['user_type'] == 'merchant' && $reply['user_id']) {
+			    $reply_username = '卖家回复';
+			}
+			$arr['reply_content']  = nl2br(str_replace('\n', '<br />', htmlspecialchars($reply['content'])));
+			$arr['reply_username'] = $reply_username;
+			$arr['reply_add_time'] = RC_Time::local_date(ecjia::config('time_format'), $reply['add_time']);
 			$list['list'][] = $arr;
 		}
 	}

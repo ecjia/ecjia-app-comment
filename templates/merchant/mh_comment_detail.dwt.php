@@ -61,7 +61,7 @@
 		                <div class="panel-heading">
 		                    <a data-toggle="collapse" data-parent="#accordionOne" href="#collapseOne" class="accordion-toggle">
 		                        <span class="glyphicon"></span>
-		                        <h4 class="panel-title">评论内容</h4>
+		                        <h4 class="panel-title">管理员回复内容</h4>
 		                    </a>
 		                </div>
 		                <div id="collapseOne" class="panel-collapse collapse in">
@@ -69,10 +69,18 @@
 	                         	  <!-- {foreach from=$replay_admin_list item=list} -->
 		                              <div class="text-right">
 		                                 <div class="comment-all-right-thumb">
-											<img src="{$list.staff_img}" >
+		                                	{if $list.staff_img}
+						                		<img src="{RC_Upload::upload_url()}/{$list.staff_img}" >
+						                	{else}
+						                		<img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">
+						                	{/if}
 										 </div>
-							  			 <div class="comment-thumb-details">
-											<h1><span><small class="label label-warning-admin">管理员</small></span>&nbsp;{$list.staff_name}</h1>
+							  			  <div class="comment-thumb-details">
+							  			 	{if $list.user_type eq 'admin'}
+							  			 	<h1><span><small class="label label-warning-admin">平台管理员</small></span>&nbsp;{$list.staff_name}</h1>
+							  			 	{else}
+							  			 	<h1><span><small class="label label-warning-admin">商家管理员</small></span>&nbsp;{$list.staff_name}</h1>
+							  			 	{/if}
 											<p>{$list.add_time_new}</p><br>
 										 </div>
 										 <p>{$list.content}</p>

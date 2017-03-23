@@ -244,7 +244,7 @@ class mh_appeal extends ecjia_merchant {
 		$type = $_GET['type'];
 		$filter['keywords'] = empty($_GET['keywords']) ? '' : trim($_GET['keywords']);
 		if ($filter['keywords']) {
-			$db_comment_appeal->where('appeal_sn', 'like', '%'.mysql_like_quote($filter['keywords']).'%');
+			$db_comment_appeal->where('appeal_content', 'like', '%'.mysql_like_quote($filter['keywords']).'%');
 		}
 	
 		$db_comment_appeal->where(RC_DB::raw('store_id'), $_SESSION['store_id']);
@@ -280,8 +280,6 @@ class mh_appeal extends ecjia_merchant {
 					$row['check_status_name'] = '通过';
 				}elseif ($row['check_status'] == 3){
 					$row['check_status_name'] = '驳回';
-				}elseif($row['check_status'] == 4){
-					$row['check_status_name'] = '撤销';
 				}
 				$row['appeal_pic_list'] = RC_DB::TABLE('term_attachment')->where('object_id',  $row['id'])->where('object_app', 'ecjia.comment')->where('object_group','appeal')->select('file_path')->get();
 				$list[] = $row;
