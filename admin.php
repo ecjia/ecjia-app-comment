@@ -378,6 +378,8 @@ class admin extends ecjia_admin {
 				$goods_id = RC_DB::table('comment')->where('comment_id', $id)->pluck('id_value');
 			}
 			RC_Api::api('comment', 'update_goods_comment', array('goods_id' => $goods_id));
+			/*审核通过后送积分*/
+			RC_Api::api('comment', 'comment_award', array('comment_id' => $id));
 			
 			$message = RC_Lang::get('comment::comment_manage.show_success');
 		} elseif ($allow == 'forbid') {
@@ -448,6 +450,13 @@ class admin extends ecjia_admin {
 							}
 						}
 					}
+					/*审核通过后送积分*/
+					if (!empty($comment_ids)) {
+						foreach ($comment_ids as $v) {
+							RC_Api::api('comment', 'comment_award', array('comment_id' => $v));
+						}
+					}
+					
 				break;
 
 				case 'deny' :
