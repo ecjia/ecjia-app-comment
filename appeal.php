@@ -238,7 +238,7 @@ class appeal extends ecjia_admin {
 		$page = new ecjia_page($count, 10, 5);
 		$data = $db_comment_appeal
 		->selectRaw('ca.id, ca.appeal_sn, ca.comment_id, ca.appeal_content, ca.check_status, ca.appeal_time, ca.process_time, sf.merchants_name, c.has_image')
-		->orderby(RC_DB::Raw('ca.appeal_time'), 'asc')
+		->orderby(RC_DB::Raw('ca.appeal_time'), 'desc')
 		->take(10)
 		->skip($page->start_id-1)
 		->get();
@@ -260,7 +260,7 @@ class appeal extends ecjia_admin {
 				->where(RC_DB::raw('object_id'), '=', $row['id'])
 				->where(RC_DB::raw('object_group'), '=', 'appeal')
 				->where(RC_DB::raw('object_app'), '=', 'ecjia.comment')
-				->select('file_path')->orderby(RC_DB::raw('add_time'), 'asc')->get();
+				->select('file_path')->get();
 				if (!empty($row['imgs'])) {
 					foreach ($row['imgs'] as $key => $val) {
 						$row['imgs'][$key]['file_path'] =  RC_Upload::upload_url().'/'.$val['file_path'];
