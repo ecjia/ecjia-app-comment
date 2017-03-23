@@ -35,7 +35,7 @@
 						      <div class="panel-body">
                                     <div class="text-right-commentinfo">
                                         <div class="comment-users-img">
-									       <img src="{$avatar_img}" style="width:60px;height:60px;">
+									       <img src="{$avatar_img}" style="width:60px;height:60px;border-radius:100%;">
 								        </div>
         					  			 <div class="comment-userinfo">
         									<div>
@@ -55,7 +55,7 @@
 											<!-- {/foreach} -->
 									{/if}
 									{if $comment_info.status neq 3}
-									<div>
+									<div class="commentinfo-can-btn">
 										<a class="data-pjax btn toggle_view" href='{url path="comment/admin/check" args="list=4&comment_id={$appeal_info.comment_id}&id={$appeal_info.id}"}' data-msg="{t}您确定要将该用户[{$comment_info.user_name|default:{lang key='comment::comment_manage.anonymous'}}]的评论移至回收站吗？{/t}" data-val="trashed_comment"  type="button">{t}删除至回收站{/t}</a>
 									</div>
 									{/if}
