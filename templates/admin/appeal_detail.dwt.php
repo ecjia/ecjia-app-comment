@@ -51,7 +51,7 @@
                                     <div class="comment-content-info">{$comment_info.content}</div>
 									{if $comment_imgs_list}
 											<!-- {foreach from=$comment_imgs_list item=img_list} -->
-													<img width="78" height="78" style="margin-right:8px;margin-top:10px;margin-bottom:8px;" alt="" src="{$img_list.file_path}">
+													<img style="margin-right:8px;margin-top:10px;margin-bottom:8px;height:75px;width:75px;" alt="" src="{$img_list.file_path}">
 											<!-- {/foreach} -->
 									{/if}
 									{if $comment_info.status neq 3}
@@ -71,7 +71,7 @@
 					    <div class="appeal-content-info">{$appeal_info.appeal_content}</div>
 					    <!-- {if $appeal_imgs_list}-->
 								<!-- {foreach from=$appeal_imgs_list item=list} -->
-										<img width="78" height="78" style="margin-right:8px;margin-top:10px;margin-bottom:6px;" alt="" src="{$list.file_path}">
+										<img style="margin-right:8px;margin-top:10px;margin-bottom:6px;height:75px;width:75px;" alt="" src="{$list.file_path}">
 								<!-- {/foreach} -->
 						<!-- {/if}-->
 						<div style="margin-bottom:8px;">{$appeal_info.appeal_time}</div>
