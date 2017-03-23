@@ -81,13 +81,15 @@ class mh_comment extends ecjia_merchant {
 	    
 	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('评论列表'));
 	    $this->assign('ur_here', '评论列表');
-	    
-	    $data = $this->comment_list($_GET['goods_id']);
+	    $goods_id = $_GET['goods_id'];
+	    $data = $this->comment_list($goods_id);
 	    $this->assign('data', $data);
-	    if(!empty($_GET['goods_id'])){
-	    	$goods_info = RC_DB::TABLE('goods')->where('goods_id', $_GET['goods_id'])->select('goods_name', 'shop_price', 'goods_thumb')->first();
+	    
+	    if(!empty($goods_id)){
+	    	$goods_info = RC_DB::TABLE('goods')->where('goods_id', $_GET['goods_id'])->select('goods_name', 'shop_price', 'goods_thumb', 'goods_rank')->first();
+	    	$goods_info['goods_rank'] = $goods_info['goods_rank'] / 100;
 	    	$this->assign('goods_info', $goods_info);
-	    	$this->assign('goods_id',  $_GET['goods_id']);
+	    	$this->assign('goods_id',  $goods_id);
 	    }
 
 	    $this->assign('select_rank', $_GET['select_rank']);
