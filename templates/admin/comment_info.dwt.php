@@ -110,9 +110,11 @@
     			</div>
 			</div>
 			<input type="hidden" name="comment_id" value="{$comment_info.comment_id}" />
-			<div class="control-group control-group-small">
-				<button class="btn btn-gebo" type="submit">回复</button>
-			</div>
+			{if $comment_info.status neq '3'}
+				<div class="control-group control-group-small">
+					<button class="btn btn-gebo" type="submit">回复</button>
+				</div>
+			{/if}
 		</div>
 		
 		<div class="right-bar move-mod">
