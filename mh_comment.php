@@ -86,8 +86,12 @@ class mh_comment extends ecjia_merchant {
 	    $this->assign('data', $data);
 	    
 	    if(!empty($goods_id)){
-	    	$goods_info = RC_DB::TABLE('goods')->where('goods_id', $_GET['goods_id'])->select('goods_name', 'shop_price', 'goods_thumb', 'goods_rank')->first();
-	    	$goods_info['goods_rank'] = $goods_info['goods_rank'] / 100;
+	    	$goods_rank = RC_DB::TABLE('goods_data')->where('goods_id', $goods_id)->pluck('goods_rank');
+	    	if(empty($goods_rank)){
+	    		$goods_rank === 10000;
+	    	}
+	    	$goods_info['goods_rank'] = $goods_rank / 100;
+	    	
 	    	$this->assign('goods_info', $goods_info);
 	    	$this->assign('goods_id',  $goods_id);
 	    }
@@ -117,6 +121,9 @@ class mh_comment extends ecjia_merchant {
 	    	'add_time'		=> RC_Time::gmtime(),
 	    );
 	    RC_DB::table('comment_reply')->insertGetId($data);
+	    
+	    $data = array('status' => '1');
+	    RC_DB::table('comment')->where('comment_id', $comment_id)->update($data);
 	    
 		$goods_id = RC_DB::TABLE('comment')->where('comment_id', $comment_id)->pluck('id_value');
 		RC_Api::api('comment', 'update_goods_comment', array('goods_id' => $goods_id));
@@ -218,6 +225,9 @@ class mh_comment extends ecjia_merchant {
 			ecjia_merchant::admin_log('评论ID:'.$comment_id, 'reply', 'users_comment');
 		}
 
+		$data = array('status' => '1');
+	    RC_DB::table('comment')->where('comment_id', $comment_id)->update($data);
+	    
 		$goods_id = RC_DB::TABLE('comment')->where('comment_id', $comment_id)->pluck('id_value');
 		RC_Api::api('comment', 'update_goods_comment', array('goods_id' => $goods_id));
 		
