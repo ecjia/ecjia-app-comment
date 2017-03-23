@@ -54,7 +54,7 @@ function EM_assign_comment($id, $type, $page = 1, $page_size = 15) {
 	    $list['comment_number']['general'] = 0;
 	    $list['comment_number']['low'] = 0;
 	    $list['comment_number']['picture'] = 0;
-	    $list['comment_percent'] = '100%';
+	    $list['comment_percent'] = '100';
 	} else {
 	    $comment_number['comment_good'] = empty($comment_number['comment_good']) ? 0 : $comment_number['comment_good'];
 	    $comment_number['comment_general'] = empty($comment_number['comment_general']) ? 0 : $comment_number['comment_general'];
@@ -67,7 +67,7 @@ function EM_assign_comment($id, $type, $page = 1, $page_size = 15) {
 	    $list['comment_number']['general'] = $comment_number['comment_general'];
 	    $list['comment_number']['low'] = $comment_number['comment_low'];
 	    $list['comment_number']['picture'] = $comment_number['comment_picture'];
-	    $list['comment_percent'] = round($comment_number['goods_rank']/100).'%';
+	    $list['comment_percent'] = round($comment_number['goods_rank']/100);
 	}
 	
 	$db_comment = RC_DB::table('comment as c')
@@ -135,6 +135,7 @@ function EM_assign_comment($id, $type, $page = 1, $page_size = 15) {
 			$arr['rank']     	= $row['comment_rank'];
 			$arr['goods_attr']	= $row['goods_attr'];
 			$arr['add_time'] 	= RC_Time::local_date(ecjia::config('time_format'), $row['add_time']);
+			$arr['picture']     = array();
 	
 			if ($row['has_image'] == 1) {
 				$picture_list = RC_DB::table('term_attachment')
