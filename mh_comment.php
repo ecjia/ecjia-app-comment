@@ -129,9 +129,9 @@ class mh_comment extends ecjia_merchant {
 			);
 			RC_DB::table('comment')->where('comment_id', $comment_id)->update($data);
 			RC_Api::api('comment', 'update_goods_comment', array('goods_id' => $id_value));
+			RC_Api::api('comment', 'comment_award', array('comment_id' => $comment_id));
 		}
-		
-	   
+
 	    ecjia_merchant::admin_log('评论ID:'.$comment_id, 'reply', 'users_comment');
 	   	return $this->showmessage('回复成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('comment/mh_comment/init')));
 	}
@@ -240,6 +240,7 @@ class mh_comment extends ecjia_merchant {
 			);
 			RC_DB::table('comment')->where('comment_id', $comment_id)->update($data);
 			RC_Api::api('comment', 'update_goods_comment', array('goods_id' => $id_value));
+			RC_Api::api('comment', 'comment_award', array('comment_id' => $comment_id));
 		}
 		
 	    return $this->showmessage('回复成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('comment/mh_comment/comment_detail',array('comment_id' => $comment_id))));
