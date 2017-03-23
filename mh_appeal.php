@@ -280,8 +280,6 @@ class mh_appeal extends ecjia_merchant {
 					$row['check_status_name'] = '通过';
 				}elseif ($row['check_status'] == 3){
 					$row['check_status_name'] = '驳回';
-				}elseif($row['check_status'] == 4){
-					$row['check_status_name'] = '撤销';
 				}
 				$row['appeal_pic_list'] = RC_DB::TABLE('term_attachment')->where('object_id',  $row['id'])->where('object_app', 'ecjia.comment')->where('object_group','appeal')->select('file_path')->get();
 				$list[] = $row;
