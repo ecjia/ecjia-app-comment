@@ -56,15 +56,15 @@ class comment_update_goods_comment_api extends Component_Event_Api {
 	public function call(&$options) {
 // 	    $options['goods_id'] $options['rank']
 		
-	    if (empty($options['goods_id']) || empty($options['rank'])) {
+	    if (empty($options['goods_id'])) {
 	        return new ecjia_error('invalid_parameter', '参数无效');
 	    }
-	    $rank_arr = array(1,2,3,4,5);
-	    if (!in_array($options['rank'], $rank_arr)) {
-	        return new ecjia_error('invalid_parameter', '评分参数无效');
-	    }
+// 	    $rank_arr = array(1,2,3,4,5);
+// 	    if (!in_array($options['rank'], $rank_arr)) {
+// 	        return new ecjia_error('invalid_parameter', '评分参数无效');
+// 	    }
 	    $goods_id = $options['goods_id'];
-	    $rank = $options['rank'];
+// 	    $rank = $options['rank'];
 	    
 	    $comment_number = RC_DB::table('comment')
 	    ->select(RC_DB::raw('count(*) as "all"'),
