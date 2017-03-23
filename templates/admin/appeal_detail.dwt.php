@@ -71,9 +71,10 @@
 					    <div class="appeal-content-info">{$appeal_info.appeal_content}</div>
 					    <!-- {if $appeal_imgs_list}-->
 								<!-- {foreach from=$appeal_imgs_list item=list} -->
-										<img width="78" height="78" style="margin-right:8px;margin-top:10px;margin-bottom:8px;" alt="" src="{$list.file_path}">
+										<img width="78" height="78" style="margin-right:8px;margin-top:10px;margin-bottom:6px;" alt="" src="{$list.file_path}">
 								<!-- {/foreach} -->
 						<!-- {/if}-->
+						<div style="margin-bottom:8px;">{$appeal_info.appeal_time}</div>
 					</div>
 				</div>
 			</div>
