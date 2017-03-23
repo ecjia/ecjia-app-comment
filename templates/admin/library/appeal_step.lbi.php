@@ -29,11 +29,6 @@
 					<div class="step-failed m_b5">{if $appeal_info.check_status lt '4'}3{/if}</div>
 					<div>申诉失败<br>{$appeal_info.process_time}</div>
 				</div>
-				{elseif $appeal_info.check_status eq '4' }
-				<div class="{if $appeal_info.check_status eq '4'}step-cur{/if} m_b20  p_t5">
-					<div class="step-failed m_b5">{if $appeal_info.check_status lt '5'}3{/if}</div>
-					<div>申诉撤销<br>{$appeal_info.process_time}</div>
-				</div>
 				{else}
 				<div class="{if $appeal_info.check_status eq '2'}step-cur{/if} m_b20  p_t5">
 					<div class="step-no m_b5">{if $appeal_info.check_status lt '3'}3{/if}</div>

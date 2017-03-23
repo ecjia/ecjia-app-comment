@@ -253,8 +253,6 @@ class appeal extends ecjia_admin {
 					$row['label_check_status'] = '通过';
 				}elseif ($row['check_status'] == 3){
 					$row['label_check_status'] = '驳回';
-				}elseif($row['check_status'] == 4){
-					$row['label_check_status'] = '撤销';
 				}
 				$row['imgs'] = RC_DB::table('term_attachment')
 				->where(RC_DB::raw('object_id'), '=', $row['id'])
