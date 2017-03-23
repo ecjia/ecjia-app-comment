@@ -32,20 +32,23 @@
     };
  
     app.appeal_info = {
-        init: function () {        	
-    		var $form = $("form[name='theForm']");
-			var option = {
-					submitHandler : function() {
-						$form.ajaxSubmit({
-							dataType : "json",
-							success : function(data) {
-								ecjia.merchant.showmessage(data);
-							}
-						});
+        init: function () {   
+			$('#appeal_btn').on('click', function() {
+				$(".filepath").removeAttr("disabled");
+	    		var $form = $("form[name='theForm']");
+				var option = {
+						submitHandler : function() {
+							$form.ajaxSubmit({
+								dataType : "json",
+								success : function(data) {
+									ecjia.merchant.showmessage(data);
+								}
+							});
+						}
 					}
-				}
-			 var options = $.extend(ecjia.merchant.defaultOptions.validate, option);
-			$form.validate(options);
+				 var options = $.extend(ecjia.merchant.defaultOptions.validate, option);
+				$form.validate(options);
+			});
         }
     };
 })(ecjia.merchant, jQuery);

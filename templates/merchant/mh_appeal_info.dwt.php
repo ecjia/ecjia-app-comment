@@ -35,7 +35,7 @@
 			$(this).parent().children(".img22").attr('src', srcs);
 			$(this).parent().children(".img11").hide();
 			$(this).parent().children('.pic_close').show(); 
-// 			$(this).attr('disabled', 'disabled');
+			$(this).attr('disabled', 'disabled');
 			
 			
 			$(".pic_close").on("click",function() {
@@ -142,7 +142,7 @@
 						</div>
 						<br><br><br>
 						<input type="hidden" name="comment_id" value="{$comment_info.comment_id}" />
-						<button class="btn btn-info" type="submit">提交申诉</button>
+						<button class="btn btn-info" id="appeal_btn" type="submit">提交申诉</button>
 					</form>
 				</div>
 			</div>
