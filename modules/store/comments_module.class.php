@@ -54,7 +54,7 @@ function EM_assign_comment($id, $type, $page = 1, $page_size = 15) {
 	    $list['comment_number']['general'] = 0;
 	    $list['comment_number']['low'] = 0;
 	    $list['comment_number']['picture'] = 0;
-	    $list['comment_percent'] = '100%';
+	    $list['comment_percent'] = '100';
 	} else {
 	    $comment_number['comment_good'] = empty($comment_number['comment_good']) ? 0 : $comment_number['comment_good'];
 	    $comment_number['comment_general'] = empty($comment_number['comment_general']) ? 0 : $comment_number['comment_general'];
