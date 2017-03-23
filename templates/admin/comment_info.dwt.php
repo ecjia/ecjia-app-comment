@@ -72,13 +72,6 @@
 						<div class="accordion-inner">
 						      <div class="panel-body">
 						          <!-- {foreach from=$replay_admin_list item=list} -->
-						           <div class="comment-all-right-thumb" style="margin-left: 10px;">
-	                                	{if $list.user_type eq 'merchant'}
-					                		<img src="{$list.staff_img}" >
-					                	{elseif $list.user_type eq 'admin'}
-					                		<img src="{$list.admin_img}">
-					                	{/if}
-									 </div>
                                     <div class="text-right admin-reply">
         								 {if $list.user_type eq 'merchant'}
 	        								 <div class="comment-thumb-details">
@@ -92,6 +85,13 @@
 	        								 </div>
         								 {/if}
         								 <p>{$list.content}</p>
+        								 <div class="comment-all-right-thumb" style="margin-left: 10px;">
+    	                                	{if $list.user_type eq 'merchant'}
+    					                		<img src="{$list.staff_img}" >
+    					                	{elseif $list.user_type eq 'admin'}
+    					                		<img src="{$list.admin_img}">
+    					                	{/if}
+    									 </div>
                                     </div>
                                   <!-- {foreachelse} -->
                                     <div class="text-center">管理员暂时还未回复任何消息</div>
@@ -129,7 +129,7 @@
         						{if $shop_info.logo}
         		                	<img src="{$shop_info.logo_img}" >
         		                {else}
-        		                	<img src="{$ecjia_main_static_url}img/ecjia_avatar.jpg">
+        		                	<img src="{$shop_info.no_logo}">
         		                {/if}
         					</div>
         					<div class="comment-store-info">
