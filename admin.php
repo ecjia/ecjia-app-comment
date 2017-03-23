@@ -382,39 +382,34 @@ class admin extends ecjia_admin {
 	public function check() {
 		$this->admin_priv('comment_update', ecjia::MSGTYPE_JSON);
 		
-		$list		= !empty($_GET['list']) ? $_GET['list'] : 3;
+		$list		= !empty($_GET['list']) ? $_GET['list'] : '';
 		$id		 	= !empty($_GET['comment_id']) 		? intval($_GET['comment_id'])		: 0;
 		$page		= !empty($_GET['page']) 		? intval($_GET['page'])		: 1;
 		$allow 		= !empty($_POST['check']) 	? $_POST['check']			: '';
 		$status		= $_POST['status'];
-		$last       = !empty($_GET['last']) ? $_GET['last'] : '';
-		
 		$appeal_id = $_GET['id'];
-
+		$store_id = $_GET['store_id'];
+		
 		if ($status === '') {
 			if ($list == 3) {
-			 if ($last == 'reply') {
-			        $pjaxurl = RC_Uri::url('comment/admin/reply', array('comment_id' => $id));
-			    } else {
-			        $pjaxurl = RC_Uri::url('comment/admin/init', array('list' => 1));
-			    }			
+				$pjaxurl = RC_Uri::url('comment/admin/store_goods_comment_list', array('page' => $page, 'store_id' => $store_id));
 			} elseif ($list == 4) {
 				$pjaxurl = RC_Uri::url('comment/appeal/detail', array('id' => $appeal_id, 'comment_id' => $id));
-			}else{
+			}elseif ($list == 1) {
 				$pjaxurl = RC_Uri::url('comment/admin/init', array('page' => $page, 'list' => 1));
+			}elseif ($list == 5) {
+				$pjaxurl = RC_Uri::url('comment/admin/reply', array('comment_id' => $id));
 			}
 		} else {
 			if ($list == 3) {
-			    if ($last == 'reply') {
-			        $pjaxurl = RC_Uri::url('comment/admin/reply', array('comment_id' => $id));
-			    } else {
-			        $pjaxurl = RC_Uri::url('comment/admin/init', array('list' => 1));
-			    }
-			} elseif ($list == 4) {
+			    $pjaxurl = RC_Uri::url('comment/admin/store_goods_comment_list', array('page' => $page, 'status' => $status, 'store_id' => $store_id));
+			}elseif ($list == 4) {
 				$pjaxurl = RC_Uri::url('comment/admin/init', array('id' => $appeal_id, 'comment_id' => $id));
-			}else {
+			}elseif ($list == 1) {
 			    $pjaxurl = RC_Uri::url('comment/admin/init', array('status' => $status, 'page' => $page, 'list' => 1));
-			} 
+			} elseif ($list == 5) {
+				$pjaxurl = RC_Uri::url('comment/admin/reply', array('comment_id' => $id));
+			}
 		} 
 		
 		$db_comment = RC_DB::table('comment');
@@ -425,6 +420,7 @@ class admin extends ecjia_admin {
 				'status'     => '1'
 			);
 			$db_comment->where('comment_id', $id)->update($data);
+			//RC_Api::api('comment', 'update_goods_comment', array('goods_id' => '1046', 'rank' => $rank));
 			$message = RC_Lang::get('comment::comment_manage.show_success');
 		} elseif ($allow == 'forbid') {
 			/*禁止评论显示 */
