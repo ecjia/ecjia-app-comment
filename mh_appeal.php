@@ -244,7 +244,7 @@ class mh_appeal extends ecjia_merchant {
 		$type = $_GET['type'];
 		$filter['keywords'] = empty($_GET['keywords']) ? '' : trim($_GET['keywords']);
 		if ($filter['keywords']) {
-			$db_comment_appeal->where('appeal_sn', 'like', '%'.mysql_like_quote($filter['keywords']).'%');
+			$db_comment_appeal->where('appeal_content', 'like', '%'.mysql_like_quote($filter['keywords']).'%');
 		}
 	
 		$db_comment_appeal->where(RC_DB::raw('store_id'), $_SESSION['store_id']);

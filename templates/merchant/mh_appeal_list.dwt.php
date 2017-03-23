@@ -35,7 +35,7 @@
 			
 				<form class="form-inline pull-right" name="searchForm" method="post" action="{$search_action}">
 					<div class="form-group">
-						<input type="text" class="form-control" name="keywords" value="{$smarty.get.keywords}" placeholder="请输入申诉编号"/> 
+						<input type="text" class="form-control" name="keywords" value="{$smarty.get.keywords}" placeholder="请输入申诉内容"/> 
 						<button type="button" class="btn btn-primary"><i class="fa fa-search"></i>搜索</button>
 					</div>
 				</form>
@@ -47,7 +47,7 @@
 							<tr>
 								<th class="w200">申诉编号</th>
 								<th>申诉内容</th>
-								<th class="w100">审核状态</th>
+								<th class="w150">审核状态</th>
 							</tr>
 						</thead>
 						<tbody>
