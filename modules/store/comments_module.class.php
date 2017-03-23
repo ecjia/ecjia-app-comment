@@ -133,7 +133,7 @@ function EM_assign_comment($id, $type, $page = 1, $page_size = 15) {
 			$arr['content']  	= str_replace('\r\n', '<br />', htmlspecialchars($row['content']));
 			$arr['content']  	= nl2br(str_replace('\n', '<br />', $arr['content']));
 			$arr['rank']     	= $row['comment_rank'];
-			$arr['goods_attr']	= $row['goods_attr'];
+			$arr['goods_attr']	= str_replace('\n', '', $row['goods_attr']);
 			$arr['add_time'] 	= RC_Time::local_date(ecjia::config('time_format'), $row['add_time']);
 			$arr['picture']     = array();
 	
