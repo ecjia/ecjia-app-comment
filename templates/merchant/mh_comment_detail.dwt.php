@@ -52,7 +52,12 @@
 			                	<img src="{RC_Upload::upload_url()}/{$list.file_path}">
 			                 <!-- {/foreach} -->
 						</div>
-						<a href='{url path="comment/mh_appeal/add_appeal" args="comment_id={$comment_info.comment_id}"}'><button class="btn btn-info" type="button" style="margin-top: 10px;">申诉</button></a>
+						{if $go_on_appeal}
+							<button class="btn btn-info" type="button" style="margin-top: 10px;" disabled="disabled">申诉中</button>
+						{else}
+							<a href='{url path="comment/mh_appeal/add_appeal" args="comment_id={$comment_info.comment_id}"}'><button class="btn btn-info" type="button" style="margin-top: 10px;">申诉</button></a>
+						{/if}
+						
 		            </div>    
 				</div><br>
 				
