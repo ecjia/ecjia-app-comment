@@ -163,66 +163,18 @@ class admin extends ecjia_admin {
 	public function reply() {		
 		$this->admin_priv('comment_update');
 		
-		$admin_ip     	= RC_Ip::client_ip();
-		$comment_info 	= array();
-		$reply_info   	= array();
-		$id_value     	= array();
-		$where 			= array();
-		
-		$where['comment_id'] = !empty($_GET['comment_id']) ? $_GET['comment_id'] : 0;
-		$comment_info = RC_DB::TABLE('comment')->where('comment_id', $where['comment_id'])->first();
+		$comment_id = !empty($_GET['comment_id']) ? $_GET['comment_id'] : 0;
+		$comment_info = RC_DB::TABLE('comment')->where('comment_id', $comment_id)->first();
 
 		if (empty($comment_info)) {
 			return $this->showmessage(RC_Lang::get('comment::comment_manage.no_comment_info'), ecjia::MSGTYPE_HTML | ecjia::MSGSTAT_ERROR );
-		}
-		/* 获取评论详细信息并进行字符处理 */
-		$comment_info['content']  = str_replace('\r\n', '<br />', htmlspecialchars($comment_info['content']));
-		$comment_info['content']  = nl2br(str_replace('\n', '<br />', $comment_info['content']));
-		$comment_info['add_time'] = RC_Time::local_date(ecjia::config('time_format'), $comment_info['add_time']);
-
-		/* 取得评论的对象(文章或者商品) */
-		if ($comment_info['comment_type'] == '0') {
-			ecjia_screen::get_current_screen()->add_help_tab(array(
-				'id'		=> 'overview',
-				'title'		=> RC_Lang::get('comment::comment_manage.overview'),
-				'content'	=> '<p>' . RC_Lang::get('comment::comment_manage.goods_comment_detail_help') . '</p>'
-			));
-			ecjia_screen::get_current_screen()->set_help_sidebar(
-				'<p><strong>' . RC_Lang::get('comment::comment_manage.more_info') . '</strong></p>' .
-				'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:商品评论#.E6.9F.A5.E7.9C.8B.E5.8F.8A.E5.9B.9E.E5.A4.8D" target="_blank">'.RC_Lang::get('comment::comment_manage.about_goods_comment_detail').'</a>') . '</p>'
-			);
-			//TODO
-			$id_value = $this->db_goods->goods_field(array('goods_id' => $comment_info['id_value']), 'goods_name');
-			$comment_info['url'] = RC_Uri::url('goods/admin/preview', array('id' => $comment_info['id_value']));
-				
-			$here = RC_Lang::get('comment::comment_manage.comment_list');
-			$url = RC_Uri::url('comment/admin/init', array('type' => 1));
-			$comment_info['type'] = '1';
-			$this->assign('id_value', $id_value); 		//评论的对象
-		} else {
-			ecjia_screen::get_current_screen()->add_help_tab(array(
-				'id'		=> 'overview',
-				'title'		=> RC_Lang::get('comment::comment_manage.overview'),
-				'content'	=> '<p>' . RC_Lang::get('comment::comment_manage.article_comment_detail_help') . '</p>'
-			));
-			ecjia_screen::get_current_screen()->set_help_sidebar(
-				'<p><strong>' . RC_Lang::get('comment::comment_manage.more_info') . '</strong></p>' .
-				'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:文章评论#.E6.9F.A5.E7.9C.8B.E5.8F.8A.E5.9B.9E.E5.A4.8D" target="_blank">'.RC_Lang::get('comment::comment_manage.about_article_comment_detail').'</a>') . '</p>'
-			);
-			$id_value = RC_Api::api('article', 'article_info', array('id' => $comment_info['id_value']));
-			$comment_info['url'] = RC_Uri::url('article/admin/preview', array('id' => $comment_info['id_value']));
-				
-			$here = RC_Lang::get('comment::comment_manage.article_comment');
-			$url = RC_Uri::url('comment/admin/init', array('type' => 2));
-			$comment_info['type'] = '2';
-// 			$this->assign('id_value', $id_value['title']); //评论的对象
 		}
 
 		/*获取用户头像*/
 		$avatar_img = RC_Upload::upload_url().'/'.RC_DB::TABLE('users')->where('user_id', $comment_info['user_id'])->pluck('avatar_img');
 
 		/* 获得评论回复条数 */
-		$reply_info = RC_DB::TABLE('comment_reply')->where('comment_id', $where['comment_id'])->get();
+		$reply_info = RC_DB::TABLE('comment_reply')->where('comment_id', $comment_id)->get();
 		
 		if (!empty($reply_info)) {
 			foreach ($reply_info as $key => $val) {
@@ -300,13 +252,14 @@ class admin extends ecjia_admin {
 		} else {
 		    $shop_info['composite'] = 3;
 		}
-
+		
+		$here = RC_Lang::get('comment::comment_manage.comment_list');
+		$url = RC_Uri::url('comment/admin/init', array('list' => 1));
 		/* 模板赋值 */
 		$this->assign('comment_info', $comment_info); 		//评论信息
 		$this->assign('replay_admin_list', $reply_info); 		//管理员回复信息
 		$this->assign('avatar_img', $avatar_img);     //用户头像
 		$this->assign('admin_info', $staff_info);   //管理员信息
-		$this->assign('admin_ip', $admin_ip);		//当前管理员IP获取
 		$this->assign('comment_pic_list', $comment_pic_list);     //评论图片
 		$this->assign('shop_info', $shop_info);     //店铺信息
 		$this->assign('nochecked', $nochecked);     

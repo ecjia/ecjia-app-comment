@@ -94,7 +94,7 @@
 			<input type="hidden" name="comment_id" value="{$appeal_info.comment_id}"/>
 			<input type="hidden" name="appeal_id" value="{$appeal_info.id}"/>
 			<input type="hidden" name="ckeck_stauts" value="{$appeal_info.ckeck_stauts}"/>
-			<!--{if $appeal_info.check_status eq 2} -->
+			<!--{if $appeal_info.check_status eq 2 OR $appeal_info.check_status eq 3} -->
 				<div class="control-group">
 					<div class="reply-title">申诉回复： </div>
 				</div>
