@@ -67,7 +67,7 @@ function EM_assign_comment($id, $type, $page = 1, $page_size = 15) {
 	    $list['comment_number']['general'] = $comment_number['comment_general'];
 	    $list['comment_number']['low'] = $comment_number['comment_low'];
 	    $list['comment_number']['picture'] = $comment_number['comment_picture'];
-	    $list['comment_percent'] = round($comment_number['goods_rank']/100).'%';
+	    $list['comment_percent'] = round($comment_number['goods_rank']/100);
 	}
 	
 	$db_comment = RC_DB::table('comment as c')
