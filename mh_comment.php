@@ -232,8 +232,9 @@ class mh_comment extends ecjia_merchant {
 		}
 // 		$comment_info = RC_DB::TABLE('comment')->where('comment_id', $comment_id)->select('id_value', 'status')->first();
 		$status = RC_DB::TABLE('comment')->where('comment_id', $comment_id)->pluck('status');
-		_dump($status);
+		_dump($status,1);
 		if(intval($status) === 0){
+			_dump("test",1);
 			$data = array(
 				'status' => 1
 			);
