@@ -77,7 +77,7 @@
 										 </div>
 							  			  <div class="comment-thumb-details">
 							  			 	{if $list.user_type eq 'admin'}
-							  			 	<h1><span><small class="label label-warning-admin">平台管理员</small></span>&nbsp;{$list.$admin_user_name}</h1>
+							  			 	<h1><span><small class="label label-warning-admin">平台管理员</small></span>&nbsp;{$list.admin_user_name}</h1>
 							  			 	{else}
 							  			 	<h1><span><small class="label label-warning-admin">商家管理员</small></span>&nbsp;{$list.staff_name}</h1>
 							  			 	{/if}
