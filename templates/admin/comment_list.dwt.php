@@ -129,7 +129,7 @@
 						{if $comment.has_image eq 1}
 							{if $comment.imgs}
 								<!-- {foreach from=$comment.imgs item=img_list} -->
-										<img class="" width="78" height="78" style="margin-right:8px;margin-top:10px;" alt="" src="{$img_list.file_path}">
+										<img style="margin-right:8px;margin-top:10px;width:75px;height:75px;" alt="" src="{$img_list.file_path}">
 								<!-- {/foreach} -->
 							{/if}
 						{/if}
