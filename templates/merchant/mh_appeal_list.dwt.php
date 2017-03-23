@@ -59,6 +59,9 @@
 										{$list.appeal_content}<br>{$list.appeal_time}
 									</span>
 									<br>
+									<!-- {foreach from=$list.appeal_pic_list item=list_pic} -->
+										<img src="{RC_Upload::upload_url()}/{$list_pic.file_path}" width="50" height="50" style="margin-top: 10px;">
+									<!-- {/foreach} -->
 									<div class="edit-list">
 										<a class="data-pjax" href='{url path="comment/mh_appeal/detail" args="appeal_sn={$list.appeal_sn}&check_status={$list.check_status}"}' title="查看详情">查看详情</a>
 										{if $list.check_status eq 1}&nbsp;|&nbsp;<a class="remove_apply ecjiafc-red" style="cursor: pointer;" data-msg="您确定要撤销该申诉吗？" data-href='{url path="comment/mh_appeal/revoke" args="appeal_sn={$list.appeal_sn}"}' title="撤销">撤销</a>{/if}

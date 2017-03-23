@@ -264,7 +264,7 @@ class mh_appeal extends ecjia_merchant {
 		$count = $db_comment_appeal->count();
 		$page = new ecjia_merchant_page($count, 10, 5);
 		$data = $db_comment_appeal
-		->selectRaw('appeal_sn,comment_id,appeal_content,check_status,appeal_time,process_time')
+		->selectRaw('id,appeal_sn,comment_id,appeal_content,check_status,appeal_time,process_time')
 		->orderby('appeal_time', 'desc')
 		->take(10)
 		->skip($page->start_id-1)
@@ -283,6 +283,7 @@ class mh_appeal extends ecjia_merchant {
 				}elseif($row['check_status'] == 4){
 					$row['check_status_name'] = '撤销';
 				}
+				$row['appeal_pic_list'] = RC_DB::TABLE('term_attachment')->where('object_id',  $row['id'])->where('object_app', 'ecjia.comment')->where('object_group','appeal')->select('file_path')->get();
 				$list[] = $row;
 			}
 		}
