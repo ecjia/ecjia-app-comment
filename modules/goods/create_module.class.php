@@ -135,7 +135,6 @@ class create_module extends api_front implements api_interface {
 		        $message = '评论成功！并获得'.$comment_award.ecjia::config('integral_name').'！';
 		    }
 		    
-		    return array('data' => array('comment_award' => $comment_award, 'label_comment_award' => $message, 'label_award' => ecjia::config('integral_name')));
 		}
 
 		//补充图片 或 第一次评价
@@ -200,6 +199,9 @@ class create_module extends api_front implements api_interface {
 		            }
 		        }
 		    }
+		}
+		if (!empty($content) && !empty($rank) && empty($comment_info)) {
+		    return array('data' => array('comment_award' => $comment_award, 'label_comment_award' => $message, 'label_award' => ecjia::config('integral_name')));
 		}
 		
 		return array();
