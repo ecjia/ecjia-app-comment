@@ -143,6 +143,7 @@ class mh_comment extends ecjia_merchant {
 			$staff_info = RC_DB::TABLE('staff_user')->where('user_id', $val['user_id'])->select('name', 'avatar')->first();
 			$replay_admin_list[$key]['staff_name'] = $staff_info['name'];
 			$replay_admin_list[$key]['staff_img']  =  $staff_info['avatar'];
+			$admin_user_name = RC_DB::TABLE('admin_user')->where('user_id', $val['user_id'])->pluck('user_name');
 		};
 		
 		$goods_info = RC_DB::TABLE('goods')->where('goods_id', $comment_info['id_value'])->select('goods_name', 'shop_price', 'goods_thumb')->first();
