@@ -126,7 +126,8 @@ class create_module extends api_front implements api_interface {
 		    //评价送积分
 		    $message = '';
 		    $comment_award = 0;
-		    if (ecjia::config('comment_award_open')) {
+		    
+		    if (ecjia::config('comment_award_open') && ecjia::config('comment_check') == 0) {
 		        $comment_award_rules = ecjia::config('comment_award_rules');
 		        $comment_award_rules = unserialize($comment_award_rules);
 		        $comment_award = isset($comment_award_rules[$_SESSION['user_rank']]) ? $comment_award_rules[$_SESSION['user_rank']] : ecjia::config('comment_award');
@@ -205,7 +206,7 @@ class create_module extends api_front implements api_interface {
 		        }
 		    }
 		}
-		if (!empty($content) && !empty($rank) && empty($comment_info)) {
+		if (!empty($content) && !empty($rank) && empty($comment_info) && ecjia::config('comment_award_open')) {
 		    return array('data' => array('comment_award' => $comment_award, 'label_comment_award' => $message, 'label_award' => ecjia::config('integral_name')));
 		}
 		
