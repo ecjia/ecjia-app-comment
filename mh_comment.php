@@ -137,12 +137,12 @@ class mh_comment extends ecjia_merchant {
 		
 		$avatar_img = RC_DB::TABLE('users')->where('user_id', $comment_info['user_id'])->pluck('avatar_img');
 		
-		$replay_admin_list = RC_DB::TABLE('comment_reply')->where('comment_id', $comment_id)->where('user_id', $_SESSION['staff_id'])->select('content', 'add_time', 'user_id')->get();
+		$replay_admin_list = RC_DB::TABLE('comment_reply')->where('comment_id', $comment_id)->select('content', 'add_time', 'user_id', 'user_type')->get();
 		foreach ($replay_admin_list as $key => $val) {
 			$replay_admin_list[$key]['add_time_new'] = RC_Time::local_date(ecjia::config('time_format'), $val['add_time']);
 			$staff_info = RC_DB::TABLE('staff_user')->where('user_id', $val['user_id'])->select('name', 'avatar')->first();
 			$replay_admin_list[$key]['staff_name'] = $staff_info['name'];
-			$replay_admin_list[$key]['staff_img']  =  RC_Upload::upload_url($staff_info['avatar']);
+			$replay_admin_list[$key]['staff_img']  =  $staff_info['avatar'];
 		};
 		
 		$goods_info = RC_DB::TABLE('goods')->where('goods_id', $comment_info['id_value'])->select('goods_name', 'shop_price', 'goods_thumb')->first();
@@ -152,12 +152,7 @@ class mh_comment extends ecjia_merchant {
 		$other_comment = RC_DB::TABLE('comment')->where('store_id', $_SESSION['store_id'])->where('id_value', $comment_info['id_value'])->where('comment_id', '!=', $comment_info['comment_id'])->select('user_name', 'content', 'comment_rank', 'comment_id','id_value')->take(4)->get();
 		
 		$comment_pic_list = RC_DB::TABLE('term_attachment')->where('object_id', $comment_info['comment_id'])->where('object_app', 'ecjia.comment')->where('object_group','comment')->select('file_path')->get();
-		
-		$appeal_count = RC_DB::TABLE('comment_appeal')->where(RC_DB::raw('store_id'), $_SESSION['store_id'])->where(RC_DB::raw('comment_id'), $comment_id)->count();
-		if ($appeal_count > 0) {
-			$this->assign('no_appeal', 'no_appeal');
-		} 
-		
+
 		$this->assign('comment_info', $comment_info);
 		$this->assign('avatar_img', $avatar_img);
 		$this->assign('replay_admin_list', $replay_admin_list);
