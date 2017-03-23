@@ -135,6 +135,7 @@ function EM_assign_comment($id, $type, $page = 1, $page_size = 15) {
 			$arr['rank']     	= $row['comment_rank'];
 			$arr['goods_attr']	= $row['goods_attr'];
 			$arr['add_time'] 	= RC_Time::local_date(ecjia::config('time_format'), $row['add_time']);
+			$arr['picture']     = array();
 	
 			if ($row['has_image'] == 1) {
 				$picture_list = RC_DB::table('term_attachment')
