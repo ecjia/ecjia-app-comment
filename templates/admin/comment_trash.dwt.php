@@ -34,7 +34,7 @@
 				<tr>
 					<th class="w100">用户名</th>
 					<th class='w100'>商家名称</th>
-					<th class="w500">商品详情</th>
+					<th>商品详情</th>
 					<th class="w150">星级</th>
 				</tr>
 			</thead>
@@ -56,11 +56,9 @@
 						<div>{lang key='comment::comment_manage.comment_on'}&nbsp;&nbsp;{$comment.add_time}</div>
 						<div>{$comment.content|truncate:100|escape:html}</div>
 						{if $comment.imgs}
-						<div class="img-style">
 						    <!-- {foreach from=$comment.imgs item=img_list} -->
-							     <img class="thumbnail" style="float:left;width:78px;height:78px;margin-right:8px;" src="{$img_list.file_path}">
+							     <img width="78" height="78" style="margin-right:8px;margin-top:10px;margin-bottom:8px;" src="{$img_list.file_path}">
 						    <!-- {/foreach} -->
-						</div>
 						{/if}
 						<div class="edit-list">
 								<a class="data-pjax" href='{url path="comment/admin/reply" args="comment_id={$comment.comment_id}"}'>

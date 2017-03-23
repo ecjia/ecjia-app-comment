@@ -50,14 +50,14 @@
                                     </div>
                                     <div class="comment-content-info">{$comment_info.content}</div>
 									{if $comment_imgs_list}
-										<div class="img-style appeal-imgs-div">
 											<!-- {foreach from=$comment_imgs_list item=img_list} -->
-													<img class="thumbnail" style="float:left;width:78px;height:78px;margin-right:8px;" alt="" src="{$img_list.file_path}">
+													<img width="78" height="78" style="margin-right:8px;margin-top:10px;margin-bottom:8px;" alt="" src="{$img_list.file_path}">
 											<!-- {/foreach} -->
-										</div>
 									{/if}
 									{if $comment_info.status neq 3}
+									<div>
 										<a class="data-pjax btn toggle_view" href='{url path="comment/admin/check" args="list=4&comment_id={$appeal_info.comment_id}&id={$appeal_info.id}"}' data-msg="{t}您确定要将该用户[{$comment_info.user_name|default:{lang key='comment::comment_manage.anonymous'}}]的评论移至回收站吗？{/t}" data-val="trashed_comment"  type="button">{t}删除至回收站{/t}</a>
+									</div>
 									{/if}
                              </div>
 						</div>
@@ -70,11 +70,9 @@
 			    	<div class="appeal-content-padding">
 					    <div class="appeal-content-info">{$appeal_info.appeal_content}</div>
 					    <!-- {if $appeal_imgs_list}-->
-							<div class="img-style appeal-imgs-div" style="padding-bottom:20px;">
 								<!-- {foreach from=$appeal_imgs_list item=list} -->
-										<img class="thumbnail" style="float:left;width:78px;height:78px;margin-right:8px;" alt="" src="{$list.file_path}">
+										<img width="78" height="78" style="margin-right:8px;margin-top:10px;margin-bottom:8px;" alt="" src="{$list.file_path}">
 								<!-- {/foreach} -->
-							</div>
 						<!-- {/if}-->
 					</div>
 				</div>

@@ -366,7 +366,6 @@ class admin extends ecjia_admin {
 		$comment_pic_list = RC_DB::TABLE('term_attachment')
                 		->where('object_id', $comment_info['comment_id'])
                 		->select('file_path')
-                		->limit(5)
                 		->get();
 
 		$shop_info['logo'] = RC_DB::TABLE('merchants_config')

@@ -139,11 +139,9 @@
 						<div>{$comment.content|truncate:100|escape:html}</div>
 						{if $comment.has_image eq 1}
 							{if $comment.imgs}
-								<div class="img-style">
-									<!-- {foreach from=$comment.imgs item=img_list} -->
-											<img class="thumbnail" style="float:left;width:78px;height:78px;margin-right:8px;" alt="" src="{$img_list.file_path}">
-									<!-- {/foreach} -->
-								</div>
+								<!-- {foreach from=$comment.imgs item=img_list} -->
+										<img width="78" height="78" style="margin-right:8px;margin-top:10px;margin-bottom:8px;" alt="" src="{$img_list.file_path}">
+								<!-- {/foreach} -->
 							{/if}
 						{/if}
 						<div class="edit-list">
