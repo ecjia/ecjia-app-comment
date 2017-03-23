@@ -122,12 +122,15 @@ class mh_comment extends ecjia_merchant {
 	    );
 	    RC_DB::table('comment_reply')->insertGetId($data);
 	    
-		$comment_info = RC_DB::TABLE('comment')->where('comment_id', $comment_id)->select('id_value', 'status')->first();
-		if(!empty($comment_info) && intval($comment_info['status'] === 0)){
-			$data = array('status' => '1');
+		$id_value = RC_DB::TABLE('comment')->where('comment_id', $comment_id)->where('status', 0)->pluck('id_value');
+		if(!empty($id_value)){
+			$data = array(
+				'status' => 1
+			);
 			RC_DB::table('comment')->where('comment_id', $comment_id)->update($data);
-			RC_Api::api('comment', 'update_goods_comment', array('goods_id' => $comment_info['id_value']));
+			RC_Api::api('comment', 'update_goods_comment', array('goods_id' => $id_value));
 		}
+		
 	   
 	    ecjia_merchant::admin_log('评论ID:'.$comment_id, 'reply', 'users_comment');
 	   	return $this->showmessage('回复成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('comment/mh_comment/init')));
@@ -231,9 +234,7 @@ class mh_comment extends ecjia_merchant {
 			ecjia_merchant::admin_log('评论ID:'.$comment_id, 'reply', 'users_comment');
 		}
 		$id_value = RC_DB::TABLE('comment')->where('comment_id', $comment_id)->where('status', 0)->pluck('id_value');
-		_dump($id_value);
 		if(!empty($id_value)){
-			_dump($id_value,1);
 			$data = array(
 				'status' => 1
 			);
