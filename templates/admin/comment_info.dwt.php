@@ -72,14 +72,25 @@
 						<div class="accordion-inner">
 						      <div class="panel-body">
 						          <!-- {foreach from=$replay_admin_list item=list} -->
+						           <div class="comment-all-right-thumb">
+	                                	{if $list.user_type eq 'merchant'}
+					                		<img src="{$list.staff_img}" >
+					                	{elseif $list.user_type eq 'admin'}
+					                		<img src="{$list.admin_img}">
+					                	{/if}
+									 </div>
                                     <div class="text-right admin-reply">
-                                        <div class="comment-all-right-thumb">
-									       <img src="{$list.staff_img}" >
-								        </div>
-        					  			 <div class="comment-thumb-details">
-        									<h1>{$list.user_name}</h1>
-        									<p>{$list.add_time_new}</p><br>
-        								 </div>
+        								 {if $list.user_type eq 'merchant'}
+	        								 <div class="comment-thumb-details">
+	        									<h1><span><small class="label label-warning-admin">商家管理员</small></span>&nbsp;&nbsp;{$list.staff_name}</h1>
+	        									<p>{$list.add_time}</p><br>
+	        								 </div>
+        								 {elseif $list.user_type eq 'admin'}
+	        								 <div class="comment-thumb-details">
+	        									<h1><span><small class="label label-warning-admin">平台管理员</small></span>&nbsp;&nbsp;{$list.admin_name}</h1>
+	        									<p>{$list.add_time}</p><br>
+	        								 </div>
+        								 {/if}
         								 <p>{$list.content}</p>
                                     </div>
                                   <!-- {foreachelse} -->
