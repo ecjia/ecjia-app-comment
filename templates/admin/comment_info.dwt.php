@@ -127,7 +127,10 @@
         					<div class="comment-goods" style="font-size: 17px;">
         					   <div class="goods_type">
     					  	       <label class="control-label store-attr">综合评分：</label>
-    					  	       <span class="store-grade">{section name=loop loop=$shop_info.composite}<i class="fontello-icon-star" style="color:#FF9933;"></i>{/section}</span>
+    					  	       <span class="store-grade">
+    					  	       	{section name=loop loop=$shop_info.composite}<i class="fontello-icon-star" style="color:#FF9933;"></i>{/section}
+    					  	       	{section name=loop loop=5-$shop_info.composite}<i class="fontello-icon-star" style="color:#bbb;"></i>{/section}
+    					  	       </span>
         					   </div>
         					   <div class="goods_type">
         					       <label class="control-label store-attr">全部评论： </label>
