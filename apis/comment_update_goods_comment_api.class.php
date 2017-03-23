@@ -59,6 +59,10 @@ class comment_update_goods_comment_api extends Component_Event_Api {
 	    if (empty($options['goods_id'])) {
 	        return new ecjia_error('invalid_parameter', '参数无效');
 	    }
+	    $goods = RC_DB::table('goods')->where('goods_id', $goods_id)->first();
+	    if (empty($goods)) {
+	        return new ecjia_error('goods_no_exist', '商品信息不存在');
+	    }
 // 	    $rank_arr = array(1,2,3,4,5);
 // 	    if (!in_array($options['rank'], $rank_arr)) {
 // 	        return new ecjia_error('invalid_parameter', '评分参数无效');
@@ -88,7 +92,24 @@ class comment_update_goods_comment_api extends Component_Event_Api {
 	        $comment_percent = '10000';
 	    }
 	    
-	    $update = RC_DB::table('goods_rank')->where('goods_id', $goods_id)->update(array('goods_rank' => $comment_percent));
+// 	    $update = RC_DB::table('goods_rank')->where('goods_id', $goods_id)->update(array('goods_rank' => $comment_percent));
+	    $goods_data = RC_DB::table('goods_data')->where('goods_id', $goods_id)->first();
+	    
+	    $data = array(
+	        'goods_id' => $goods_id,
+	        'store_id' => $goods['store_id'],
+	        'comment_good' => $comment_number['good'],
+	        'comment_general' => $comment_number['general'],
+	        'comment_low' => $comment_number['low'],
+	        'comment_picture' => $comment_number['picture'],
+	        'goods_rank' => $comment_percent,
+	    );
+	    if (empty($goods_data)) {
+	        RC_DB::table('goods_data')->insert($data);
+	    } else {
+	        RC_DB::table('goods_data')->where('goods_id', $goods_id)->update($data);
+	    }
+	    
 	    return true;
 	}
 
