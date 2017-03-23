@@ -230,12 +230,14 @@ class mh_comment extends ecjia_merchant {
 			RC_DB::table('comment_reply')->insertGetId($data);
 			ecjia_merchant::admin_log('评论ID:'.$comment_id, 'reply', 'users_comment');
 		}
-		_dump($comment_id);
-		$comment_info = RC_DB::TABLE('comment')->where('comment_id', $comment_id)->select('id_value', 'status')->first();
-		_dump($comment_info,1);
-		if(!empty($comment_info) && intval($comment_info['status'] === 0)){
-			_dump($comment_info['status'],1);
-			$data = array('status' => '1');
+// 		$comment_info = RC_DB::TABLE('comment')->where('comment_id', $comment_id)->select('id_value', 'status')->first();
+		$status = RC_DB::TABLE('comment')->where('comment_id', $comment_id)->pluck('status');
+		_dump($status,1);
+		if(intval($status) === 0){
+			_dump("test",1);
+			$data = array(
+				'status' => 1
+			);
 			RC_DB::table('comment')->where('comment_id', $comment_id)->update($data);
 			RC_Api::api('comment', 'update_goods_comment', array('goods_id' => $comment_info['id_value']));
 		}
