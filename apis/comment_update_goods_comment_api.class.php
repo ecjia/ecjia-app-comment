@@ -81,14 +81,13 @@ class comment_update_goods_comment_api extends Component_Event_Api {
 	    $comment_number['general'] = empty($comment_number['general']) ? 0 : intval($comment_number['general']);
 	    $comment_number['low'] = empty($comment_number['low']) ? 0 : intval($comment_number['low']);
 	    $comment_number['picture'] = empty($comment_number['picture']) ? 0 : intval($comment_number['picture']);
-	    
 	    if ($comment_number['all'] != 0) {
 	        $comment_percent = round(($comment_number['good'] / $comment_number['all']) * 10000);
 	    } else {
 	        $comment_percent = '10000';
 	    }
 	    
-	    $update = RC_DB::table('goods_rank')->where('goods_id', $goods_id)->update(array('goods_rank' => $comment_percent));
+	    $update = RC_DB::table('goods')->where('goods_id', $goods_id)->update(array('goods_rank' => $comment_percent));
 	    return true;
 	}
 
