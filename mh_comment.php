@@ -225,6 +225,8 @@ class mh_comment extends ecjia_merchant {
 	private function comment_list($goods_id) {
 		$db_comment = RC_DB::table('comment');
 		$db_comment->where(RC_DB::raw('store_id'), $_SESSION['store_id']);
+		$db_comment->where(RC_DB::raw('status'), '<>','3');
+		
 		if(!empty($goods_id)){
 			$db_comment->where(RC_DB::raw('id_value'), $goods_id);
 		}

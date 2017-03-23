@@ -201,7 +201,6 @@ class mh_appeal extends ecjia_merchant {
 		$this->assign('ur_here', '申诉详情');
 		
 		$appeal_sn 		= $_GET['appeal_sn'];
-		$check_status   = $_GET['check_status'];
 		$appeal = RC_DB::table('comment_appeal')->where('appeal_sn', $appeal_sn)->first();
 		$appeal['appeal_time'] = RC_Time::local_date(ecjia::config('time_format'), $appeal['appeal_time']);
 		$appeal['process_time'] = RC_Time::local_date(ecjia::config('time_format'), $appeal['process_time']);
@@ -213,7 +212,7 @@ class mh_appeal extends ecjia_merchant {
 		$avatar_img = RC_DB::TABLE('users')->where('user_id', $comment_info['user_id'])->pluck('avatar_img');
 		$apple_img_list = RC_DB::TABLE('term_attachment')->where('object_id', $appeal['id'])->where('object_app', 'ecjia.comment')->where('object_group','appeal')->select('file_path')->get();
 		
-		$this->assign('check_status', $check_status);
+		$this->assign('check_status', $appeal['check_status']);
 		$this->assign('appeal', $appeal);
 		$this->assign('comment_pic_list', $comment_pic_list);
 		$this->assign('comment_info', $comment_info);

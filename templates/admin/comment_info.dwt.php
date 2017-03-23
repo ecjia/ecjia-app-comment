@@ -49,7 +49,7 @@
     								{t}批准{/t}
     							</a>&nbsp;|&nbsp;
     						{elseif $comment_info.status eq 1}
-    							<a class="approve" href='{url path="comment/admin/check" args="last={"reply"}&comment_id={$comment_info.comment_id}{if $smarty.get.page}&page={$smarty.get.page}{/if}"}' data-msg="{t}您确定要更改此评论的状态吗？{/t}" data-status="{$smarty.get.status}" data-val="forbid" >
+    							<a class="approve ecjiafc-red" href='{url path="comment/admin/check" args="last={"reply"}&comment_id={$comment_info.comment_id}{if $smarty.get.page}&page={$smarty.get.page}{/if}"}' data-msg="{t}您确定要更改此评论的状态吗？{/t}" data-status="{$smarty.get.status}" data-val="forbid" >
     								{t}驳回{/t}
     							</a>&nbsp;|&nbsp;
     						{/if}
