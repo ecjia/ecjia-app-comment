@@ -72,7 +72,7 @@
 						<div class="accordion-inner">
 						      <div class="panel-body">
 						          <!-- {foreach from=$replay_admin_list item=list} -->
-						           <div class="comment-all-right-thumb">
+						           <div class="comment-all-right-thumb" style="margin-left: 10px;">
 	                                	{if $list.user_type eq 'merchant'}
 					                		<img src="{$list.staff_img}" >
 					                	{elseif $list.user_type eq 'admin'}
