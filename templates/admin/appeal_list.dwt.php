@@ -52,7 +52,7 @@
 						<div>{t}申诉于{/t}&nbsp;&nbsp;{$appeal.appeal_time}</div>
 							{if $appeal.imgs}
 								<!-- {foreach from=$appeal.imgs item=img_list} -->
-										<img width="78" height="78" style="margin-right:8px;margin-top:10px;" alt="" src="{$img_list.file_path}">
+										<img style="margin-right:8px;margin-top:10px;width:75px;height:75px;" alt="" src="{$img_list.file_path}">
 								<!-- {/foreach} -->
 							{/if}
 						<div class="edit-list">
