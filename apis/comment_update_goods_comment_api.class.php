@@ -59,6 +59,7 @@ class comment_update_goods_comment_api extends Component_Event_Api {
 	    if (empty($options['goods_id'])) {
 	        return new ecjia_error('invalid_parameter', '参数无效');
 	    }
+	    $goods_id = $options['goods_id'];
 	    $goods = RC_DB::table('goods')->where('goods_id', $goods_id)->first();
 	    if (empty($goods)) {
 	        return new ecjia_error('goods_no_exist', '商品信息不存在');
@@ -67,7 +68,7 @@ class comment_update_goods_comment_api extends Component_Event_Api {
 // 	    if (!in_array($options['rank'], $rank_arr)) {
 // 	        return new ecjia_error('invalid_parameter', '评分参数无效');
 // 	    }
-	    $goods_id = $options['goods_id'];
+	    
 // 	    $rank = $options['rank'];
 	    
 	    $comment_number = RC_DB::table('comment')
