@@ -57,7 +57,7 @@ function assign_adminlog_content(){
 	ecjia_admin_log::instance()->add_action('appeal_status', '更新申诉状态');
 	ecjia_admin_log::instance()->add_action('batch_trash', '批量移至回收站');
 
-	ecjia_admin_log::instance()->add_object('users_appeal', '用户申诉');
+	ecjia_admin_log::instance()->add_object('merchant_appeal', '商家申诉');
 }
 
 // end
