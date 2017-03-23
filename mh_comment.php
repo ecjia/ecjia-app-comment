@@ -86,8 +86,12 @@ class mh_comment extends ecjia_merchant {
 	    $this->assign('data', $data);
 	    
 	    if(!empty($goods_id)){
-	    	$goods_info = RC_DB::TABLE('goods')->where('goods_id', $_GET['goods_id'])->select('goods_name', 'shop_price', 'goods_thumb', 'goods_rank')->first();
-	    	$goods_info['goods_rank'] = $goods_info['goods_rank'] / 100;
+	    	$goods_rank = RC_DB::TABLE('goods_data')->where('goods_id', $goods_id)->pluck('goods_rank');
+	    	if(empty($goods_rank)){
+	    		$goods_rank === 10000;
+	    	}
+	    	$goods_info['goods_rank'] = $goods_rank / 100;
+	    	
 	    	$this->assign('goods_info', $goods_info);
 	    	$this->assign('goods_id',  $goods_id);
 	    }
@@ -118,6 +122,13 @@ class mh_comment extends ecjia_merchant {
 	    );
 	    RC_DB::table('comment_reply')->insertGetId($data);
 	    
+		$comment_info = RC_DB::TABLE('comment')->where('comment_id', $comment_id)->select('id_value', 'status')->first();
+		if($comment_info['status'] === 0){
+			$data = array('status' => '1');
+			RC_DB::table('comment')->where('comment_id', $comment_id)->update($data);
+			RC_Api::api('comment', 'update_goods_comment', array('goods_id' => $comment_info['id_value']));
+		}
+	   
 	    ecjia_merchant::admin_log('评论ID:'.$comment_id, 'reply', 'users_comment');
 	   	return $this->showmessage('回复成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('comment/mh_comment/init')));
 	}
@@ -214,6 +225,14 @@ class mh_comment extends ecjia_merchant {
 			RC_DB::table('comment_reply')->insertGetId($data);
 			ecjia_merchant::admin_log('评论ID:'.$comment_id, 'reply', 'users_comment');
 		}
+		
+		$comment_info = RC_DB::TABLE('comment')->where('comment_id', $comment_id)->select('id_value', 'status')->first();
+		if($comment_info['status'] === 0){
+			$data = array('status' => '1');
+			RC_DB::table('comment')->where('comment_id', $comment_id)->update($data);
+			RC_Api::api('comment', 'update_goods_comment', array('goods_id' => $comment_info['id_value']));
+		}
+		
 	    return $this->showmessage('回复成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('comment/mh_comment/comment_detail',array('comment_id' => $comment_id))));
 	}
 
