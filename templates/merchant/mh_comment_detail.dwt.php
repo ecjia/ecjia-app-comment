@@ -52,7 +52,7 @@
 			                	<img src="{RC_Upload::upload_url()}/{$list.file_path}">
 			                 <!-- {/foreach} -->
 						</div>
-						<a href='{url path="comment/mh_appeal/add_appeal" args="comment_id={$comment_info.comment_id}"}'><button class="btn btn-info" type="button">申诉</button></a>
+						<a href='{url path="comment/mh_appeal/add_appeal" args="comment_id={$comment_info.comment_id}"}'><button class="btn btn-info" type="button" style="margin-top: 10px;">申诉</button></a>
 		            </div>    
 				</div><br>
 				
@@ -77,7 +77,7 @@
 										 </div>
 							  			  <div class="comment-thumb-details">
 							  			 	{if $list.user_type eq 'admin'}
-							  			 	<h1><span><small class="label label-warning-admin">平台管理员</small></span>&nbsp;{$list.staff_name}</h1>
+							  			 	<h1><span><small class="label label-warning-admin">平台管理员</small></span>&nbsp;{$list.admin_user_name}</h1>
 							  			 	{else}
 							  			 	<h1><span><small class="label label-warning-admin">商家管理员</small></span>&nbsp;{$list.staff_name}</h1>
 							  			 	{/if}

@@ -135,6 +135,11 @@ class create_module extends api_front implements api_interface {
 		        $message = '评论成功！并获得'.$comment_award.ecjia::config('integral_name').'！';
 		    }
 		    
+		    //更新商品评分,商品审核开启时
+		    if (ecjia::config('comment_check') == 1) {
+		        RC_Api::api('comment', 'update_goods_comment', array('goods_id' => $order_info['goods_id']));
+		    }
+		    
 		}
 
 		//补充图片 或 第一次评价
