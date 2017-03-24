@@ -172,7 +172,7 @@
 							</strong>
 						</a>
 					</div>
-					<div class="accordion-body in collapse" id="goods_info_area_tvimg">
+					<div class="accordion-body in collapse reply_admin_list" id="goods_info_area_tvimg">
 						<div class="accordion-inner">
 						      <!-- {foreach from=$other_comment item=list} -->
     						          <div class="formSep">
