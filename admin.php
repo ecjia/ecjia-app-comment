@@ -171,7 +171,12 @@ class admin extends ecjia_admin {
 		}
 
 		/*获取用户头像*/
-		$avatar_img = RC_Upload::upload_url().'/'.RC_DB::TABLE('users')->where('user_id', $comment_info['user_id'])->pluck('avatar_img');
+		$img_url = RC_DB::TABLE('users')->where('user_id', $comment_info['user_id'])->pluck('avatar_img');
+		if ($img_url) {
+		    $avatar_img = RC_Upload::upload_url().'/'.$img_url;
+		} else {
+		    $avatar_img = RC_App::apps_url('statics/images/admin_pic.jpg', __FILE__);;
+		}
 
 		/* 获得评论回复条数 */
 		$reply_info = RC_DB::TABLE('comment_reply')->where('comment_id', $comment_id)->get();
