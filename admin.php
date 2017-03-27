@@ -197,6 +197,9 @@ class admin extends ecjia_admin {
 			$reply_info[$key]['content']  = nl2br(htmlspecialchars($reply_info[$key]['content']));
 		}
 		
+		//转换时间
+		$comment_info['add_time'] = RC_Time::local_date(ecjia::config('time_format'), $comment_info['add_time']);
+		
 		//获取评论图片
 		$comment_pic_list = RC_DB::TABLE('term_attachment')
                 		->where('object_id', $comment_info['comment_id'])
@@ -258,7 +261,6 @@ class admin extends ecjia_admin {
 		} else {
 		    $shop_info['composite'] = 3;
 		}
-		
 		$here = RC_Lang::get('comment::comment_manage.comment_list');
 		$url = RC_Uri::url('comment/admin/init', array('list' => 1));
 		/* 模板赋值 */
