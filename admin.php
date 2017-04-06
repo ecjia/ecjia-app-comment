@@ -396,6 +396,10 @@ class admin extends ecjia_admin {
 				'status'     => '0'
 			);
 			$db_comment->where('comment_id', $id)->update($data);
+			if (!empty($id)) {
+				$goods_id = RC_DB::table('comment')->where('comment_id', $id)->pluck('id_value');
+			}
+			RC_Api::api('comment', 'update_goods_comment', array('goods_id' => $goods_id));
 		}
 		 elseif ($allow == "trashed_comment") {
 			/* 移到回收站 */
@@ -471,6 +475,18 @@ class admin extends ecjia_admin {
 					$data = array(
 						'status' => '0'
 					);
+					$db_comment->whereIn('comment_id', $comment_ids)->update($data);
+					/*驳回后更新商品等级*/
+					if (!empty($comment_ids)) {
+						$goods_ids = RC_DB::table('comment')->whereIn('comment_id', $comment_ids)->select('id_value')->get();
+						if (!empty($goods_ids)) {
+							foreach ($goods_ids as $key => $val) {
+								if (!empty($val['id_value'])) {
+									RC_Api::api('comment', 'update_goods_comment', array('goods_id' => $val['id_value']));
+								}
+							}
+						}
+					}
 				break;
 				
 				case 'trashed_comment' :
