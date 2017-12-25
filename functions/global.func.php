@@ -49,7 +49,7 @@ defined ( 'IN_ECJIA' ) or exit ( 'No permission resources.' );
 /*
  * 管理员操作对象和动作
 */
-function assign_adminlog_content(){
+function assign_commentlog_content(){
 	ecjia_admin_log::instance()->add_action('reply', '回复');
 	ecjia_admin_log::instance()->add_action('revoke', '撤销');
 	ecjia_admin_log::instance()->add_action('to_trash', '移至回收站');
