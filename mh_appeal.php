@@ -53,8 +53,8 @@ class mh_appeal extends ecjia_merchant {
 	public function __construct() {
 		parent::__construct();
 		
-		RC_Loader::load_app_func('global');
-		assign_commentlog_content();
+		Ecjia\App\Comment\Helper::assign_adminlog_content();
+
 		RC_Script::enqueue_script('jquery-form');
 		RC_Script::enqueue_script('smoke');
 		RC_Style::enqueue_style('uniform-aristo');
