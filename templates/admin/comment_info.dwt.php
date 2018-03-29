@@ -37,15 +37,15 @@
     					  	<p>商品评分：{section name=loop loop=$comment_info.comment_rank}<i class="fontello-icon-star" style="color:#FF9933;"></i>{/section}{section name=loop loop=5-$comment_info.comment_rank}<i class="fontello-icon-star" style="color:#bbb;"></i>{/section}</p>
     		                <p>{$comment_info.content}</p>
                             <div class="img-pwsp-list">
-                                <figure>
     		                      <!-- {foreach from=$comment_pic_list item=list} -->
-                            		<span>
-                                		<a class="nopjax" href="{RC_Upload::upload_url()}/{$list.file_path}">
-                                			<img src="{RC_Upload::upload_url()}/{$list.file_path}">
-                                		</a>
-                               		</span>
+    		                      	<figure>
+	                            		<span>
+	                                		<a class="nopjax" href="{RC_Upload::upload_url()}/{$list.file_path}">
+	                                			<img src="{RC_Upload::upload_url()}/{$list.file_path}">
+	                                		</a>
+	                               		</span>
+                               		</figure>
     		                      <!-- {/foreach} -->
-                                </figure>
                              </div>
     					</div>
     					{if $comment_info.status neq 3}
