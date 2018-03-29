@@ -48,17 +48,17 @@
 								<i class="fa fa-star" style="color:#bbb;"></i>
 							{/section}
 			                <p>{$comment_info.content}</p>
-			                 <!-- {foreach from=$comment_pic_list item=list} -->
-			                 <div class="img-pwsp-list">
-			                 	<figure>
-                            		<span>
-                                		<a class="nopjax" href="{RC_Upload::upload_url()}/{$list.file_path}">
-                                			<img src="{RC_Upload::upload_url()}/{$list.file_path}">
-                                		</a>
-                               		</span>
-                              	</figure>
-			         		</div>
-			       			<!-- {/foreach} -->
+			                <div class="img-pwsp-list">
+			                	<figure>
+				        		<!-- {foreach from=$comment_pic_list item=list} -->
+	                        		<span>
+	                            		<a class="nopjax" href="{RC_Upload::upload_url()}/{$list.file_path}">
+	                            			<img src="{RC_Upload::upload_url()}/{$list.file_path}">
+	                            		</a>
+	                           		</span>
+				       			<!-- {/foreach} -->
+			       				</figure>
+			       			</div>
 						</div>
 						{if $go_on_appeal}
 							<button class="btn btn-info" type="button" style="margin-top: 10px;" disabled="disabled">申诉中</button>
