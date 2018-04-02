@@ -216,5 +216,6 @@
 }
 
 .img-pwsp-list figure {
-	display: inline-block
+	display: inline-block;
+	margin: 0;
 }
