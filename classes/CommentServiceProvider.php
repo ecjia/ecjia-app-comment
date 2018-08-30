@@ -9,7 +9,7 @@ class CommentServiceProvider extends  AppParentServiceProvider
     
     public function boot()
     {
-        $this->package('ecjia/app-comment', null, dirname(__DIR__));
+        $this->package('ecjia/app-comment');
     }
     
     public function register()
