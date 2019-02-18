@@ -44,28 +44,28 @@
 //
 //  ---------------------------------------------------------------------------------
 //
-defined('IN_ECJIA') or exit('No permission resources.');
-/**
- * 后台权限API
- * @author royalwang
- *
- */
-class comment_admin_purview_api extends Component_Event_Api {
-    
-    public function call(&$options) {
-        $purviews = array(
-            array('action_name' => __('评价晒单' ,'comment'), 	'action_code' => 'comment_manage', 	'relevance' => ''),
-        	array('action_name' => __('评论更新' ,'comment'), 	'action_code' => 'comment_update', 	'relevance' => ''),
-        	array('action_name' => __('评论删除' ,'comment'), 	'action_code' => 'comment_delete', 	'relevance' => ''),
-        	array('action_name' => __('评论回收站列表', 'comment'), 	'action_code' => ' comment_trash_list', 	'relevance' => ''),
-        	array('action_name' => __('评论申诉管理', 'comment'), 	'action_code' => 'appeal_manage', 	'relevance' => ''),
-        	array('action_name' => __('评论申诉审核', 'comment'), 	'action_code' => 'appeal_update', 	'relevance' => ''),
-            array('action_name' => __('评论设置', 'comment'), 	'action_code' => 'comment_config', 	'relevance' => ''),
-            
-        );
-        
-        return $purviews;
-    }
-}
 
-// end
+/**
+ * js语言包设置
+ */
+
+defined('IN_ECJIA') or exit('No permission resources.');
+
+return array(
+    //comment
+    'comment_page' =>array(
+        'ok'		 		=> __('确定', 'comment'),
+        'cancel'	 		=> __('取消', 'comment'),
+        'content_required'	=> __('请填写回复内容！', 'comment'),
+        'one_level'			=> __('1级-严重不合格', 'comment'),
+        'two_level'			=> __('2级-不合格', 'comment'),
+        'three_level'		=> __('3级-合格', 'comment'),
+        'four_level'		=> __('4级-优秀', 'comment'),
+        'five_level'		=> __('5级-完美', 'comment'),
+        'select_goods_empty'=> __('未搜索到商品信息', 'comment'),
+        'select_user_empty'	=> __('未搜索到会员信息', 'comment'),
+        'request_failed'	=> __('请求失败', 'comment'),
+    ),
+
+);
+//end
