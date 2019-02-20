@@ -57,12 +57,12 @@ class comment_update_goods_comment_api extends Component_Event_Api {
 // 	    $options['goods_id'] $options['rank']
 		
 	    if (empty($options['goods_id'])) {
-	        return new ecjia_error('invalid_parameter', '参数无效');
+	        return new ecjia_error('invalid_parameter', __('参数无效', 'comment'));
 	    }
 	    $goods_id = $options['goods_id'];
 	    $goods = RC_DB::table('goods')->where('goods_id', $goods_id)->first();
 	    if (empty($goods)) {
-	        return new ecjia_error('goods_no_exist', '商品信息不存在');
+	        return new ecjia_error('goods_no_exist', __('商品信息不存在', 'comment'));
 	    }
 // 	    $rank_arr = array(1,2,3,4,5);
 // 	    if (!in_array($options['rank'], $rank_arr)) {

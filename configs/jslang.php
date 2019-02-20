@@ -65,6 +65,8 @@ return array(
         'select_goods_empty'=> __('未搜索到商品信息', 'comment'),
         'select_user_empty'	=> __('未搜索到会员信息', 'comment'),
         'request_failed'	=> __('请求失败', 'comment'),
+        'not_greater_end_time'	=> __('开始时间不得大于结束时间！', 'comment'),
+
     ),
 
 );

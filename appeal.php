@@ -74,7 +74,9 @@ class appeal extends ecjia_admin {
 		RC_Style::enqueue_style('datepicker', RC_Uri::admin_url('statics/lib/datepicker/datepicker.css'));
 		RC_Script::enqueue_script('bootstrap-datepicker', RC_Uri::admin_url('statics/lib/datepicker/bootstrap-datepicker.min.js'));
 		//RC_Style::enqueue_style('start', RC_App::apps_url('statics/css/start.css', __FILE__));
-		RC_Script::localize_script('comment_manage', 'js_lang', config('app-comment::jslang.comment_page'));
+
+        RC_Script::localize_script('appeal', 'js_lang', config('app-comment::jslang.comment_page'));
+        RC_Script::localize_script('comment_manage', 'js_lang', config('app-comment::jslang.comment_page'));
 	}
 	
 	/**

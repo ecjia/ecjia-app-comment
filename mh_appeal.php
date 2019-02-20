@@ -63,7 +63,9 @@ class mh_appeal extends ecjia_merchant {
 		RC_Style::enqueue_style('mh_appeal', RC_App::apps_url('statics/css/mh_appeal.css', __FILE__), array());
 		RC_Style::enqueue_style('bootstrap-fileupload', RC_App::apps_url('statics/bootstrap-fileupload/bootstrap-fileupload.css', __FILE__), array());
 		RC_Script::enqueue_script('bootstrap-fileupload', RC_App::apps_url('statics/bootstrap-fileupload/bootstrap-fileupload.js', __FILE__), array(), false, true);
-		ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('申诉管理', RC_Uri::url('comment/mh_appeal/init')));
+
+        RC_Script::localize_script('mh_appeal', 'js_lang', config('app-comment::jslang.comment_page'));
+        ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('申诉管理', 'comment'), RC_Uri::url('comment/mh_appeal/init')));
 		ecjia_merchant_screen::get_current_screen()->set_parentage('order', 'order/merchant.php');
 		
 	}
@@ -74,8 +76,8 @@ class mh_appeal extends ecjia_merchant {
 	public function init() {
 	    $this->admin_priv('mh_appeal_manage');
 	    
-	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here('申诉列表'));
-	    $this->assign('ur_here', '申诉列表');
+	    ecjia_merchant_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('申诉列表', 'comment')));
+	    $this->assign('ur_here', __('申诉列表', 'comment'));
 	    
 	    $data = $this->appeal_list($_SESSION['store_id']);
 	    $this->assign('count', $data['count']);
@@ -275,11 +277,11 @@ class mh_appeal extends ecjia_merchant {
 			foreach ($data as $row) {
 				$row['appeal_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['appeal_time']);
 				if($row['check_status'] == 1){
-					$row['check_status_name'] = '待处理';
+					$row['check_status_name'] = __('待处理', 'comment');
 				}elseif ($row['check_status'] == 2){
-					$row['check_status_name'] = '通过';
+					$row['check_status_name'] = __('通过', 'comment');
 				}elseif ($row['check_status'] == 3){
-					$row['check_status_name'] = '驳回';
+					$row['check_status_name'] = __('驳回', 'comment');
 				}
 				$row['appeal_pic_list'] = RC_DB::table('term_attachment')->where('object_id',  $row['id'])->where('object_app', 'ecjia.comment')->where('object_group','appeal')->select('file_path')->get();
 				$list[] = $row;
