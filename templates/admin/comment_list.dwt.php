@@ -26,7 +26,7 @@
 		<!-- {if $select_rank} -->
 		<li class="hide-rank"><span>></span></li>
 		<li class="hide-rank"><a class="data-pjax btn no-show-rank" href='{url path="comment/admin/init" args="{if $smarty.get.status neq null}&status={$smarty.get.status}{/if}{if $smarty.get.has_img neq null}&has_img={$smarty.get.has_img}{/if}{if $select_status}&select_status={$select_status}{/if}{if $select_img}&select_img={$select_img}{/if}"}' style="padding:3px 5px;">
-			{if $smarty.get.rank eq 1} {t domain="comment"}{/t} {elseif $smarty.get.rank eq 2} {t domain="comment"}中评{/t} {elseif $smarty.get.rank eq 3}{t domain="comment"}差评{/t}{/if}
+			{if $smarty.get.rank eq 1}{elseif $smarty.get.rank eq 2} {t domain="comment"}中评{/t} {elseif $smarty.get.rank eq 3}{t domain="comment"}差评{/t}{/if}
 			<i class=" close-status fontello-icon-cancel cursor_pointer"></i></a>
 		</li>
 		<!-- {/if} -->

@@ -58,7 +58,7 @@
 		</li>
 		<!-- {/if} -->
 	</ul>
-	<div class="store-total-comments">{t domain="comment"}共{/r}<a href="javascript:;" style="text-decoration:none;">&nbsp;&nbsp;{if $comment_list.filter.current_count}{$comment_list.filter.current_count}{else}{$total_count}{/if}&nbsp;&nbsp;</a>{t domain="comment"}条相关评论{/t}</div>
+	<div class="store-total-comments">{t domain="comment"}共{/t}<a href="javascript:;" style="text-decoration:none;">&nbsp;&nbsp;{if $comment_list.filter.current_count}{$comment_list.filter.current_count}{else}{$total_count}{/if}&nbsp;&nbsp;</a>{t domain="comment"}条相关评论{/t}</div>
 </div>
 <div class="heading-table">
 	<table class="table table-oddtd table-bordered">
