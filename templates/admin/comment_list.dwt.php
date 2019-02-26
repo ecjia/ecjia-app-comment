@@ -141,7 +141,7 @@
 								<a class="data-pjax" href='{url path="comment/admin/reply" args="comment_id={$comment.comment_id}"}'>
 									{t domain="comment"}查看及回复{/t}
 								</a>&nbsp;|&nbsp;
-                            <a class="ecjiafc-red toggle_view" href='{url path="comment/admin/check" args="list=1&comment_id={$comment.comment_id}{if $smarty.get.page}&page={$smarty.get.page}{/if}"}' data-msg='{t domain="comment" 1="{$comment.user_name}"}您确定要将该用户[%1]的评论移至回收站吗？{/t}' data-status="{$smarty.get.status}" data-val="trashed_comment" >{t}移至回收站{/t}</a>
+                            <a class="ecjiafc-red toggle_view" href='{url path="comment/admin/check" args="list=1&comment_id={$comment.comment_id}{if $smarty.get.page}&page={$smarty.get.page}{/if}"}' data-msg='{t domain="comment" 1="{$comment.user_name}"}您确定要将该用户[%1]的评论移至回收站吗？{/t}' data-status="{$smarty.get.status}" data-val="trashed_comment" >{t domain="comment"}移至回收站{/t}</a>
 						    {/if}
 						</div>
 					</td>
