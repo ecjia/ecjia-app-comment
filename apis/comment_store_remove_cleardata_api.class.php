@@ -65,6 +65,7 @@ class comment_store_remove_cleardata_api extends Component_Event_Api
 
         return [
             new \Ecjia\App\Comment\StoreCleanHandlers\StoreArticleCommentClear($store_id),
+            new \Ecjia\App\Comment\StoreCleanHandlers\StoreGoodsCommentClear($store_id),
         ];
     }
 

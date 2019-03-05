@@ -14,26 +14,26 @@ use RC_DB;
 use RC_Api;
 use ecjia_admin;
 
-class StoreArticleCommentClear extends StoreCleanAbstract
+class StoreGoodsCommentClear extends StoreCleanAbstract
 {
 
     /**
      * 代号标识
      * @var string
      */
-    protected $code = 'store_article_comment_clear';
+    protected $code = 'store_goods_comment_clear';
 
     /**
      * 名称
      * @var string
      */
-    protected $name = '文章评论';
+    protected $name = '商品评论';
 
     /**
      * 排序
      * @var int
      */
-    protected $sort = 12;
+    protected $sort = 39;
 
     /**
      * 数据描述及输出显示内容
@@ -42,7 +42,7 @@ class StoreArticleCommentClear extends StoreCleanAbstract
     {
         return <<<HTML
 
-<span class="controls-info">店铺内，文章的所有评论</span>
+<span class="controls-info">将店铺内所有商品评论全部删除</span>
 
 HTML;
 
@@ -55,7 +55,7 @@ HTML;
      */
     public function handleCount()
     {
-        $count = RC_DB::table('discuss_comments')->where('store_id', $this->store_id)->count();
+        $count = RC_DB::table('comment')->where('store_id', $this->store_id)->count();
 
         return $count;
     }
@@ -73,7 +73,7 @@ HTML;
             return true;
         }
 
-        $result = RC_DB::table('discuss_comments')->where('store_id', $this->store_id)->delete();
+        $result = RC_DB::table('comment')->where('store_id', $this->store_id)->delete();
 
         if ($result) {
             $this->handleAdminLog();
@@ -95,7 +95,7 @@ HTML;
 
         $merchants_name = !empty($store_info) ? sprintf(__('店铺名是%s', 'comment'), $store_info['merchants_name']) : sprintf(__('店铺ID是%s', 'comment'), $this->store_id);
 
-        ecjia_admin::admin_log($merchants_name, 'clean', 'store_article_comment');
+        ecjia_admin::admin_log($merchants_name, 'clean', 'store_goods_comment');
     }
 
     /**
