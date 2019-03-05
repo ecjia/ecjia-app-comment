@@ -40,12 +40,10 @@ class StoreGoodsCommentClear extends StoreCleanAbstract
      */
     public function handlePrintData()
     {
+        $text = __('将店铺内所有商品评论全部删除', 'comment');
         return <<<HTML
-
-<span class="controls-info">将店铺内所有商品评论全部删除</span>
-
+<span class="controls-info">{$text}</span>
 HTML;
-
     }
 
     /**

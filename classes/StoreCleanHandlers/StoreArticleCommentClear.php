@@ -40,12 +40,10 @@ class StoreArticleCommentClear extends StoreCleanAbstract
      */
     public function handlePrintData()
     {
+        $text = __('店铺内，文章的所有评论', 'comment');
         return <<<HTML
-
-<span class="controls-info">店铺内，文章的所有评论</span>
-
+<span class="controls-info">{$text}</span>
 HTML;
-
     }
 
     /**
