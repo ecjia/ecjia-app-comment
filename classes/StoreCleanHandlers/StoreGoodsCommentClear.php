@@ -33,7 +33,7 @@ class StoreGoodsCommentClear extends StoreCleanAbstract
      * 排序
      * @var int
      */
-    protected $sort = 39;
+    protected $sort = 40;
 
     /**
      * 数据描述及输出显示内容
