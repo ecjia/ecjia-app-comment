@@ -13,6 +13,8 @@ use RC_Uri;
 use RC_DB;
 use RC_Api;
 use ecjia_admin;
+use RC_Filesystem;
+use RC_Upload;
 
 class StoreGoodsCommentClear extends StoreCleanAbstract
 {
@@ -69,6 +71,21 @@ HTML;
         $count = $this->handleCount();
         if (empty($count)) {
             return true;
+        }
+
+        $comment_list = RC_DB::table('comment')->where('store_id', $this->store_id)->lists('comment_id');
+
+        $file_list = RC_DB::table('term_attachment')
+            ->whereIn('object_id', $comment_list)
+            ->where('object_group', 'comment')
+            ->where('object_app', 'ecjia.comment')
+            ->lists('file_path');
+
+        if (!empty($file_list)) {
+            $disk = RC_Filesystem::disk();
+            foreach ($file_list as $k => $v) {
+                $disk->delete(RC_Upload::upload_path() . $v);
+            }
         }
 
         $result = RC_DB::table('comment')->where('store_id', $this->store_id)->delete();
