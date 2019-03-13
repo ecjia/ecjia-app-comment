@@ -4,16 +4,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Ecjia App comment 1.27.4\n"
 "Report-Msgid-Bugs-To: https://make.ecjia.com/polyglots/\n"
-"POT-Creation-Date: 2019-03-01 01:42:29+00:00\n"
+"POT-Creation-Date: 2019-03-13 14:03+0800\n"
+"PO-Revision-Date: 2019-03-13 14:04+0800\n"
+"Last-Translator: \n"
+"Language-Team: LANGUAGE <ecjia@ecjia.com>\n"
+"Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2019-03-08 17:45+0800\n"
-"Language-Team: LANGUAGE <ecjia@ecjia.com>\n"
 "X-Generator: Poedit 1.8.7\n"
-"Last-Translator: \n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"Language: zh_TW\n"
 
 #: admin.php:92
 msgid "商品评论列表"
@@ -195,6 +195,10 @@ msgstr "發起申訴"
 msgid "撤销申诉"
 msgstr "撤銷申訴"
 
+#: apis/comment_store_remove_cleardata_api.class.php:63
+msgid "请求接口%s参数无效"
+msgstr "請求接口%s參數無效"
+
 #: apis/comment_update_goods_comment_api.class.php:65
 msgid "商品信息不存在"
 msgstr "商品信息不存在"
@@ -242,6 +246,24 @@ msgstr "通過"
 #: appeal.php:257 mh_appeal.php:284
 msgid "驳回"
 msgstr "駁回"
+
+#: classes/StoreCleanHandlers/StoreArticleCommentClear.php:43
+msgid "店铺内，文章的所有评论"
+msgstr "店舖內，文章的所有評論"
+
+#: classes/StoreCleanHandlers/StoreArticleCommentClear.php:94
+#: classes/StoreCleanHandlers/StoreGoodsCommentClear.php:111
+msgid "店铺名是%s"
+msgstr "店鋪名是%s"
+
+#: classes/StoreCleanHandlers/StoreArticleCommentClear.php:94
+#: classes/StoreCleanHandlers/StoreGoodsCommentClear.php:111
+msgid "店铺ID是%s"
+msgstr "店鋪ID是%s"
+
+#: classes/StoreCleanHandlers/StoreGoodsCommentClear.php:45
+msgid "将店铺内所有商品评论全部删除"
+msgstr "將店舖內所有商品評論全部刪除"
 
 #: configs/jslang.php:57
 msgid "确定"
