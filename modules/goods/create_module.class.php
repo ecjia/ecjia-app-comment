@@ -65,6 +65,7 @@ class goods_create_module extends api_front implements api_interface {
 		$content 		= $this->requestData('content');
 		$rank 			= $this->requestData('rank', 5);
 		$is_anonymous 	= $this->requestData('is_anonymous', 1);
+		$picture		= $this->requestData('picture', array()); //兼容表单提交图片上传
 		
 		if ( empty($rec_id)) {
 			return new ecjia_error('invalid_parameter', '参数错误！');
@@ -168,6 +169,17 @@ class goods_create_module extends api_front implements api_interface {
 		        }
 		        
 		        $image_info	= $upload->batch_upload($_FILES);
+		    } elseif (!empty($picture)) { //表单提交上传
+		    	if (is_array($picture)) {
+		    		foreach ($picture as $pic_val) {
+		    			if (!empty($pic_val['name'])) {
+		    				if (!$upload->check_upload_file($pic_val)) {
+		    					return new ecjia_error('picture_error', $upload->error());
+		    				}
+		    			}
+		    		}
+		    		$image_info	= $upload->batch_upload($picture);
+		    	}
 		    }
 		    
 		    if (!empty($image_info)) {
