@@ -170,6 +170,7 @@ class goods_create_module extends api_front implements api_interface {
 		        
 		        $image_info	= $upload->batch_upload($_FILES);
 		    } elseif (!empty($picture)) { //表单提交上传
+		    	$picture = json_decode($picture, true);
 		    	if (is_array($picture)) {
 		    		foreach ($picture as $pic_val) {
 		    			if (!empty($pic_val['name'])) {
