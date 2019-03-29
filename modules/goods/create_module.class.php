@@ -161,7 +161,7 @@ class goods_create_module extends api_front implements api_interface {
 		    	if (is_array($picture)) {
 		    		$image_info	= $upload->batchUpload($picture);
 		    	}
-
+                dd($upload->errors());
                 dd($image_info);
 		    }
 
