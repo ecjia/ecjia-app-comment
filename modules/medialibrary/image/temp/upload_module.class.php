@@ -58,8 +58,13 @@ class medialibrary_image_temp_upload_module extends api_front implements api_int
 		if (!empty($_FILES['tempimage'])) {
 			$picture = $_FILES['tempimage'];
 
+			$dir = storage_path('temp/tempupload');
+            if (!RC_File::isDirectory($dir)) {
+                RC_File::makeDirectory($dir, 0755, true);
+            }
+
 			$filename = basename($picture['tmp_name']);
-            $new_tmp_name = storage_path('temp/tempupload/'.$filename);
+            $new_tmp_name = $dir.'/'.$filename;
 
             RC_File::move_file($picture['tmp_name'], $new_tmp_name);
 
