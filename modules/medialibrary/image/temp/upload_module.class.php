@@ -57,6 +57,14 @@ class medialibrary_image_temp_upload_module extends api_front implements api_int
 		$picture = [];
 		if (!empty($_FILES['tempimage'])) {
 			$picture = $_FILES['tempimage'];
+
+			$filename = basename($picture['tmp_name']);
+            $new_tmp_name = storage_path('/temp/tempupload/'.$filename);
+
+            RC_File::move_file($picture['tmp_name'], $new_tmp_name);
+
+			$picture['tmp_name'] = $new_tmp_name;
+
 		}
 		return $picture;
 	}
