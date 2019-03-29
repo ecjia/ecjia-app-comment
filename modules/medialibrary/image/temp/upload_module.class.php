@@ -56,22 +56,7 @@ class medialibrary_image_temp_upload_module extends api_front implements api_int
 		
 		$picture = [];
 		if (!empty($_FILES['tempimage'])) {
-			$count = count($_FILES['tempimage']['name']);
-			for ($i = 0; $i < $count; $i++) {
-				$picture[] = array(
-						'name' 		=> 	$_FILES['tempimage']['name'][$i],
-						'type' 		=> 	$_FILES['tempimage']['type'][$i],
-						'tmp_name' 	=> 	$_FILES['tempimage']['tmp_name'][$i],
-						'error'		=> 	$_FILES['tempimage']['error'][$i],
-						'size'		=> 	$_FILES['tempimage']['size'][$i],
-				);
-				
-				//if (!empty($picture['name'])) {
-				//	if (!$upload->check_upload_file($picture)) {
-				//		return new ecjia_error('picture_error', $upload->error());
-				//	}
-				//}
-			}
+			$picture = $_FILES['tempimage'];
 		}
 		return $picture;
 	}
