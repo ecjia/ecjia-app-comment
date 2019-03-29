@@ -148,16 +148,18 @@ class goods_create_module extends api_front implements api_interface {
 		if ((!empty($comment_info) && $comment_info['has_image'] == 0) || empty($comment_info)) {
 		    
 		    $save_path = 'data/comment/'.RC_Time::local_date('Ym');
-		    $upload = RC_Upload::uploader('image', array('save_path' => $save_path, 'auto_sub_dirs' => true));
+		    
 		    
 		    $image_info = null;
 		    if (!empty($_FILES)) {
+		    	$upload = RC_Upload::uploader('image', array('save_path' => $save_path, 'auto_sub_dirs' => true));
 		        $picture = $_FILES['picture'];
 		        $image_info	= $upload->batch_upload($picture);
 		    } elseif (!empty($picture)) { //表单提交上传
+		    	$upload = RC_Upload::uploader('newimage', array('save_path' => $save_path, 'auto_sub_dirs' => true));
 		    	$picture = json_decode($picture, true);
 		    	if (is_array($picture)) {
-		    		$image_info	= $upload->batch_upload($picture);
+		    		$image_info	= $upload->batchUpload($picture);
 		    	}
 		    }
 		    
