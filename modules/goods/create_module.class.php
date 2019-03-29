@@ -152,33 +152,11 @@ class goods_create_module extends api_front implements api_interface {
 		    
 		    $image_info = null;
 		    if (!empty($_FILES)) {
-		        $count = count($_FILES['picture']['name']);
-		        for ($i = 0; $i < $count; $i++) {
-		            $picture = array(
-		                'name' 		=> 	$_FILES['picture']['name'][$i],
-		                'type' 		=> 	$_FILES['picture']['type'][$i],
-		                'tmp_name' 	=> 	$_FILES['picture']['tmp_name'][$i],
-		                'error'		=> 	$_FILES['picture']['error'][$i],
-		                'size'		=> 	$_FILES['picture']['size'][$i],
-		            );
-		            if (!empty($picture['name'])) {
-		                if (!$upload->check_upload_file($picture)) {
-		                    return new ecjia_error('picture_error', $upload->error());
-		                }
-		            }
-		        }
-		        
-		        $image_info	= $upload->batch_upload($_FILES);
+		        $picture = $_FILES['picture'];
+		        $image_info	= $upload->batch_upload($picture);
 		    } elseif (!empty($picture)) { //表单提交上传
 		    	$picture = json_decode($picture, true);
 		    	if (is_array($picture)) {
-		    		foreach ($picture as $pic_val) {
-		    			if (!empty($pic_val['name'])) {
-		    				if (!$upload->check_upload_file($pic_val)) {
-		    					return new ecjia_error('picture_error', $upload->error());
-		    				}
-		    			}
-		    		}
 		    		$image_info	= $upload->batch_upload($picture);
 		    	}
 		    }
