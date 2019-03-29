@@ -54,25 +54,16 @@ defined('IN_ECJIA') or exit('No permission resources.');
 class medialibrary_image_temp_upload_module extends api_front implements api_interface {
     public function handleRequest(\Royalcms\Component\HttpKernel\Request $request) {
 		
-    	$tempimage 	= $this->requestData('tempimage', array());
-		
-		if (empty($tempimage)) {
-			return new ecjia_error('invalid_parameter', __('参数错误！', 'comment'));
-		}
-		
-		//$save_path = 'data/comment/'.RC_Time::local_date('Ym');
-		//$upload = RC_Upload::uploader('image', array('save_path' => $save_path, 'auto_sub_dirs' => true));
-		
 		$picture = [];
-		if (!empty($tempimage)) {
-			$count = count($tempimage['picture']['name']);
+		if (!empty($_FILES['tempimage'])) {
+			$count = count($_FILES['tempimage']['name']);
 			for ($i = 0; $i < $count; $i++) {
 				$picture[] = array(
-						'name' 		=> 	$tempimage['picture']['name'][$i],
-						'type' 		=> 	$tempimage['picture']['type'][$i],
-						'tmp_name' 	=> 	$tempimage['picture']['tmp_name'][$i],
-						'error'		=> 	$tempimage['picture']['error'][$i],
-						'size'		=> 	$tempimage['picture']['size'][$i],
+						'name' 		=> 	$_FILES['tempimage']['name'][$i],
+						'type' 		=> 	$_FILES['tempimage']['type'][$i],
+						'tmp_name' 	=> 	$_FILES['tempimage']['tmp_name'][$i],
+						'error'		=> 	$_FILES['tempimage']['error'][$i],
+						'size'		=> 	$_FILES['tempimage']['size'][$i],
 				);
 				
 				//if (!empty($picture['name'])) {
