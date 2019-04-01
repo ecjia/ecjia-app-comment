@@ -163,6 +163,8 @@ class goods_create_module extends api_front implements api_interface {
 		    	}
 		    }
 
+		    dd($image_info);
+
 		    if (!empty($image_info)) {
 		        if (!empty($comment_info) && $comment_info['has_image'] == 0) {
 		            $comment_id = $comment_info['comment_id'];
