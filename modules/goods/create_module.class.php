@@ -162,8 +162,8 @@ class goods_create_module extends api_front implements api_interface {
 		    		$image_info	= $upload->batchUpload($picture);
 		    	}
 		    }
-
-		    dd($image_info);
+            _dump($image_info);
+            _dump($upload->errors(),1);
 
 		    if (!empty($image_info)) {
 		        if (!empty($comment_info) && $comment_info['has_image'] == 0) {
