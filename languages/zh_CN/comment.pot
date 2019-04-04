@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Ecjia App comment 1.28.0\n"
 "Report-Msgid-Bugs-To: https://make.ecjia.com/polyglots/\n"
-"POT-Creation-Date: 2019-03-29 01:41:52+00:00\n"
+"POT-Creation-Date: 2019-04-04 05:54:39+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -392,10 +392,6 @@ msgstr ""
 
 #: mh_comment.php:142 mh_comment.php:227 mh_comment.php:243
 msgid "评论ID:"
-msgstr ""
-
-#: modules/medialibrary/image/temp/upload_module.class.php:60
-msgid "参数错误！"
 msgstr ""
 
 #: content/apps/comment/templates/admin/appeal_list.dwt.php:18
